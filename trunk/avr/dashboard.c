@@ -1,5 +1,7 @@
 #include<avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+#include <avr/signal.h>
 
 
 
@@ -12,16 +14,72 @@ int calc_gear(int ppr_engine, int ppr_wheel);
 int calc_rpm(int ppr_engine);
 
 
-#define F_CPU = 8000000
+
+
+
+SIGNAL(SIG_INTERRUPT0)     
+/* signal handler for external interrupt int0 */
+{
+     
+	int i=0, a=0;
+    while (a<1000)
+		{
+		if (1<=5)
+			{
+			PORTB=~(1<<i);
+			}
+		
+		
+		if (i>5)
+			{
+			PORTB=~(1<<(10-i));
+			}
+		i=i+1;
+		a=a+1;
+		_delay_ms(10000000);
+		if (i>10)
+			{
+			i=0;
+			}
+		}
+
+}
+
+
+SIGNAL(SIG_INTERRUPT1)     
+/* signal handler for external interrupt int1 */
+{
+     
+	int i=255;
+    while (i>=0)
+		{
+		PORTB=i;
+		i=i-1;
+		_delay_ms(1000);
+		}
+
+}
+
+
 
 int main (void) 
 {
-  DDRD = 0xFF;      
+  DDRB = 0xFF;      
  
   int x = 0;
   int y = 0, z=0, gear=0, rpm=0;
   
   set_adc();
+    DDRD  = 0x00;                // use all pins on port D for input
+    PORTD = 0xff;                // activate internal pull-up
+    
+    GIMSK = 0b11000000;	//_BV(INT0 && INT1);           // enable external int0
+    MCUCR = 0b00001010;  //_BV(ISC11 && ISC01);          // falling egde: int0
+    
+    sei();                       // enable interrupts 
+
+
+	
   
   for (;;) {  
     
