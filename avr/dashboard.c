@@ -1,17 +1,27 @@
 #include<avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
-#include <avr/signal.h>
+//#include <avr/signal.h>
+#include <util/delay.h>
+
+#define F_CPU 8000000
 
 
 
-int get_adc1(void);
-int get_adc2(void);
-void set_adc(void);
-void disp_rpm(int rpm);
-void disp_gear(int gear);
+int get_rpm_engine(void);
+int get_velocity(void);
+int set_adc(void);
+int disp_rpm(int rpm);
+void disp_gear(char gear);
 int calc_gear(int ppr_engine, int ppr_wheel);
 int calc_rpm(int ppr_engine);
+int clutch(void);
+int neutraul(void);
+void init_ports(void);
+void init_isr(void);
+void shift_light(void);
+
+
+volatile char gear;
 
 
 
@@ -19,29 +29,14 @@ int calc_rpm(int ppr_engine);
 
 SIGNAL(SIG_INTERRUPT0)     
 /* signal handler for external interrupt int0 */
-{
-     
-	int i=0, a=0;
-    while (a<1000)
+{	
+	int c=0;
+	c = clutch();
+    if (c == 1) // undersøger om koblingen er aktiveret
 		{
-		if (1<=5)
-			{
-			PORTB=~(1<<i);
-			}
-		
-		
-		if (i>5)
-			{
-			PORTB=~(1<<(10-i));
-			}
-		i=i+1;
-		a=a+1;
-		_delay_ms(10000000);
-		if (i>10)
-			{
-			i=0;
-			}
-		}
+		gear=gear+1;
+		} 
+	
 
 }
 
@@ -49,53 +44,161 @@ SIGNAL(SIG_INTERRUPT0)
 SIGNAL(SIG_INTERRUPT1)     
 /* signal handler for external interrupt int1 */
 {
-     
-	int i=255;
-    while (i>=0)
+    int c=0;
+	c=clutch();
+    if (c == 1) // undersøger om koblingen er aktiveret
 		{
-		PORTB=i;
-		i=i-1;
-		_delay_ms(1000);
+		gear=gear-1;
 		}
+	
 
 }
 
 
 
 int main (void) 
-{
-  DDRB = 0xFF;      
+{	
+  int velocity = 0, rpm=0, max_rpm = 512;
+  gear=0;
  
-  int x = 0;
-  int y = 0, z=0, gear=0, rpm=0;
   
-  set_adc();
-    DDRD  = 0x00;                // use all pins on port D for input
-    PORTD = 0xff;                // activate internal pull-up
-    
-    GIMSK = 0b11000000;	//_BV(INT0 && INT1);           // enable external int0
-    MCUCR = 0b00001010;  //_BV(ISC11 && ISC01);          // falling egde: int0
-    
-    sei();                       // enable interrupts 
-
-
-	
+  init_ports();
+  init_isr();
+  set_adc();            
+                  
+  	
   
   for (;;) {  
     
-	x = get_adc1();
-	y = get_adc2();
+	rpm = get_rpm_engine();
+	velocity = get_velocity();
 	
-	//PORTD=~y/4;
-	gear=calc_gear(x, y);
+	
+	//gear=calc_gear(rpm, velocity);
 
 	disp_gear(gear);
-	_delay_ms(1000);
+	if (rpm > max_rpm)
+		{
+		shift_light();
+		}
+	_delay_ms(30);
+	_delay_ms(30);
+	_delay_ms(30);
   }
 
 }
 
 
+void init_ports(void)
+{
+  DDRB = 0b01111111;
+  DDRD = 0b11100000;
+  DDRC = 0b00000;
+  PORTC= 0xFF;
+  PORTD = 0b00011111;	// activate internal pull-up
+}
+
+void init_isr(void)
+{
+  GIMSK = 0b11000000;	//_BV(INT0 && INT1);           // enable external int0
+  MCUCR = 0b00001010;  //_BV(ISC11 && ISC01);          // falling egde: int0
+    
+  sei();                       // enable interrupts 
+
+}
+
+
+void shift_light(void)
+{
+	int i=13;
+	while (i)
+	{
+		PORTB=0xFF;
+		_delay_ms(30);
+		_delay_ms(30);
+		_delay_ms(30);
+		PORTB=0x00;
+		_delay_ms(30);
+		_delay_ms(30);
+		_delay_ms(30);
+		i=i-1;
+	}
+
+}
+
+
+
+int clutch(void)
+{
+int c;
+c=(~PIND & 0b00000001);
+return c;
+
+}
+
+
+int neutral(void)
+{
+int n;
+n=(~PIND & 0b00010000);
+return n;
+
+}
+
+
+
+
+
+
+
+void disp_gear(char gear)
+{
+int n=0;
+n=neutral();
+	/*switch(gear)
+	{
+	case 1:
+		{
+		PORTB=0b00100000;
+		PORTD=0b10000000;
+		}
+	case 2:
+		{
+		PORTB=0b00111010;
+		PORTD=0b01000000;
+		}
+	case 3:
+		{
+		PORTB=0b00111010;
+		PORTD=0b10000000;
+		}
+	case 4:
+		{
+		PORTB=0b00101100;
+		PORTD=0b10000000;
+		}
+	case 5:
+		{
+		PORTB=0b00011110;
+		PORTD=0b10000000;
+		}
+	case 6:
+		{
+		PORTB=0b00001110;
+		PORTD=0b11000000;
+		}		
+	}
+	
+*/
+if (n)
+	{
+	PORTB=0x00;
+	}
+else
+	{
+	PORTB=~(1<<(gear-1));
+	}
+}
 
 
 
@@ -105,23 +208,17 @@ int main (void)
 
 
 
-
-
-
-
-
-
-
-
-
-
-void set_adc(void)
+int set_adc(void)
 {
 // Activate ADC with Prescaler 16 --> 1Mhz/16 = 62.5kHz
   ADCSRA = _BV(ADEN) | _BV(ADPS2);
+	return 0;
 }
 
-int get_adc1(void)
+
+
+
+int get_rpm_engine(void)
 {
 	int x;
 
@@ -139,11 +236,16 @@ int get_adc1(void)
 return x;
 }
 
-int get_adc2(void)
+
+
+
+
+
+int get_velocity(void)
 {
 	int x;
 
-	// Select pin ADC0 using MUX
+	// Select pin ADC1 using MUX
     ADMUX = 0b0001;
 
 	//Start conversion
@@ -159,16 +261,17 @@ return x;
 
 int calc_gear(int ppr_engine, int ppr_wheel)
 {
-	int  gear;
-	float z, tmp;
-	ppr_engine=ppr_engine*1000;
+	//extern char gear;
+	float z;
+
+	
+	ppr_engine=ppr_engine*1024;
 	z=ppr_engine/ppr_wheel;
 
-	tmp = z*255;
-	tmp = tmp/1000;
 	
-		
 
+	
+	
 	if (z<=520)
 		{
 		gear = 1;
@@ -198,8 +301,4 @@ int calc_gear(int ppr_engine, int ppr_wheel)
 
 }
 
-void disp_gear(int gear)
-{
-	PORTD=~(1<<gear);
 
-}
