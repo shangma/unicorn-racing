@@ -11,17 +11,17 @@ int get_rpm_engine(void);
 int get_velocity(void);
 int set_adc(void);
 int disp_rpm(int rpm);
-void disp_gear(char gear);
-int calc_gear(int ppr_engine, int ppr_wheel);
+void disp_gear(void);
+void calc_gear(int ppr_engine, int ppr_wheel);
 int calc_rpm(int ppr_engine);
 int clutch(void);
 int neutraul(void);
 void init_ports(void);
 void init_isr(void);
-void shift_light(void);
+void shift_light(int rpm, int max_rpm);
 
 
-volatile char gear;
+volatile int gear;
 
 
 
@@ -32,7 +32,8 @@ SIGNAL(SIG_INTERRUPT0)
 {	
 	int c=0;
 	c = clutch();
-    if (c == 1) // undersøger om koblingen er aktiveret
+	shift_light(2,1);
+    if (c != 0) // undersøger om koblingen er aktiveret
 		{
 		gear=gear+1;
 		} 
@@ -46,7 +47,8 @@ SIGNAL(SIG_INTERRUPT1)
 {
     int c=0;
 	c=clutch();
-    if (c == 1) // undersøger om koblingen er aktiveret
+	shift_light(2,1);
+    if (c != 0) // undersøger om koblingen er aktiveret
 		{
 		gear=gear-1;
 		}
@@ -58,8 +60,8 @@ SIGNAL(SIG_INTERRUPT1)
 
 int main (void) 
 {	
-  int velocity = 0, rpm=0, max_rpm = 512;
-  gear=0;
+  int velocity = 0, rpm=42, max_rpm = 700;
+  gear=2;
  
   
   init_ports();
@@ -68,22 +70,32 @@ int main (void)
                   
   	
   
-  for (;;) {  
+  while(1) {  
     
 	rpm = get_rpm_engine();
 	velocity = get_velocity();
 	
 	
-	//gear=calc_gear(rpm, velocity);
-
-	disp_gear(gear);
+	calc_gear(rpm, velocity);
+	/*gear=gear+1;
+	if (gear > 7)
+		{ 
+		gear=1;
+		}*/
+	disp_gear();
 	if (rpm > max_rpm)
 		{
-		shift_light();
+		shift_light(rpm,max_rpm);
 		}
+	//PORTB = ~rpm;
+
 	_delay_ms(30);
 	_delay_ms(30);
 	_delay_ms(30);
+	_delay_ms(30);
+	_delay_ms(30);
+	
+	
   }
 
 }
@@ -108,20 +120,28 @@ void init_isr(void)
 }
 
 
-void shift_light(void)
+void shift_light(int rpm, int max_rpm)
 {
-	int i=13;
-	while (i)
+	
+	if (rpm > max_rpm)
 	{
-		PORTB=0xFF;
+		PORTD |= 0b00100000;
 		_delay_ms(30);
 		_delay_ms(30);
 		_delay_ms(30);
-		PORTB=0x00;
+		PORTD &= 0b11000000;
 		_delay_ms(30);
 		_delay_ms(30);
 		_delay_ms(30);
-		i=i-1;
+		PORTD |= 0b00100000;
+		_delay_ms(30);
+		_delay_ms(30);
+		_delay_ms(30);
+		PORTD &= 0b11000000;
+		_delay_ms(30);
+		_delay_ms(30);
+		_delay_ms(30);
+	
 	}
 
 }
@@ -131,7 +151,7 @@ void shift_light(void)
 int clutch(void)
 {
 int c;
-c=(~PIND & 0b00000001);
+c=(~PINB & 0b10000000);
 return c;
 
 }
@@ -151,53 +171,71 @@ return n;
 
 
 
-void disp_gear(char gear)
+void disp_gear()
 {
-int n=0;
+
+int n=0, c=0;
+
+c=clutch();
 n=neutral();
-	/*switch(gear)
+
+if (c != 0)
 	{
-	case 1:
-		{
-		PORTB=0b00100000;
-		PORTD=0b10000000;
-		}
-	case 2:
-		{
-		PORTB=0b00111010;
-		PORTD=0b01000000;
-		}
-	case 3:
-		{
-		PORTB=0b00111010;
-		PORTD=0b10000000;
-		}
-	case 4:
-		{
-		PORTB=0b00101100;
-		PORTD=0b10000000;
-		}
-	case 5:
-		{
-		PORTB=0b00011110;
-		PORTD=0b10000000;
-		}
-	case 6:
-		{
-		PORTB=0b00001110;
-		PORTD=0b11000000;
-		}		
+	PORTB &= 0b11111110;
 	}
-	
-*/
-if (n)
+
+else
 	{
-	PORTB=0x00;
+	PORTB |= 0b00000001;
+	}
+
+
+
+PORTB |= 0b00111110;	//sluk alle segmenter (untagen P)
+PORTD |= 0b11000000;
+
+if (n != 0)
+	{
+	PORTB &= 0b11110111;
+	PORTD &= 0b00111111;
 	}
 else
 	{
-	PORTB=~(1<<(gear-1));
+	
+	if(gear==1)
+		{		
+		PORTB &= 0b11011111;
+		PORTD &= 0b01111111;
+		}
+	else if (gear==2)
+		{
+		PORTB &= 0b11100101;
+		PORTD &= 0b10111111;
+		}
+	else if (gear==3)
+		{
+		PORTB &= 0b11000101;
+		PORTD &= 0b01111111;
+		}
+	else if (gear==4)
+		{
+		PORTB &= 0b11010011;
+		PORTD &= 0b01111111;
+		}
+	else if (gear==5)
+		{
+		PORTB &= 0b11100001;
+		PORTD &= 0b01111111;
+		}
+	else if (gear==6)
+		{
+		PORTB &= 0b11100001;
+		PORTD &= 0b00111111;
+		}		
 	}
+
+	
+	//PORTB=~(1<<(gear-1));
 }
 
 
@@ -223,7 +261,7 @@ int get_rpm_engine(void)
 	int x;
 
 	// Select pin ADC0 using MUX
-    ADMUX = 0;
+    ADMUX = 0b0001;
 
 	//Start conversion
     ADCSRA |= _BV(ADSC);
@@ -233,6 +271,7 @@ int get_rpm_engine(void)
     
     // get converted value
     x = ADCW;
+
 return x;
 }
 
@@ -246,7 +285,7 @@ int get_velocity(void)
 	int x;
 
 	// Select pin ADC1 using MUX
-    ADMUX = 0b0001;
+    ADMUX = 0;
 
 	//Start conversion
     ADCSRA |= _BV(ADSC);
@@ -259,46 +298,48 @@ int get_velocity(void)
 return x;
 }
 
-int calc_gear(int ppr_engine, int ppr_wheel)
+void calc_gear(int ppr_engine, int ppr_wheel)
 {
-	//extern char gear;
-	float z;
-
 	
-	ppr_engine=ppr_engine*1024;
-	z=ppr_engine/ppr_wheel;
-
+	unsigned int z;
 	
 
 	
+	z=ppr_wheel*64;
+	z=z/ppr_engine;
+	//PORTB = ~z/16;
+
 	
-	if (z<=520)
+
+	
+	
+	if (z<=33)
 		{
 		gear = 1;
 		}
-	else if (z>520 && z<= 663)
+	else if (z<= 42)
 		{
 		gear = 2;
 		} 
-	else if (z>663 && z<= 776)
+	else if (z<= 49)
 		{
 		gear = 3;
 		}
-	else if (z>776 && z<= 876)
+	else if (z<= 56)
 		{
 		gear = 4;
 		} 
-	else if (z>876 && z<= 962)
+	else if (z<= 61)
 		{
 		gear = 5;
 		}
-	else if (z>962)
+	else  
 		{
 		gear = 6;
 		}
-	//PORTD =~gear;
-	return gear;
-
+	//PORTB =~gear;
+	
 }
+
 
 
