@@ -19,6 +19,8 @@ int neutraul(void);
 void init_ports(void);
 void init_isr(void);
 void shift_light(int rpm, int max_rpm);
+int roed(void);
+int groen(void);
 
 
 volatile int gear;
@@ -30,12 +32,13 @@ volatile int gear;
 SIGNAL(SIG_INTERRUPT0)     
 /* signal handler for external interrupt int0 */
 {	
-	int c=0;
-	c = clutch();
-	shift_light(2,1);
-    if (c != 0) // undersøger om koblingen er aktiveret
+	
+    if (clutch()) // undersøger om koblingen er aktiveret
 		{
-		gear=gear+1;
+		
+		if (gear>1)
+			gear=gear-1;
+			
 		} 
 	
 
@@ -45,12 +48,13 @@ SIGNAL(SIG_INTERRUPT0)
 SIGNAL(SIG_INTERRUPT1)     
 /* signal handler for external interrupt int1 */
 {
-    int c=0;
-	c=clutch();
-	shift_light(2,1);
-    if (c != 0) // undersøger om koblingen er aktiveret
+    
+	
+    if (clutch() ) // undersøger om koblingen er aktiveret
 		{
-		gear=gear-1;
+		if (gear<6)
+			gear=gear+1;
+			
 		}
 	
 
@@ -75,8 +79,11 @@ int main (void)
 	rpm = get_rpm_engine();
 	velocity = get_velocity();
 	
-	
-	calc_gear(rpm, velocity);
+	if (!clutch())
+	{
+		calc_gear(rpm, velocity);
+	}
+
 	/*gear=gear+1;
 	if (gear > 7)
 		{ 
@@ -89,11 +96,7 @@ int main (void)
 		}
 	//PORTB = ~rpm;
 
-	_delay_ms(30);
-	_delay_ms(30);
-	_delay_ms(30);
-	_delay_ms(30);
-	_delay_ms(30);
+
 	
 	
   }
@@ -113,7 +116,7 @@ void init_ports(void)
 void init_isr(void)
 {
   GIMSK = 0b11000000;	//_BV(INT0 && INT1);           // enable external int0
-  MCUCR = 0b00001010;  //_BV(ISC11 && ISC01);          // falling egde: int0
+  MCUCR = 0b00001111;  //_BV(ISC11 && ISC01);          // falling egde: int0
     
   sei();                       // enable interrupts 
 
@@ -165,10 +168,20 @@ return n;
 
 }
 
+int groen(void)
+{
+_delay_ms(10);
+return (~PIND & 0b00000100);
+
+}
 
 
+int roed(void)
+{
+_delay_ms(10);
+return (~PIND & 0b00001000);
 
-
+}
 
 
 void disp_gear()
@@ -209,7 +222,7 @@ else
 		}
 	else if (gear==2)
 		{
-		PORTB &= 0b11100101;
+		PORTB &= 0b11000101;
 		PORTD &= 0b10111111;
 		}
 	else if (gear==3)
