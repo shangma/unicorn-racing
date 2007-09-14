@@ -4,7 +4,7 @@ void init(void){
   initTimer();
 }
 
-int main(void){
+int main(void) {
   init();
   
   while(1){

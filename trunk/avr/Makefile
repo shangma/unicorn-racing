@@ -1,13 +1,16 @@
-PRG            = demo
-FRONT_OBJ      = front.o frontISR.o
-BACK_OBJ       = back.o backISR.o
-MCU_TARGET     = atmega8
-OPTIMIZE       = -O2
+OBJCOPY        = avr-objcopy
+OBJDUMP        = avr-objdump
+
+FRONTOBJ	= front.o frontTimer.o
+BACKOBJ		= back.o
+
+MCU_TARGET	= atmega8
+OPTIMIZE	= -O2
+
+TEXTFORMAT	= hex
 
 DEFS           =
 LIBS           =
-
-# You should not have to change anything below here.
 
 CC             = avr-gcc
 
@@ -19,27 +22,41 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: front back lst text eeprom
+all: f b
 
-front: front.elf
-        $(OBJ)=$(FRONT_OBJ)
-back: back.elf
-        $(OBJ)=$(BACK_OBJ)
+$(PRG).elf: $(OBJ)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-%.elf: $(OBJ)
-        $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+lst:  $(PRG).lst
+
+f:
+	make PRG=front 
+	cp front/front.$(TEXTFORMAT) ./tmp.$(TEXTFORMAT)
+        
+b:
+	cp back/back.$(TEXTFORMAT) ./tmp.$(TEXTFORMAT)
+
+front/front.elf:
+	cd front; make OBJ="$(FRONTOBJ)" PRG=front -f ../Makefile lst; cd ..
+
+back/back.elf:
+	cd back; make OBJ="$(BACKOBJ)" PRG=back -f ../Makefile lst; cd ..
+
+burn:	tmp.hex
+	echo burn $(HEST)
 
 # dependency:
 %.o: %.c %.h
 
-clean:
-        rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
-        rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
-
-lst:  $(PRG).lst
+clean: clr
+	cd front; make -f ../Makefile clr; cd ..
+	cd back; make -f ../Makefile clr; cd ..
+clr:
+	rm -rf *.o *.elf *.eps *.png *.pdf *.bak 
+	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 %.lst: %.elf
-        $(OBJDUMP) -h -S $< > $@
+	$(OBJDUMP) -h -S $< > $@
 
 # Rules for building the .text rom images
 
@@ -50,13 +67,13 @@ bin:  $(PRG).bin
 srec: $(PRG).srec
 
 %.hex: %.elf
-        $(OBJCOPY) -j .text -j .data -O ihex $< $@
+	$(OBJCOPY) -j .text -j .data -O ihex $< $@
 
 %.srec: %.elf
-        $(OBJCOPY) -j .text -j .data -O srec $< $@
+	$(OBJCOPY) -j .text -j .data -O srec $< $@
 
 %.bin: %.elf
-        $(OBJCOPY) -j .text -j .data -O binary $< $@
+	$(OBJCOPY) -j .text -j .data -O binary $< $@
 
 # Rules for building the .eeprom rom images
 
@@ -67,15 +84,15 @@ ebin:  $(PRG)_eeprom.bin
 esrec: $(PRG)_eeprom.srec
 
 %_eeprom.hex: %.elf
-        $(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O ihex $< $@ \
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O ihex $< $@ \
         || { echo empty $@ not generated; exit 0; }
 
 %_eeprom.srec: %.elf
-        $(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O srec $< $@ \
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O srec $< $@ \
         || { echo empty $@ not generated; exit 0; }
 
 %_eeprom.bin: %.elf
-        $(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O binary $< $@ \
+	$(OBJCOPY) -j .eeprom --change-section-lma .eeprom=0 -O binary $< $@ \
         || { echo empty $@ not generated; exit 0; }
 
 # Every thing below here is used by avr-libc's build system and can be ignored
