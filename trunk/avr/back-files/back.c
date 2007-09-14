@@ -1,10 +1,10 @@
 #include "back.h"
 
 void init(void){
-  initTimer();
-  initRPM();
-  initSPEED();
-  initADC();
+  timerInit();
+  rpmInit();
+  speedInit();
+  adcInit();
 }
 
 int main(void){

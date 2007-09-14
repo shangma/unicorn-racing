@@ -1,1 +1,1 @@
-void initTimer(void);
+void timerInit(void);
