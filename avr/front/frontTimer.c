@@ -1,8 +1,8 @@
 #include "frontTimer.h"
 
-void initTimer(){
+void initTimer(void){
 }
 
-ISR(TIMER1_OVF_vect){
+void ISR(TIMER1_OVF_vect){
 /*Display data*/
 }
