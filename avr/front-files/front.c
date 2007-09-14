@@ -1,7 +1,7 @@
 #include "front.h"
 
 void init(void){
-  initTimer();
+  timerInit();
 }
 
 int main(void) {

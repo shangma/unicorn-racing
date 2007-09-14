@@ -5,3 +5,6 @@
 #include "backRPM.h"
 #include "backSPEED.h"
 #include "backADC.h"
+
+int rpm;
+int speed;

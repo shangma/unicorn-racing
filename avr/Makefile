@@ -2,7 +2,7 @@ OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
 FRONTOBJ	= front.o frontTimer.o
-BACKOBJ		= back.o
+BACKOBJ		= back.o backRPM.o backTimer.o backSPEED.o backADC.o
 
 MCU_TARGET	= atmega8
 OPTIMIZE	= -O2
@@ -22,38 +22,35 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: f b
+all: front back
 
 $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 lst:  $(PRG).lst
 
-f:
-	make PRG=front 
-	cp front/front.$(TEXTFORMAT) ./tmp.$(TEXTFORMAT)
+front:
+	make PRG=front OBJ="$(FRONTOBJ)" subdir
         
-b:
-	cp back/back.$(TEXTFORMAT) ./tmp.$(TEXTFORMAT)
+back:
+	make PRG=back OBJ="$(BACKOBJ)" subdir
 
-front/front.elf:
-	cd front; make OBJ="$(FRONTOBJ)" PRG=front -f ../Makefile lst; cd ..
-
-back/back.elf:
-	cd back; make OBJ="$(BACKOBJ)" PRG=back -f ../Makefile lst; cd ..
+subdir:
+	cd $(PRG)-files; make OBJ="$(OBJ)" PRG=$(PRG) -f ../Makefile lst; cd ..
 
 burn:	tmp.hex
 	echo burn $(HEST)
+	-rm tmp.hex
 
 # dependency:
 %.o: %.c %.h
 
 clean: clr
-	cd front; make -f ../Makefile clr; cd ..
-	cd back; make -f ../Makefile clr; cd ..
+	cd front-files; make -f ../Makefile clr; cd ..
+	cd back-files; make -f ../Makefile clr; cd ..
 clr:
-	rm -rf *.o *.elf *.eps *.png *.pdf *.bak 
-	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
+	-rm -rf *.o *.elf *.eps *.png *.pdf *.bak 
+	-rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 %.lst: %.elf
 	$(OBJDUMP) -h -S $< > $@

@@ -1,6 +1,6 @@
 #include "frontTimer.h"
 
-void initTimer(void){
+void timerInit(void){
 }
 
 void ISR(TIMER1_OVF_vect){

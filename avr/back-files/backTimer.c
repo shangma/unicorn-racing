@@ -1,10 +1,15 @@
 #include "backTimer.h"
 
-void initTimer(void){
+extern rpm;
+extern speed;
+
+void timerInit(void){
 }
 
 ISR(TIMER1_OVF_vect){
-/*Do ADC*/
-/*Get RPM*/
-/*Get SPEED*/
+
+  rpm=rpmGet();
+  speed=speedGet();
+
+/*Send data*/
 }
