@@ -43,7 +43,7 @@ burn:	tmp.hex
 	-rm tmp.hex
 
 # dependency:
-%.o: %.c %.h
+%.o: %.c %.h $(PRG)Defines.h
 
 clean: clr
 	cd front-files; make -f ../Makefile clr; cd ..
