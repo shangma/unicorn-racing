@@ -4,7 +4,7 @@ void timerInit(void){
   /*Init. timer1*/
 }
 
-void ISR(TIMER1_OVF_vect){
+ISR(TIMER1_OVF_vect){
   int rpm;
   int speed;
 
