@@ -22,7 +22,7 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: front back
+all: compile front back
 
 $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
@@ -30,17 +30,34 @@ $(PRG).elf: $(OBJ)
 lst:  $(PRG).lst
 
 front:
-	make PRG=front OBJ="$(FRONTOBJ)" subdir
+	@make PRG=front OBJ="$(FRONTOBJ)" subdir
         
 back:
-	make PRG=back OBJ="$(BACKOBJ)" subdir
+	@make PRG=back OBJ="$(BACKOBJ)" subdir
 
 subdir:
-	cd $(PRG)-files; make OBJ="$(OBJ)" PRG=$(PRG) -f ../Makefile lst; cd ..
+	@cd $(PRG)-files; make OBJ="$(OBJ)" PRG=$(PRG) -f ../Makefile lst doBurn; cd ..
 
-burn:	tmp.hex
-	echo burn $(HEST)
-	-rm tmp.hex
+compile:
+	@echo "==============================="
+	@echo "Disabling burn-on-compile"
+	@echo "run 'make burn [...]' to enable"
+	@echo "==============================="
+	@-rm BURN
+
+burn:
+	@echo "==================================="
+	@echo "Enabling burn-on-compile"
+	@echo "run 'make compile [...]' to disable"
+	@echo "==================================="
+	@touch BURN
+
+doBurn:	../BURN $(PRG).hex
+	@echo "==================================================="
+	@echo "Trying to burn $(PRG).hex to device..."
+	@echo "run 'make compile [...]' to disable burn-on-compile"
+	@echo "==================================================="
+	avrdude -p m8 -c stk500v2 -e -U flash:w:$(PRG).hex
 
 # dependency:
 %.o: %.c %.h $(PRG)Defines.h
@@ -48,6 +65,7 @@ burn:	tmp.hex
 clean: clr
 	cd front-files; make -f ../Makefile clr; cd ..
 	cd back-files; make -f ../Makefile clr; cd ..
+	-rm BURN
 clr:
 	-rm -rf *.o *.elf *.eps *.png *.pdf *.bak 
 	-rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
