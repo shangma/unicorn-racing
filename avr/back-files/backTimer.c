@@ -1,10 +1,11 @@
 #include "backTimer.h"
 
 void timerInit(void){
-  /*Init. timer1*/
+  /*Init. timer2*/
+  
 }
 
-ISR(TIMER1_OVF_vect){
+ISR(TIMER2_OVF_vect){
   int rpm;
   int speed;
 
