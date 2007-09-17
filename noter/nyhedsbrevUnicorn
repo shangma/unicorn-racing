@@ -7,37 +7,29 @@ Først en lille status på personerne bag Unicorn Race Engineering.
 
 Holdet er p.t. bestående af 16 ingeniørstuderende, hvor størstedelen er studerende fra industri og produktion retningerne. Herudover er der også en håndfuld elektronik studerende. Holdet er inddelt i forskellige grupper som har forskellige ansvarsområder fx. chassis, hjulophæng, motor osv. På et snartkommede hvervemødeblandt de studerence på Aalborg Universiter, håber vi flere viser interesse for holdet. Dette vil give os mulighed for at hæve ambitionerne yderligere og opnå bedre resultater ved de internationale konkurrencer. 
 
-Ingen konkurrencer uden bil - og hvordan er det gået med bilen?
+Ingen konkurrencer uden bil - og hvordan er det gået med bilen? (uklart at der herfra tales om G3)
 
 Hen over efteråret designes de enkelte dele, som udgør racerbilen. Det hele tegnes op i 3D CAD, og sættes sammen til en virtuel racerbil. Mange af delene undergår også FEM analyse for at minimere materialemængden uden at miste den påkrævede styrke - Generelt forsøges køreegenskaberne forbedret og vægten nedsat, da mindre vægt er lig med fart. Efter design/redesign perioden går selve udformningen af bilen i gang. Sidst på vinteren begynder chassiset derfor så småt at tage form. Igennem foråret bliver dele som differentiale, uprights osv. udformet og monteret på chassiset og som tiden går, begynder man så småt at se starten på en racerbil. 
 
-Den nuværende bil - 2. generation eller kort G2 - blev bygget til at kører i Formula SAE 2007 sæsonen og var tilmeldt konkurrencer i England og Tyskland. Grundet nogle praktiske problemer med færdiggørelsen af bilen, vurderede holdet ikke at det var muligt at have bilen fuldstændig klar til England. I stedet for at satse på at nå konkurrencen i england - koncenterede vi os om at få bilen helt færdig til konkurrencen i Tyskland. 
+Den nuværende bil - 2. generation eller kort G2 - blev bygget til at kører i Formula SAE 2007 sæsonen og var tilmeldt konkurrencer i England og Tyskland. Grundet nogle praktiske problemer med færdiggørelsen af bilen, vurderede holdet ikke at det var muligt at have bilen fuldstændig klar til England. I stedet for at satse på at nå konkurrencen i England - koncenterede vi os om at få bilen helt færdig til konkurrencen i Tyskland. 
 
 
-Bilen blev færdig og vi drog til tyskland. I tyskland bilen teknisk godkendt - det vil kort sige at bilen er i sikkerhedsmæssig forsvarlig stand og overholder reglementet. 
+Bilen blev færdig og vi drog til Tyskland. I Tyskland bilen teknisk godkendt - det vil kort sige at bilen er i sikkerhedsmæssig forsvarlig stand og konstruktionen overholder reglementet.
+
+Desværre gik det mindre godt da bilens støjniveau skulle testes - en test der skulle beståes før vi kunne få lov at køre. I første omgang ville motoren ikke starte. Det viste sig at være en defekt på benzinpumpen, som det dog lykkedes at lave en interimistisk reperation af. Under selve lydmålingen overskred vi den tiladte grænseværdi. Vi prøvede at rette dette problem dernede, med det viste sig ikke at være muligt med de tilstedeværende midler. 
 
 I sin nuværende form består Formula SAE konkurrencerne af to dele: En statisk del og en dynamisk del. Den statiske del af konkurrencerne omhandler de teoretiske aspekter af at serieproducere en racerbil til weekendrace.
 
 Det hypotetiske scenarie er at et firma henvender sig til en designgruppe bestående af ingeniørstuderende, som skal designe og sælge en weekendracer.
 De statiske events repræsenterer således en række ’¡Èmøder’¡É med virksomheden indenfor; Præsentation, Design, og Regnskab.
  I præsentationen handler det om at overbevise den fiktive virksomhed om at præcis dén bil som designgruppen har konstrueret, skal produceres. Rent ud sagt handler det om, hvor lækkert man kan pakke tingene ind, og sælge sit koncept. Design konkurrencen handler om, hvem der har bygget den ingeniørmæssigt mest overbevisende bil til det fiktive firma. Her vurderes de løsninger, som designgruppe
-er kommet frem til - det kan på mange måder sammenlignes med det projektarbejde og den projekteksamen som Aalborg Universitet er kendetegnet ved. Det er den konkurrence af de statiske som holdets medlemmer er mest spændt på. Dels fordi der gives respons fra respekterede personer i Bil og motorsportsindustrien og dels fordi det giver mulighed for at diskutere de løsninger, der er valgt, hvilket er meget lærerigt. Regnskabseventen gennemgår produktionsregnskabet for raceren. Det er således en kritisk gennemgang af de samlede produktionsomkostninger der er ved at producere en racer.
+er kommet frem til - det kan på mange måder sammenlignes med det projektarbejde og den projekteksamen som Aalborg Universitet er(/var) kendetegnet ved. Det er den konkurrence af de statiske som holdets medlemmer er mest spændt på. Dels fordi der gives respons fra respekterede personer i bil og motorsportsindustrien og dels fordi det giver mulighed for at diskutere de løsninger, der er valgt, hvilket er meget lærerigt. Regnskabseventen gennemgår produktionsregnskabet for raceren. Det er således en kritisk gennemgang af de samlede produktionsomkostninger der er ved at producere en racer.
 
 I den samlede bedømmelse af den statiske del lå vi midt i feltet - hvilket slet ikke er dårligt taget vores relative lille hold i betragtning og den hårde internationale konkurrance. 
 
-Desværre gik det mindre godt med den dynamiske del - den del af konkurrence hvor bilen køreegenskaber bliver testet. Vi oplevede noget uforudsete mekaniske nedbrud (defekt benzinpumpe, olielæk osv.) og da disse problemet endeligt var klaret opstod endnu et problem. Under en måling af støjniveauet fra bilen under kørsel overskred vi en grænseværdi - hvilket betød at vi ikke kunne få lov til at foresætte. Vi prøvede at rette dette problem dernede, med det viste sig ikke at være muligt med de tilstedeværende midler. 
-
-
 Fremtiden
-Med G2'erne har vi opnået et meget fornuftigt design, som tegner godt for den næste generation. Igennem designet af G2 og dataopsamling ved kørsel har vi gjort os mange nye erfaringer. Disse erfaringer vil givet vis resultere i en ny og strækt forbedret G3. Det er holdet overbevisning at G3'eren vil vise sig at bliver en fornem racer.
+Med G2'erne har vi opnået et meget fornuftigt design, som tegner godt for den næste generation. Igennem designet af G2 og dataopsamling ved kørsel har vi gjort os mange nye erfaringer. Disse erfaringer vil givet vis resultere i en ny og strækt forbedret G3. Det er holdets overbevisning at G3'eren vil vise sig at bliver en fornem(? velkørende) racer.
 
 Hvad har I egentligt fået for jeres bidrag?
-Vi er naturligvis meget glade for jeres bidrag til dette projekt og håber I i fremtiden også vil støtte op om projektet. Udover at gøre det muligt at opretholde et sådanne projekt på Aalborg Universitet - Så er vi også blevet mere eksponeret i medierne og derved også voré sponsorer.  I den seneste tid er det blevet til adskellige artikler i hovedsagligt Ingeniøren men også 24 nordjyske, TV2 lokal aviserne ***(og hvor ellers). Desuden var racerbilen at finde på HI-messen 2007; hvor en af vore sponsorer havde stillet en stand til rådighed. Dette var en fantastisk mulighed for at fremvise racerbilen - og give interesserede et indblik i teknikken bag. 
-
-
-
-
-
-
-
+Vi er naturligvis meget glade for jeres bidrag til dette projekt og håber I også i fremtiden vil støtte op om projektet. Udover at gøre det muligt at opretholde et sådant projekt på Aalborg Universitet - Så er vi også blevet mere eksponeret i medierne og derved også voré sponsorer.  I den seneste tid er det blevet til adskellige artikler i hovedsagligt Ingeniøren men også 24 nordjyske, TV2 lokal aviserne ***(og hvor ellers). Desuden var racerbilen at finde på HI-messen 2007; hvor en af vore sponsorer havde stillet en stand til rådighed. Dette var en fantastisk mulighed for at fremvise racerbilen - og give interesserede et indblik i teknikken bag.
 
