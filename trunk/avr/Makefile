@@ -57,7 +57,18 @@ doBurn:	../BURN $(PRG).hex
 	@echo "Trying to burn $(PRG).hex to device..."
 	@echo "run 'make compile [...]' to disable burn-on-compile"
 	@echo "==================================================="
-	avrdude -p m8 -c stk500v2 -e -U flash:w:$(PRG).hex
+	avrdude -p m8 -c pony-stk200 -e -U -E noreset flash:w:$(PRG).hex
+
+buffer:	
+	@echo "========================="
+	@echo "3-stating buffer"
+	@echo "(requires fix in avrdude)"
+	@echo "========================="
+	avrdude -p m8 -c buffer -E vcc 2> /dev/null
+
+parport:
+	-sudo mknod /dev/parport0 c 99 0
+	-sudo chmod a+w /dev/parport0
 
 # dependency:
 %.o: %.c %.h $(PRG)Defines.h
@@ -67,7 +78,7 @@ clean: clr
 	cd back-files; make -f ../Makefile clr; cd ..
 	-rm BURN
 clr:
-	-rm -rf *.o *.elf *.eps *.png *.pdf *.bak 
+	-rm -rf *.o *.elf
 	-rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 %.lst: %.elf
