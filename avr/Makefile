@@ -68,7 +68,7 @@ buffer:
 
 parport:
 	-sudo mknod /dev/parport0 c 99 0
-	-sudo chmod a+w /dev/parport0
+	-sudo chmod a+rw /dev/parport0
 
 # dependency:
 %.o: %.c %.h $(PRG)Defines.h
