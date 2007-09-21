@@ -4,9 +4,7 @@
 #include "backDefines.h"
 
 void rpmInit(void);
-int rpmCalc(void);
-int rpmGet(void);
 
-int rpmRpm;
+uint8_t rpmGet(void);
 
 #endif

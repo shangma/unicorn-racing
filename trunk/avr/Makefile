@@ -1,8 +1,8 @@
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-FRONTOBJ	= front.o frontTimer.o
-BACKOBJ		= back.o backRPM.o backTimer.o backSPEED.o backADC.o
+FRONTOBJ	= front.o
+BACKOBJ		= back.o backTimer.o backDisplay.o backRPM.o backGear.o
 
 MCU_TARGET	= atmega8
 OPTIMIZE	= -O2
@@ -57,7 +57,7 @@ doBurn:	../BURN $(PRG).hex
 	@echo "Trying to burn $(PRG).hex to device..."
 	@echo "run 'make compile [...]' to disable burn-on-compile"
 	@echo "==================================================="
-	avrdude -p m8 -c pony-stk200 -e -U -E noreset flash:w:$(PRG).hex
+	avrdude -p m8 -c pony-stk200 -e -U flash:w:$(PRG).hex
 
 buffer:	
 	@echo "========================="

@@ -1,20 +1,18 @@
 #include "backTimer.h"
 
 void timerInit(void){
-  /*Init. timer2*/
-  
+  TCCR2=0x07; /*prescaler=1024*/
+  TIMSK|=_BV(TOIE2);
 }
 
 ISR(TIMER2_OVF_vect){
-  int rpm;
-  int speed;
 
-  rpm=rpmCalc();
-  speed=speedCalc();
-  adcOP(new);
-  adcCT(new);
+  TCNT2=TCNT2&~0x40;
+  
+  rpm=rpmGet();
+/*  speed=speedGet();*/
+  speed=40;
   
   flags.newMeasure=true;
-
-/*Send data*/
+  timeDiv++;
 }

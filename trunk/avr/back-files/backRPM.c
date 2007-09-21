@@ -1,17 +1,14 @@
 #include "backRPM.h"
 
 void rpmInit(void){
-  /*Init. counter0*/
-  rpmRpm=0;
+  TCCR1B=0x06;  /*count from PORTD.5*/
 }
 
-int rpmCalc(void){
-  rpmRpm=TCNT0;
-  TCNT0=0;
-  /*Convert rpm to sensible scale*/
-  return rpmRpm;
-}
-
-int rpmGet(void){
-  return rpmRpm;
+uint8_t rpmGet(void){
+  uint8_t rpmRaw;
+  
+  rpmRaw=TCNT1L;
+  TCNT1L=0;
+  
+  return rpmRaw;
 }
