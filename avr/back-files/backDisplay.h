@@ -4,6 +4,18 @@
 #include "backDefines.h"
 #include <util/delay.h>
 
+/*
+     A
+    ---
+F |     | B
+  |     |
+    ---
+E |  G  | C
+  |     | .
+    ---    \P
+     D  
+*/
+
 #define segE _BV(0)
 #define segD _BV(1)
 #define segC _BV(2)
@@ -23,6 +35,13 @@
 #define disp8 (segA | segB | segC | segG | segE | segD | segF)
 #define disp9 (segA | segB | segC | segG | segD | segF)
 #define disp0 (segA | segB | segC | segE | segD | segF)
+
+#define dispA (segA | segB | segC | segE | segF | segG)
+#define dispB (segF | segE | segG | segC | segD)
+#define dispC (segA | segF | segE | segD)
+#define dispD (segG | segE | segD | segC | segB)
+#define dispE (segA | segF | segG | segE | segD)
+#define dispE (segA | segF | segG | segE)
 
 #define dispN (segE | segG | segC)
 
