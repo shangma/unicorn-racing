@@ -1,6 +1,7 @@
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdint.h>
+#ifndef _BACK_DISPLAY_H_
+#define _BACK_DISPLAY_H_
+
+#include "backDefines.h"
 #include <util/delay.h>
 
 #define segE _BV(0)
@@ -22,3 +23,19 @@
 #define disp8 (segA | segB | segC | segG | segE | segD | segF)
 #define disp9 (segA | segB | segC | segG | segD | segF)
 #define disp0 (segA | segB | segC | segE | segD | segF)
+
+#define dispN (segE | segG | segC)
+
+#define pData   _BV(6)
+#define pClock  _BV(7)
+#define pStr    _BV(0)
+
+typedef struct{
+  uint16_t  rpm:  10;
+  uint8_t  flags:  6;
+  uint8_t  gear:  8;
+}display_t;
+
+void display(uint8_t rpm, uint8_t gear, uint8_t flags);
+
+#endif

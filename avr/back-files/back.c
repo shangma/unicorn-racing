@@ -1,35 +1,35 @@
 #include "back.h"
 
 void init(void){
+  DDRB=0xF9;  /*1=output; 0=input*/
+  DDRC=0xFF;
+  DDRD=0xcF;
+  
+  PORTB=0xFF;
+  PORTC=0xFF;
+  PORTD=0xFF;
+  
+  OSCCAL=0xb4;
+  
   timerInit();
   rpmInit();
-  speedInit();
-  adcInit();
-  ioD->kill=false;
+  gearInit();
+/*  speedInit();
+  adcInit();*/
+  
+  sei();
 }
 
 int main(void){
   init();
   
   while(1){
-    if (flags.newMeasure==true){
-    
+    if(flags.newMeasure){
       flags.newMeasure=false;
       
-      /*Check Temperature*/
-      if (adcCT(last)>150){
-        ioD->kill=true;
-      }else if (adcCT(last)>100){
-        ioD->fan=true;
-      }else{
-        ioD->fan=false;
-      }
-    
-      /*Calculate gear ratio and estimate gear*/
-      if (!ioD->clutch){
-      
-      }
-      
+      gear=gearGet(rpm,speed);
+      display(rpm,gear,0);
     }
+  
   }
 }
