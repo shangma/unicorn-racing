@@ -41,7 +41,7 @@ E |  G  | C
 #define dispC (segA | segF | segE | segD)
 #define dispD (segG | segE | segD | segC | segB)
 #define dispE (segA | segF | segG | segE | segD)
-#define dispE (segA | segF | segG | segE)
+#define dispF (segA | segF | segG | segE)
 
 #define dispN (segE | segG | segC)
 

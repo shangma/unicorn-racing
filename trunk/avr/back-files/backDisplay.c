@@ -20,7 +20,7 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   }
   
   dispData.gear=gearData[gear];
-  dispData.flags=0;
+  dispData.flags=~flags;
   
   PORTB&=~pStr; //disable strobe
 

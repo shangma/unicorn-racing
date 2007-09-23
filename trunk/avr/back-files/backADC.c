@@ -1,52 +1,46 @@
 #include "backADC.h"
 
 void adcInit(void){
-  ADCSRA = _BV(ADEN) | _BV(ADPS2);
+  ADCSRA=_BV(ADEN) | _BV(ADPS2);  //enable adc, prescale=16 (use 32 for 10bit)
+  ADMUX=_BV(REFS0)|_BV(ADLAR);  //ref=AVcc, left adjusted result
 }
 
-int doADC(uint8_t source){
-  admux->source=source;
-  ADCSRA |= _BV(ADSC);
-  while (ADCSRA & _BV(ADSC)) {}
-  return ADCW;
-}
-
-uint8_t adcCT(uint8_t adc){ /*Coolant Temperature*/
-  static uint8_t temp;
-  
-  if (adc){
-    temp=doADC(0);
-    /*Convert ADC value to temperature*/
+uint8_t doADC(uint8_t source){
+  source&=0x0F;
+  ADMUX&=0xF0;
+  ADMUX|=source;
+  ADCSRA&=~_BV(ADIF);
+  ADCSRA|=_BV(ADSC);
+  while(!(ADCSRA&_BV(ADIF))){
   }
-  return temp;
+  return ADCH;
 }
 
-uint8_t adcOP(uint8_t adc){ /*Oil Pressure*/
-  static uint8_t temp;
+uint8_t waterT(void){
+  uint8_t adcValue;
   
-  if (adc){
-    temp=doADC(1);
-    /*Convert ADC value to pressure*/
-  }
-  return temp;
-}
-
-uint8_t adcIAT(uint8_t adc){  /*Intake Air Temperature*/
-  static uint8_t temp;
+  adcValue=doADC(adcWaterT);
   
-  if (adc){
-    temp=doADC(2);
-    /*Convert ADC value to temperature*/
+  if(adcValue<60){                    //cold
+    return 0x01 && !(timeDiv&0x14);
+    /*fan off*/
+  }else if(adcValue<100){             //ok, fan off
+    return 0;
+    /*fan off*/
+  }else if(adcValue<110){             //ok
+    return 0;
+  }else if(adcValue<120){             //ok, fan on
+    return 0;
+    /*fan on*/
+  }else if(adcValue<130){             //hot
+    return 0x01;
+    /*fan on*/
+  }else if(adcValue<140){             //very hot
+    return 0x01 && (timeDiv&0x04);
+    /*fan on*/
+  }else{                              //stop
+    return 0x01 && (timeDiv&0x02);
+    /*fan on*/
+    /*kill engine*/
   }
-  return temp;
-}
-
-uint8_t adcMAP(uint8_t adc){  /*Mainfold Absolute Pressure*/
-  static uint8_t temp;
-  
-  if (adc){
-    temp=doADC(3);
-    /*Convert ADC value to pressure*/
-  }
-  return temp;
 }

@@ -7,8 +7,8 @@
 #include "backDisplay.h"
 #include "backGear.h"
 /*#include "backRPM.h"
-#include "backSPEED.h"
-#include "backADC.h"*/
+#include "backSPEED.h"*/
+#include "backADC.h"
 
 
 #endif
