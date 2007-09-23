@@ -9,12 +9,12 @@ uint8_t gearGet(uint8_t rpm, uint8_t speed){
 
   ratio=(speed*256)/rpm;
   
-  if(!(PINB&_BV(1))){
+  if(!(PINB&pNeutral)){
     gear=0;
     return gear;
   }
   
-  if(!(PINB&_BV(2))){
+  if(!(PINB&pClutch)){
     return gear;
   }
   

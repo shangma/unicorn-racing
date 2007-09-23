@@ -2,7 +2,7 @@ OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
 FRONTOBJ	= front.o
-BACKOBJ		= back.o backTimer.o backDisplay.o backRPM.o backGear.o
+BACKOBJ		= back.o backTimer.o backDisplay.o backRPM.o backGear.o backADC.o
 
 MCU_TARGET	= atmega8
 OPTIMIZE	= -O2
