@@ -9,19 +9,19 @@ void gearInit(void){
 uint8_t gearGet(uint8_t rpm, uint8_t speed){
   uint16_t ratio;
 
-  ratio=(speed*256)/rpm;
-  
   if(!(PINB&pNeutral)){
-    gear=0;
+    gear=7;
     return gear;
   }
   
-  if(!(PINB&pClutch)){
-/*    if(gear==0){          //only show n when in neutral
+  if(!(PINB&pClutch) || rpm<18 || speed<10){
+    if(gear==7){          //only show n when in neutral
       gear=1+gearDir;
-    }*/
-    return gear;
+    }
+    return gear*((timeDiv&0x04)!=0);
   }
+  
+  ratio=(speed*256)/rpm;
   
   if(ratio>256){
     gear=6;
@@ -41,11 +41,14 @@ uint8_t gearGet(uint8_t rpm, uint8_t speed){
 
 
 ISR(SIG_INTERRUPT0){    //up-shift
-  if(PINB&pClutch){
+/*  if(PINB&pClutch){
     return;
-  }
+  }*/
   gearDir=1;
   if(gear==0){
+    return;
+  }
+  if(gear==7){
     gear=2;
   }else if(gear<6){
     gear++;
@@ -53,11 +56,14 @@ ISR(SIG_INTERRUPT0){    //up-shift
 }
 
 ISR(SIG_INTERRUPT1){    //down-shift
-  if(PINB&pClutch){
+/*  if(PINB&pClutch){
     return;
-  }
+  }*/
   gearDir=0;
   if(gear==0){
+    return;
+  }
+  if(gear==7){
     gear=1;
   }else if(gear>1){
     gear--;
