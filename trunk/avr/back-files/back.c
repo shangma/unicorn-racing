@@ -24,6 +24,7 @@ void init(void){
 
 int main(void){
   uint8_t warnings;
+  uint8_t dispGear;
   
   init();
   
@@ -43,8 +44,8 @@ int main(void){
       warnings&=~0x01;
       warnings|=waterT();
       
-      gear=gearGet(rpm,speed);
-      display(rpm,gear,warnings);
+      dispGear=gearGet(rpm,speed);
+      display(rpm,dispGear,warnings);
     }
   
   }

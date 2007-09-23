@@ -3,7 +3,7 @@
 void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   display_t dispData;
   int8_t c;
-  uint8_t gearData[7]={dispN,disp1,disp2,disp3,disp4,disp5,disp6};
+  uint8_t gearData[8]={0,disp1,disp2,disp3,disp4,disp5,disp6,dispN};
   uint8_t rpmScale[10]={20,40,60,70,80,90,100,110,120,130};
   
   dispData.rpm=0x3ff;

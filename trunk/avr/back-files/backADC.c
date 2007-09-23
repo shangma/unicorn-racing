@@ -21,26 +21,26 @@ uint8_t waterT(void){
   
   adcValue=doADC(adcWaterT);
   
-  if(adcValue<60){                    //cold
-    return 0x01 && !(timeDiv&0x14);
-    /*fan off*/
-  }else if(adcValue<100){             //ok, fan off
-    return 0;
-    /*fan off*/
-  }else if(adcValue<110){             //ok
-    return 0;
-  }else if(adcValue<120){             //ok, fan on
-    return 0;
-    /*fan on*/
-  }else if(adcValue<130){             //hot
-    return 0x01;
-    /*fan on*/
-  }else if(adcValue<140){             //very hot
-    return 0x01 && (timeDiv&0x04);
-    /*fan on*/
-  }else{                              //stop
-    return 0x01 && (timeDiv&0x02);
-    /*fan on*/
+  if(adcValue>145){
     /*kill engine*/
   }
+  
+  if(adcValue>115){
+    /*fan on*/
+  }else if(adcValue<105){
+    /*fan off*/
+  }
+  
+  if(adcValue>140){
+    return 0x01*((timeDiv&0x02)!=0);
+  }else if(adcValue>130){
+    return 0x01*((timeDiv&0x04)!=0);
+  }else if(adcValue>120){
+    return 0x01;
+  }else if(adcValue>70){
+    return 0;
+  }else{
+    return 0x01*((timeDiv&0x14)==0);
+  }
+
 }
