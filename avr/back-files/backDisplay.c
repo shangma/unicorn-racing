@@ -22,7 +22,7 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   dispData.gear=gearData[gear];
   dispData.flags=~flags;
   
-  PORTB&=~pStr; //disable strobe
+  PORTB&=~pStr;               //disable strobe
 
   for(c=7;c>=0;c--){
     if(dispData.gear&_BV(c)){
@@ -60,6 +60,6 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     PORTB&=~pClock;
   }
 
-  PORTB|=pStr;  //enable strobe
+  PORTB|=pStr;                //enable strobe
   
 }

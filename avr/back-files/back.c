@@ -3,7 +3,7 @@
 void init(void){
   DDRB=0xF9;  /*1=output; 0=input*/
   DDRC=0xF8;
-  DDRD=0xcF;
+  DDRD=0xc3;
   
   PORTB=0xFF;
   PORTC=0xF8;

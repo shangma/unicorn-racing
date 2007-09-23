@@ -1,7 +1,9 @@
 #include "backGear.h"
 
 void gearInit(void){
-  /*enable external interrupt*/
+  MCUCR|=0x0A;                //external interrupt on falling edge
+  GICR|=_BV(INT0)|_BV(INT1);  //enable external interrupt
+  gearDir=0;
 }
 
 uint8_t gearGet(uint8_t rpm, uint8_t speed){
@@ -15,6 +17,9 @@ uint8_t gearGet(uint8_t rpm, uint8_t speed){
   }
   
   if(!(PINB&pClutch)){
+/*    if(gear==0){          //only show n when in neutral
+      gear=1+gearDir;
+    }*/
     return gear;
   }
   
@@ -32,4 +37,29 @@ uint8_t gearGet(uint8_t rpm, uint8_t speed){
     gear=1;
   }
   return gear;
+}
+
+
+ISR(SIG_INTERRUPT0){    //up-shift
+  if(PINB&pClutch){
+    return;
+  }
+  gearDir=1;
+  if(gear==0){
+    gear=2;
+  }else if(gear<6){
+    gear++;
+  }
+}
+
+ISR(SIG_INTERRUPT1){    //down-shift
+  if(PINB&pClutch){
+    return;
+  }
+  gearDir=0;
+  if(gear==0){
+    gear=1;
+  }else if(gear>1){
+    gear--;
+  }
 }
