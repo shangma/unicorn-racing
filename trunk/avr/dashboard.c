@@ -107,7 +107,7 @@ int main (void)
 void init_ports(void)
 {
   DDRB = 0b01111111;
-  DDRD = 0b11100000;
+  DDRD = 0b11110000;
   DDRC = 0b00000;
   PORTC= 0xFF;
   PORTD = 0b00011111;	// activate internal pull-up
