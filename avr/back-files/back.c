@@ -1,12 +1,12 @@
 #include "back.h"
 
 void init(void){
-  DDRB=0xF9;  /*1=output; 0=input*/
-  DDRC=0xF8;
-  DDRD=0xc3;
+  DDRB=0xFF;  /*1=output; 0=input*/
+  DDRC=0xFC;
+  DDRD=0x03;
   
   PORTB=0xFF;
-  PORTC=0xF8;
+  PORTC=0xFC;
   PORTD=0xFF;
   
   OSCCAL=0xb4;

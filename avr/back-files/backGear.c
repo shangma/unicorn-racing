@@ -9,12 +9,12 @@ void gearInit(void){
 uint8_t gearGet(uint8_t rpm, uint8_t speed){
   uint16_t ratio;
 
-  if(!(PINB&pNeutral)){
+  if(!(PIND&pNeutral)){
     gear=7;
     return gear;
   }
   
-  if(!(PINB&pClutch) || rpm<18 || speed<10){
+  if(!(PIND&pClutch) || rpm<18 || speed<10){
     if(gear==7){          //only show n when in neutral
       gear=1+gearDir;
     }
