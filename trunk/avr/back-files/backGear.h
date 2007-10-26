@@ -3,8 +3,8 @@
 
 #include "backDefines.h"
 #include <avr/interrupt.h>
-#define pClutch _BV(2)
-#define pNeutral _BV(1)
+#define pClutch _BV(6)
+#define pNeutral _BV(7)
 
 volatile uint8_t gearDir;
 
