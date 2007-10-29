@@ -45,6 +45,10 @@ int main(void){
       warnings|=waterT();
       
       dispGear=gearGet(rpm,speed);
+      
+      warnings&=~0x36;
+      warnings|=shift(rpm,gear);
+      
       display(rpm,dispGear,warnings);
     }
   
