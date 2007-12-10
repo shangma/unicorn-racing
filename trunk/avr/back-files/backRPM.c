@@ -16,7 +16,7 @@ uint8_t rpmGet(void){
 uint8_t shift(uint8_t rpm,uint8_t gear){
   
   if(rpm>110){
-    return 0x06*((timeDiv&0x01)!=0)+0x30*!((timeDiv&0x01)!=0);
+    return 0x36*((timeDiv&0x01)!=0);
   }else{
     return 0;
   }
