@@ -1,6 +1,6 @@
 [My Computer]
-My Computer = "192.168.125.81"
+My Computer = "169.254.134.136"
 
 [NI-Unicorn]
-NI-Unicorn = "10.0.0.2"
+NI-Unicorn = "169.254.0.2"
 
