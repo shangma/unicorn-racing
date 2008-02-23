@@ -3,12 +3,12 @@
 
 #include "pshackDefines.h"
 
-#define pUpIN _BV(0)
-#define pDownIN _BV(1)
+#define pEndIN  _BV(0)
 
+#define pUpIN _BV(2)
+#define pLoadIN _BV(1)
 
-#define pUpOUT _BV(3)
-#define pDownOUT _BV(4)
-#define pIntOUT _BV(5)
+#define pKillOUT _BV(3)
+#define pHaltOUT _BV(4)
 
 #endif

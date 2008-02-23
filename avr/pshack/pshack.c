@@ -1,9 +1,9 @@
 #include "pshack.h"
 
 void init(void){
-  DDRB=0xFC;  /*1=output; 0=input*/
+  DDRB=0xF8;  /*1=output; 0=input*/
   
-  PORTB=0xE7;
+  PORTB=0xE3;
 
 /*  OSCCAL=0xb4;*/
   
@@ -11,38 +11,47 @@ void init(void){
 }
 
 int main(void){
-  unsigned int c;
+  unsigned int b, c;
   uint8_t a;
 
   init();
   c=0;
   a=0;
+  b=0;
   
   while(1){
-    if((PINB&pUpIN) && (PINB&pDownIN)){ /*no buttons pressed*/
+  
+    if(PINB&pLoadIN){
       a++;
-      if(a>100){                        /*for 100 cycles (debounce)*/
+      if(a>100){
+        a=0;
         c=0;
-        PORTB&=~pUpOUT;                 /*halt actuator*/
-        PORTB&=~pDownOUT;
+        PORTB&=~pHaltOUT;
       }
     }else if(c<=10000){
-      c++;                              /*count cycles of button pressed*/
-      a=0;                              /*stop at 10000*/
+      c++;
+      a=0;
+      if(!(PINB&pEndIN)){
+        c+=2;
+      }
     }
-    
-    if(c>10000){                        /*if button pressed for 10000 cycles*/
-      PORTB&=~pUpOUT;                   /*halt actuator*/
-      PORTB&=~pDownOUT;
+  
+    if(c>10000){
+      PORTB|=pHaltOUT;
+      PORTB&=~pKillOUT;
       continue;
     }
   
-    if(!(PINB&pUpIN) && (PINB&pDownIN)){
-      PORTB&=~pDownOUT;
-      PORTB|=pUpOUT;
-    }else if(!(PINB&pDownIN) && (PINB&pUpIN)){
-      PORTB&=~pUpOUT;
-      PORTB|=pDownOUT;
+    if(b>0){
+      b--;
+      PORTB|=pKillOUT;
+    }else{
+      PORTB&=~pKillOUT;
+    }
+
+    if((PINB&pUpIN)&&!(PINB&pLoadIN)&&c<2){
+      PORTB|=pKillOUT;
+      b=3000;
     }
   }
   
