@@ -28,7 +28,7 @@ int main(void){
         c=0;
         PORTB&=~pHaltOUT;
       }
-    }else if(c<=10000){
+    }else if(c<=20000){
       c++;
       a=0;
       if(!(PINB&pEndIN)){
@@ -36,7 +36,7 @@ int main(void){
       }
     }
   
-    if(c>10000){
+    if(c>20000){
       PORTB|=pHaltOUT;
       PORTB&=~pKillOUT;
       continue;
