@@ -9,10 +9,14 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-volatile uint8_t rpm, speed, timeDiv, gear;
+volatile uint8_t newRPM, newSpeed, timeDiv, newWarnings;
 
 volatile struct{
+  uint8_t refresh: 1;
   uint8_t newMeasure: 1;
+  uint8_t reqInfo: 1;
+  uint8_t newByte: 1;
+  uint8_t reply: 1;
 } flags;
 
 #endif

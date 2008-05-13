@@ -7,6 +7,7 @@ void init(void){
 
 /*  OSCCAL=0xb4;*/
   
+  siInit();
   timerInit();
   
   CLKPR=_BV(CLKPCE);  /*Prescale by two (CLK=4MHz)*/
@@ -16,33 +17,46 @@ void init(void){
 }
 
 int main(void){
-  uint8_t warnings;
-  uint8_t dispGear;
+  uint8_t gear, rpm, warnings;
   
   init();
   
   while(timeDiv<50){
-    if(flags.newMeasure){
-      flags.newMeasure=false;
+    if(flags.refresh){
+      flags.refresh=false;
       display(timeDiv*3,timeDiv/8,0x3F);
     }
   }
+  
+  gear=7;
+  rpm=0;
   warnings=0;
   
   while(1){
     if(flags.newMeasure){
       flags.newMeasure=false;
+      rpm=newRPM;
+/*      gear=calcGear();*/
+      gear=newSpeed;
+      warnings=newWarnings;
+    }
+  
+    if(flags.refresh){
+      flags.refresh=false;
       
-      warnings&=~0x01;
-/*      warnings|=waterT();*/
+      /*make blinking effect on warnings*/
       
-/*      dispGear=gearGet(rpm,speed);*/
-      dispGear=3;
-      
-      warnings&=~0x36;
-/*      warnings|=shift(rpm,gear);*/
-      
-      display(rpm,dispGear,warnings);
+      display(rpm,gear,warnings);
+    }
+    
+    if(flags.reqInfo){
+      flags.reqInfo=false;
+      reqInfo();
+    }
+    
+    if(flags.newByte){
+      flags.newByte=false;
+      getInfo();
     }
   
   }

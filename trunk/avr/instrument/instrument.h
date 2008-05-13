@@ -4,6 +4,7 @@
 #include "instrumentDefines.h"
 #include "display.h"
 #include "timer.h"
+#include "si.h"
 
 #define pEndIN  _BV(0)
 

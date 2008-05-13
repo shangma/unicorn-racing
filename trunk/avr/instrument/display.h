@@ -46,8 +46,8 @@ E |  G  | C
 #define dispN (segE | segG | segC)
 
 #define pData   _BV(3)
-#define pClock  _BV(4)
-#define pStr    _BV(2)
+#define pClock  _BV(2)
+#define pStr    _BV(1)
 
 typedef struct{
   uint16_t  rpm:  10;
