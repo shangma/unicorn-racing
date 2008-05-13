@@ -1,10 +1,10 @@
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-OBJ		= instrument.o display.o timer.o
+OBJ		= instrument.o display.o timer.o si.o
 PRG             = instrument
 
-MCU_TARGET	= attiny45
+MCU_TARGET	= atmega88
 OPTIMIZE	= -O2
 
 TEXTFORMAT	= hex
@@ -34,7 +34,7 @@ doBurn:	$(PRG).hex
 	@echo "Trying to burn $(PRG).hex to device..."
 	@echo "run 'make compile [...]' to disable burn-on-compile"
 	@echo "==================================================="
-	avrdude -p t45 -c pony-stk200 -e -U flash:w:$(PRG).hex
+	avrdude -p atmega88 -c pony-stk200 -e -U flash:w:$(PRG).hex
 
 parport:
 	-sudo mknod /dev/parport0 c 99 0

@@ -1,11 +1,11 @@
 #include "timer.h"
 
 void timerInit(void){
-  TCCR1=0x0B; /*prescaler=1024*/
-  TIMSK|=_BV(TOIE1);
+  TCCR2B=0x07; /*prescaler=1024*/
+  TIMSK2|=_BV(TOIE2);
 }
 
-ISR(TIMER1_OVF_vect){
+ISR(TIMER2_OVF_vect){
 
 /*
 F_CPU=4MHz, Timer1 prescaler=1024 -> 3906Hz
@@ -14,14 +14,17 @@ we want 100rpm/tick/interrupt -> interrupt @ 20Hz
 3906Hz/20Hz=195 -> we add 64 to the counter to get 256-64=192
 */
 
-  TCNT1|=0x40;
+  TCNT2|=0x40;
   
-  rpm=40;
-/*  speed=speedGet();*/
-  speed=40;
+/*  newRPM=40;
+  newSpeed=40;
+  newWarnings=0;*/
   
-  flags.newMeasure=true;
+  flags.refresh=true;
   timeDiv++;
   
-  PORTB^=_BV(0);
+  if (timeDiv==0||flags.reply){
+    flags.reply=false;
+    flags.reqInfo=true;
+  }
 }
