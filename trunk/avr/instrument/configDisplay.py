@@ -1,8 +1,10 @@
 from defineData import *
 
 statusTime.label="Time"
+
 waterTemp.label="CLT"
 waterTemp.upperL=23.8
+
 roadSpeed.label="Speed"
 
 rpm.label="RPM"
@@ -22,7 +24,7 @@ gY.lowerL=-1.5
 
 gZ.label="Z"
 gZ.upperL=1.5
-gZ.lowerL=-1.5
+gZ.lowerL=0.5
 
 triggerErr.label="Synch"
 
