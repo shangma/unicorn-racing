@@ -48,7 +48,8 @@ class meas:
     data=dataM[d]
     d=(d+1)%len(dataM)
   
-  def newData(self):
-    skip
+  def updateData(self,nData):
+    global data
+    data=nData
 
 d=0

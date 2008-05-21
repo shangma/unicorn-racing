@@ -51,10 +51,10 @@ while 1:
   if tmp==114:
 #    data=hexlify(tty.read(114))
 #    newData(hexlify(tty.read(114)))
+    rpm.updateData(hexlify(tty.read(114)))
     reply=True
-  else:
+#  else:
 #    print "Rx buffer length: " + str(tmp)
-    reply=False
 
   if tmp!=114 and c==8:
     reply=True
@@ -78,7 +78,7 @@ while 1:
     
     for item in display:
       if item.value() > item.upperL or item.value() < item.lowerL:
-        print "=======",
+        print "#######",
       else:
         print "-------",
         
