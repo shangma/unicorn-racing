@@ -37,7 +37,7 @@ d=0
 #print gX.retHex()
 
 while 1:
-  sleep(0.05)
+  sleep(0.5)
   
   c+=1
   
@@ -45,7 +45,7 @@ while 1:
     requestStatus()
     reply=False
   
-  sleep(0.01)
+  sleep(0.5)
   tmp=tty.inWaiting()
   
   if tmp==114:
