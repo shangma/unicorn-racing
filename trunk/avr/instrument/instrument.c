@@ -35,9 +35,9 @@ int main(void){
   while(1){
     if(flags.newMeasure){
       flags.newMeasure=false;
-      rpm=newRPM;
+      rpm=(newRPM>>4);
 /*      gear=calcGear();*/
-      gear=newSpeed;
+      gear=(newSpeed>>4);
       warnings=newWarnings;
     }
   

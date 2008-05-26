@@ -1,5 +1,7 @@
 from classMeas import *
 
+one=float(1)
+
 fuelPressure=meas(0)
 statusLapCount=meas(2)
 statusInjSum=meas(4)
@@ -17,7 +19,7 @@ statusCamTrigP2=meas(30)
 statusChokerAdd=meas(32)
 statusLambdaPWM=meas(34)
 
-waterTemp=meas(46,0.01)
+waterTemp=meas(46,0.01) #old gain: 0.01
 airTemp=meas(48,0.01)
 potmeter=meas(50)
 rpm=meas(54)
@@ -35,6 +37,6 @@ injectorTime=meas(78)
 ignitionTime=meas(82)
 dwellTime=meas(84)
 
-gX=meas(96,0.00006)
-gY=meas(98,0.00006)
-gZ=meas(100,0.00006)
+gX=meas(96,one/16384) #old gain: 0.00006
+gY=meas(98,one/16384)
+gZ=meas(100,one/16384)
