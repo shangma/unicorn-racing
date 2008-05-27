@@ -9,6 +9,5 @@ volatile uint8_t siCount;
 
 void siInit(void);
 void reqInfo(void);
-void getInfo(void);
 
 #endif

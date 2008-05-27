@@ -23,7 +23,7 @@ we want 100rpm/tick/interrupt -> interrupt @ 20Hz
   flags.refresh=true;
   timeDiv++;
   
-  if (timeDiv==0||flags.reply){
+  if (timeDiv==0||flags.reply==true){
     flags.reply=false;
     flags.reqInfo=true;
   }

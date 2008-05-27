@@ -4,19 +4,24 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   display_t dispData;
   int8_t c;
   uint8_t gearData[8]={0,disp1,disp2,disp3,disp4,disp5,disp6,dispN};
-  uint8_t rpmScale[10]={20,40,60,70,80,90,100,110,120,130};
+  uint8_t rpmScale[5]={92,108,124,139,155};
+  /*6000 7000 8000 9000 10000*/
   
   dispData.rpm=0x3ff;
   
-  for(c=0;c<10;c++){
+  for(c=0;c<5;c++){
     if(rpm>rpmScale[c]){
-      dispData.rpm&=~_BV(c);
+      dispData.rpm&=~_BV(c)&~_BV(9-c);
 /*      if(c){
         dispData.rpm|=_BV(c-1);   //dot-style
       }*/
     }else{
       break;
     }
+  }
+  
+  if(rpm>172){
+    dispData.rpm=0x3ff*((timeDiv&0x04)!=0);
   }
   
   dispData.gear=gearData[gear];
