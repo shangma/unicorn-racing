@@ -9,9 +9,10 @@ void init(void){
   
   siInit();
   timerInit();
+/*  dectInit();*/
   
-  CLKPR=_BV(CLKPCE);  /*Prescale by two (CLK=4MHz)*/
-  CLKPR=0x01;
+  CLKPR=_BV(CLKPCE);  /*Allow prescaler change*/
+  CLKPR=0x01;         /*Prescale by two (CLK=4MHz)*/
   
   sei();
 }
@@ -35,9 +36,10 @@ int main(void){
   while(1){
     if(flags.newMeasure){
       flags.newMeasure=false;
-      rpm=(newRPM>>4);
+      PORTB^=_BV(0);
+      rpm=(newRPM>>6);
 /*      gear=calcGear();*/
-      gear=(newSpeed>>4);
+      gear=(newSpeed>>6);
       warnings=newWarnings;
     }
   
@@ -52,11 +54,6 @@ int main(void){
     if(flags.reqInfo){
       flags.reqInfo=false;
       reqInfo();
-    }
-    
-    if(flags.newByte){
-      flags.newByte=false;
-      getInfo();
     }
   
   }
