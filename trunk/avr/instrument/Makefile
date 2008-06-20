@@ -1,7 +1,7 @@
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-OBJ		= instrument.o display.o timer.o si.o
+OBJ		= instrument.o display.o timer.o si.o radio.o
 PRG             = instrument
 
 MCU_TARGET	= atmega88
