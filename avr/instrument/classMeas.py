@@ -1,4 +1,5 @@
 from dataLog import dataM
+from fpformat import fix
 
 class meas:
   
@@ -10,6 +11,7 @@ class meas:
   label=""
   upperL=100000
   lowerL=0
+  decimals=1
   
   def __init__(self,n=0,g=1,o=0,t="w",l=2):
     self.dataOffset=n*2
@@ -40,7 +42,7 @@ class meas:
     return int(self.retHex(),16)
     
   def s(self):
-    return str(self.value())[:6]
+    return str(fix(self.value(),self.decimals))[:6]
     
   def scrollData(self):
     global d
