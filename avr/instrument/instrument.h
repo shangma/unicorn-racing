@@ -5,6 +5,7 @@
 #include "display.h"
 #include "timer.h"
 #include "si.h"
+#include "radio.h"
 
 #define pEndIN  _BV(0)
 
