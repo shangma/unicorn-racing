@@ -32,7 +32,7 @@ reply=True
 #print rdOnly+H8cmd+reqStatus
 #print unhexlify(rdOnly+H8cmd+reqStatus)
 c=0
-d=0
+#d=0
 
 #print gX.retHex()
 
@@ -59,7 +59,7 @@ while 1:
   if tmp!=114 and c==8:
     reply=True
     rpm.scrollData()
-    d=(d+1)%len(dataM)
+#    d=(d+1)%len(dataM)
 
   if reply:
     c=0
