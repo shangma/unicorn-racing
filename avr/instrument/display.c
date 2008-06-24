@@ -28,6 +28,7 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   dispData.flags=(uint8_t)~flags;
   
   PORTB&=~pStr;               //disable strobe
+  _delay_us(displayDelay);
 
   for(c=7;c>=0;c--){
     if(dispData.gear&_BV(c)){
@@ -35,9 +36,9 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     }else{
       PORTB&=~pData;
     }
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB|=pClock;
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB&=~pClock;
   }
 
@@ -47,9 +48,9 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     }else{
       PORTB&=~pData;
     }
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB|=pClock;
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB&=~pClock;
   }
   
@@ -59,12 +60,13 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     }else{
       PORTB&=~pData;
     }
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB|=pClock;
-    _delay_us(100);
+    _delay_us(displayDelay);
     PORTB&=~pClock;
   }
 
+  _delay_us(displayDelay);
   PORTB|=pStr;                //enable strobe
   
 }

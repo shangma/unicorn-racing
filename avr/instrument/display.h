@@ -49,6 +49,8 @@ E |  G  | C
 #define pClock  _BV(2)
 #define pStr    _BV(1)
 
+#define displayDelay  100
+
 typedef struct{
   uint16_t  rpm:  10;
   uint8_t  flags:  6;

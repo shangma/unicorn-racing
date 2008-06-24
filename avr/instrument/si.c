@@ -26,7 +26,7 @@ ISR(USART_RX_vect){
       dirtyPointer=(uint8_t*)&newSpeed;
       dirtyPointer[0]=UDR0;
       break;
-    case 107:
+    case 113:
       newWarnings=UDR0;
       flags.newMeasure=true;
       flags.reply=true;
