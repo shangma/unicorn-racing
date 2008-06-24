@@ -2,10 +2,19 @@
 
 from uspp import *
 from binascii import hexlify, unhexlify
-
+from os import name
 
 #tty=SerialPort("/dev/ttyS0", None, 19200,[8,"NOPARITY",2])
-tty=SerialPort("/dev/ttyS0", None, 19200)
+
+linTTYs="/dev/ttyS0"
+winTTYs="COM3"
+
+if name=="posix":
+  print "Linux (I think) using " + linTTYs
+  tty=SerialPort(linTTYs, None, 19200)
+else:
+  print "Windows (or what?) using " + winTTYs
+  tty=SerialPort(winTTYs, None, 19200)
 
 replyA=""
 
@@ -40,8 +49,7 @@ while 1:
   rpmHEX="0000"[0:4-len(tmp)]+tmp
 #  print rpmHEX
 
-  dat=unhexlify(replyA+rpmHEX+replyA)
-
+  dat=unhexlify(replyA+rpmHEX+replyA+"000000FF")
   reqRAW=tty.read(10)
   reqHEX=hexlify(reqRAW)
   print reqHEX
@@ -49,3 +57,5 @@ while 1:
   if reqHEX[17:19]=="00":
     tty.write(dat)
     print "hej"
+  else:
+    tty.flush()

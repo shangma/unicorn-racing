@@ -7,14 +7,14 @@ from time import sleep
 from os import name
 
 linTTYs="/dev/ttyS0"
-winTTYs="COM3"
+winTTYs="COM5"
 
 if name=="posix":
   print "Linux (I think) using " + linTTYs
-  tty=SerialPort("/dev/ttyS0", 1000, 19200)
+  tty=SerialPort(linTTYs, 70, 19200)
 else:
   print "Windows (or what?) using " + winTTYs
-  tty=SerialPort("COM3", 1000, 19200)
+  tty=SerialPort(winTTYs, 70, 19200)
 
 rdOnly="12345678"
 H8cmd=hexlify(chr(23))
@@ -42,25 +42,40 @@ while 1:
   c+=1
   
   if reply or c==5:
-    requestStatus()
+#    requestStatus()
     reply=False
   
-  sleep(0.5)
-  tmp=tty.inWaiting()
-  
-  if tmp==114:
-#    data=hexlify(tty.read(114))
-#    newData(hexlify(tty.read(114)))
-    rpm.updateData(hexlify(tty.read(114)))
-    reply=True
-#  else:
-#    print "Rx buffer length: " + str(tmp)
+#  sleep(0.5)
 
-  if tmp!=114 and c==8:
-    reply=True
-    rpm.scrollData()
+#  tmp=tty.inWaiting()
+#  
+#  if tmp==114:
+##    data=hexlify(tty.read(114))
+##    newData(hexlify(tty.read(114)))
+#    rpm.updateData(hexlify(tty.read(114)))
+#    reply=True
+##  else:
+##    print "Rx buffer length: " + str(tmp)
+#
+#  if tmp!=114 and c==8:
+#    reply=True
+#    rpm.scrollData()
 #    d=(d+1)%len(dataM)
 
+
+  tty.flush()
+  tmp=0
+
+  while reply==False:
+    sleep(0.01)
+    try:
+      data=hexlify(tty.read(114))
+      rpm.updateData(data)
+      reply=True
+    except:
+      tty.flush()
+      print "synch",
+    
   if reply:
     c=0
 
