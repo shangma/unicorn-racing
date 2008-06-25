@@ -3,6 +3,8 @@
 void timerInit(void){
   TCCR2B=0x07; /*prescaler=1024*/
   TIMSK2|=_BV(TOIE2);
+  timeDiv=0;
+  timeOut=0x0f;
 }
 
 ISR(TIMER2_OVF_vect){
@@ -22,9 +24,11 @@ we want 100rpm/tick/interrupt -> interrupt @ 20Hz
   
   flags.refresh=true;
   timeDiv++;
+  timeOut--;
   
-  if (timeDiv==0||timeDiv==127||flags.reply==true){
+  if (timeOut==0||flags.reply==true){
     flags.reply=false;
     flags.reqInfo=true;
+    timeOut=0x0f;
   }
 }
