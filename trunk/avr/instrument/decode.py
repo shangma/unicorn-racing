@@ -11,10 +11,10 @@ winTTYs="COM5"
 
 if name=="posix":
   print "Linux (I think) using " + linTTYs
-  tty=SerialPort(linTTYs, 70, 19200)
+#  tty=SerialPort(linTTYs, 70, 19200)
 else:
   print "Windows (or what?) using " + winTTYs
-  tty=SerialPort(winTTYs, 70, 19200)
+#  tty=SerialPort(winTTYs, 70, 19200)
 
 rdOnly="12345678"
 H8cmd=hexlify(chr(23))
@@ -22,8 +22,8 @@ reqStatus="0800000000"
     
 
 def requestStatus():
-#  print "Requesting status: " + rdOnly+H8cmd+reqStatus
-  tty.write(unhexlify(rdOnly+H8cmd+reqStatus))
+  print "Requesting status: " + rdOnly+H8cmd+reqStatus
+#  tty.write(unhexlify(rdOnly+H8cmd+reqStatus))
 
 from configDisplay import *
 
@@ -34,10 +34,10 @@ reply=True
 c=0
 #d=0
 
-#print gX.retHex()
+logFile=open("datalog.txt","r+")
 
 while 1:
-  sleep(0.5)
+  sleep(1)
   
   c+=1
   
@@ -63,18 +63,28 @@ while 1:
 #    d=(d+1)%len(dataM)
 
 
-  tty.flush()
-  tmp=0
+#  tty.flush()
+#  tmp=0
 
-  while reply==False:
-    sleep(0.01)
-    try:
-      data=hexlify(tty.read(114))
-      rpm.updateData(data)
-      reply=True
-    except:
-      tty.flush()
-      print "synch",
+#  while reply==False:
+#    sleep(0.01)
+#    try:
+#      data=hexlify(tty.read(114))
+#      rpm.updateData(data)
+#      reply=True
+#    except:
+#      tty.flush()
+#      print "synch",
+
+#  logFile.flush()
+#  logFile.readline()
+  logFile.flush()
+  logFile.seek(-500,2)
+  logFile.readline()
+  data=logFile.readline()
+#  print data
+  rpm.updateData(data)
+  reply=True
     
   if reply:
     c=0
