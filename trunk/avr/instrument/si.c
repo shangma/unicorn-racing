@@ -9,6 +9,7 @@ ISR(USART_RX_vect){
   if(!(UCSR0A&_BV(RXC0))){
     return;
   }
+  PORTD&=~pDCD;
   switch(siCount){
     case 54:
       dirtyPointer=(uint8_t*)&newRPM;
@@ -53,10 +54,11 @@ void reqInfo(void){
   uint8_t c;
   
   siCount=0;
-
+  PORTD|=pDCD;
   for(c=0;c<10;c++){
     while(!(UCSR0A&_BV(UDRE0))){
     }
     UDR0=reqCmd[c];
   }
+  
 }

@@ -1,13 +1,19 @@
 #! /usr/bin/python
 
-from uspp import *
+#from uspp import *
 from binascii import hexlify, unhexlify
 from time import sleep
 
 from os import name
+import socket
 
 linTTYs="/dev/ttyS0"
 winTTYs="COM5"
+
+host = "localhost"
+port = 21567
+buf = 1024
+addr = (host,port)
 
 if name=="posix":
   print "Linux (I think) using " + linTTYs
@@ -20,6 +26,8 @@ rdOnly="12345678"
 H8cmd=hexlify(chr(23))
 reqStatus="0800000000"
     
+UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+UDPSock.bind(addr)
 
 def requestStatus():
   print "Requesting status: " + rdOnly+H8cmd+reqStatus
@@ -34,10 +42,10 @@ reply=True
 c=0
 #d=0
 
-logFile=open("datalog.txt","r+")
+
 
 while 1:
-  sleep(1)
+  data = UDPSock.recv(buf)
   
   c+=1
   
@@ -45,43 +53,7 @@ while 1:
 #    requestStatus()
     reply=False
   
-#  sleep(0.5)
 
-#  tmp=tty.inWaiting()
-#  
-#  if tmp==114:
-##    data=hexlify(tty.read(114))
-##    newData(hexlify(tty.read(114)))
-#    rpm.updateData(hexlify(tty.read(114)))
-#    reply=True
-##  else:
-##    print "Rx buffer length: " + str(tmp)
-#
-#  if tmp!=114 and c==8:
-#    reply=True
-#    rpm.scrollData()
-#    d=(d+1)%len(dataM)
-
-
-#  tty.flush()
-#  tmp=0
-
-#  while reply==False:
-#    sleep(0.01)
-#    try:
-#      data=hexlify(tty.read(114))
-#      rpm.updateData(data)
-#      reply=True
-#    except:
-#      tty.flush()
-#      print "synch",
-
-#  logFile.flush()
-#  logFile.readline()
-  logFile.flush()
-  logFile.seek(-500,2)
-  logFile.readline()
-  data=logFile.readline()
 #  print data
   rpm.updateData(data)
   reply=True
