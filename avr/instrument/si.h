@@ -5,6 +5,8 @@
 
 #include <avr/interrupt.h>
 
+#define pDCD _BV(4)
+
 volatile uint8_t siCount;
 
 void siInit(void);
