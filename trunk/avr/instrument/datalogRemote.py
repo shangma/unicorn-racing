@@ -15,7 +15,9 @@ addr = (host,port)
 linTTYs="/dev/ttyS0"
 winTTYs="COM5"
 
-fileName="datalog " + strftime("%y-%m-%d %H%M") + ".txt"
+dataLogPath="C:\Documents and Settings\Laptop\Skrivebord\dataLogs\"
+
+fileName=dataLogPath + strftime("%y-%m-%d %H%M") + ".txt"
 print fileName
 
 if name=="posix":
