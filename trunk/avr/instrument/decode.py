@@ -7,20 +7,20 @@ from time import sleep
 from os import name
 import socket
 
-linTTYs="/dev/ttyS0"
-winTTYs="COM5"
+#linTTYs="/dev/ttyS0"
+#winTTYs="COM5"
 
 host = "localhost"
 port = 21567
 buf = 1024
 addr = (host,port)
 
-if name=="posix":
-  print "Linux (I think) using " + linTTYs
-#  tty=SerialPort(linTTYs, 70, 19200)
-else:
-  print "Windows (or what?) using " + winTTYs
-#  tty=SerialPort(winTTYs, 70, 19200)
+#if name=="posix":
+#  print "Linux (I think) using " + linTTYs
+##  tty=SerialPort(linTTYs, 70, 19200)
+#else:
+#  print "Windows (or what?) using " + winTTYs
+##  tty=SerialPort(winTTYs, 70, 19200)
 
 rdOnly="12345678"
 H8cmd=hexlify(chr(23))
