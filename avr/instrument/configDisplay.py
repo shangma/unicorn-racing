@@ -3,13 +3,14 @@ from defineData import *
 statusTime.label="Time"
 
 waterTemp.label="CLT"
-waterTemp.upperL=95
+waterTemp.upperL=105
 waterTemp.lowerL=75
 
 roadSpeed.label="Speed"
 
 rpm.label="RPM"
-rpm.upperL=200
+rpm.upperL=10000
+rpm.lowerL=5000
 
 statusLapTime.label="Lap T"
 statusLapCount.label="Lap #"
