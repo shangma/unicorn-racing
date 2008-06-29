@@ -22,11 +22,12 @@ def writeData(logFile,csvFile):
   while not eof:
     data=logFile.readline()
 #    print data
+#    print len(data)
 
     if len(data)==0:
       eof=True
       continue
-    if len(data)!=229:
+    if not (len(data)==229 or len(data)==230):
       continue
     
     rpm.updateData(data)
@@ -41,7 +42,6 @@ def writeData(logFile,csvFile):
 
 ###################################
 
-print argv
 if len(argv)==1:
   exit()
 
