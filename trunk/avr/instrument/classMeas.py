@@ -39,7 +39,11 @@ class meas:
     return int(self.retHex(),16)
     
   def retInt(self):
-    return int(self.retHex(),16)
+    tmp=int(self.retHex(),16)
+    if tmp < 32768:
+      return tmp
+    else:
+      return -(0xffff-tmp)
     
   def s(self):
     return str(fix(self.value(),self.decimals))[:6]
