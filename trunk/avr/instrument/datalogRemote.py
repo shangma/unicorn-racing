@@ -22,10 +22,10 @@ print fileName
 
 if name=="posix":
   print "Linux (I think) using " + linTTYs
-  tty=serial.Serial(linTTYs, 19200, timeout=0.1)
+  tty=serial.Serial(linTTYs, 19200, timeout=0.15)
 else:
   print "Windows (or what?) using " + winTTYs
-  tty=serial.Serial(winTTYs, 19200, timeout=0.1)
+  tty=serial.Serial(winTTYs, 19200, timeout=0.15)
 
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 logFile=open(fileName,"w")
@@ -40,6 +40,8 @@ while 1:
   tty.flushInput()
   try:
     data=hexlify(tty.read(114))
+    if len(data)!=228:
+      print len(data)
     tmp=tty.inWaiting()
   except:
     print "Timeout, resynch..."
