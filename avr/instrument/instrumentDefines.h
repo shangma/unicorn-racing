@@ -19,6 +19,7 @@ volatile struct{
   uint8_t reqInfo: 1;
   uint8_t newByte: 1;
   uint8_t reply: 1;
+  uint8_t forward: 1;
 } flags;
 
 #endif
