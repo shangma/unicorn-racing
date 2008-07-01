@@ -4,8 +4,8 @@
 #include "instrumentDefines.h"
 #include <util/delay.h>
 
-#define pConfig1 _BV(0)
-#define pConfig2 _BV(1)
+#define pConfigB _BV(0)
+#define pConfigD _BV(7)
 
 void radioInit(void);
 

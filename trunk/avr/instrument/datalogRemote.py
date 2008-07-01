@@ -1,84 +1,94 @@
 #! /usr/bin/python
 
-#from uspp import *
 import serial
 from binascii import hexlify, unhexlify
 from os import name
 from time import sleep, time, strftime
 import socket
+from string import strip
+
+#### MODE
+# FIXME: AUTODETECT
+remote=True
+passive=True
+################################
+
+#### READ CONFIG
+print "Reading config:\t\tdatalogConfig.txt"
+configFile=open("datalogConfig.txt","r")
+dataLogPath=strip(configFile.readline(),"\n\r")
+ttyName=strip(configFile.readline(),"\n\r")
+configFile.close()
+################################
+
+fileName=dataLogPath + "dataLog " + strftime("%y-%m-%d %H%M") + ".txt"
+print "Logging data to:\t" + fileName
 
 host = "localhost"
 port = 21567
 buf = 1024
 addr = (host,port)
 
-linTTYs="/dev/ttyS0"
-winTTYs="COM5"
-
-############################# 
-#dataLogPath="C:\\Documents and Settings\\Laptop\\Skrivebord\\dataLogs\\"
-dataLogPath="C:\\dataLogs\\"    # FIXME: hent path fra config fil
-
-fileName=dataLogPath + "dataLog " + strftime("%y-%m-%d %H%M") + ".txt"
-print fileName
-
-rdOnly="12345678"
-H8cmd=hexlify(chr(23))
-reqStatus="0800000000"
-
-if name=="posix":
-  print "Linux (I think) using " + linTTYs
-  tty=serial.Serial(linTTYs, 19200, timeout=0.25)
-else:
-  print "Windows (or what?) using " + winTTYs
-  tty=serial.Serial(winTTYs, 19200, timeout=0.25)
+print "Serial interface:\t" + ttyName
+tty=serial.Serial(ttyName, 19200, timeout=0.25)
 
 tty.setDTR(1)   #DTR is used to power the CarrierDetect generator circuit
 
+################################
+
 def requestStatus():
-  print "Requesting status: " + rdOnly+H8cmd+reqStatus
-  tty.write(unhexlify(rdOnly+H8cmd+reqStatus))
+#rdOnly="12345678"
+#H8cmd="17" #hexlify(chr(23))
+#reqStatus="0800000000"
+  print "Requesting status..."
+  tty.write(unhexlify("12345678"+"17"+"0800000000"))
 
 tty.flushInput()
-sleep(1)
-print "SENDING: +++"
-tty.write("+++")
-sleep(5)
-tmp=tty.inWaiting()
-print "RECEIVING: " + tty.read(tmp)
-sleep(2)
-print "SENDING: AT^SETUP"
-tty.write("\r\nAT^SETUP\r\n")
-sleep(5)
-tmp=tty.inWaiting()
-print "RECEIVING: " + tty.read(tmp)
-sleep(2)
-print "SENDING: ATO"
-tty.write("\r\nATO\r\n")
-sleep(5)
-tmp=tty.inWaiting()
-print "RECEIVING: " + tty.read(tmp)
-sleep(2)
 
-print tty.read(10)
+################################
+
+def initRadio():
+  sleep(2)
+  print "SENDING: +++"
+  tty.write("+++")
+  sleep(5)
+  tmp=tty.inWaiting()
+  print "RECEIVING: " + tty.read(tmp)
+  sleep(2)
+  print "SENDING: AT^SETUP"
+  tty.write("\r\nAT^SETUP\r\n")
+  sleep(5)
+  tmp=tty.inWaiting()
+  print "RECEIVING: " + tty.read(tmp)
+  sleep(2)
+  print "SENDING: ATO"
+  tty.write("\r\nATO\r\n")
+  sleep(5)
+  tmp=tty.inWaiting()
+  print "RECEIVING: " + tty.read(tmp)
+  sleep(2)
+
+################################
 
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 logFile=open(fileName,"w")
 
 w=0
 
+if remote:
+  initRadio()
+
 while 1:
 
-############################# 
-#  while not tty.getCD():
-#    sleep(0.001)
-#    continue
-  tty.flushInput()
-
-############################# ADDED FOR DIRECT DATALOG  
-  requestStatus()
-  sleep(0.5)
-#############################  
+  if passive: 
+    while not tty.getCD():
+      sleep(0.001)
+      continue
+    tty.flushInput()
+  else:  
+    requestStatus()
+    sleep(0.5)
+  
   try:
     data=hexlify(tty.read(114))
     if len(data)!=228:

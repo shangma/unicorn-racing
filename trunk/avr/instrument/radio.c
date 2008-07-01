@@ -6,8 +6,8 @@ volatile char onlineCMD[7]="\r\nATO\r\n";
 void radioInit(void){
   uint8_t c;
 
-  PORTC&=~pConfig1;
-  PORTC|=pConfig2;
+  PORTD|=pConfigD;    /*Disable ECU->Radio forward*/
+  PORTB|=pConfigB;    /*Disable ECU TX, Enable Radio RX/TX*/
   
   _delay_ms(1000);
   
@@ -27,7 +27,7 @@ void radioInit(void){
   
   _delay_ms(1000);
   
-  PORTC&=~pConfig2;
-  PORTC|=pConfig1;
+  PORTD&=~pConfigD;   /*Enable ECU->Radio forward*/
+  PORTB&=~pConfigB;   /*Enable ECU TX, Disable Radio RX/TX*/
 
 }

@@ -16,10 +16,6 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
 
   TCNT2|=0x40;
   
-  if (preScaler==2){
-  
-  preScaler=0;
-  
 /*  newRPM=40;
   newSpeed=40;
   newWarnings=0;*/
@@ -35,8 +31,12 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
     flags.reply=false;
     flags.reqInfo=true;
     timeOut=0x0f;
-  }
-  }else{
-    preScaler++;
+    if (flags.forward){
+      PORTD&=~_BV(7);
+      flags.forward=false;
+    }else{
+      PORTD|=_BV(7);
+      flags.forward=true;
+    } 
   }
 }

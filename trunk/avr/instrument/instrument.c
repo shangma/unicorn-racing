@@ -43,7 +43,6 @@ int main(void){
   while(1){
     if(flags.newMeasure){
       flags.newMeasure=false;
-      PORTB^=_BV(0);
       rpm=(newRPM>>6);
 /*      gear=calcGear();*/
       gear=(newSpeed>>6);
