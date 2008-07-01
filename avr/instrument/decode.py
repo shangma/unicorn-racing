@@ -21,17 +21,9 @@ addr = (host,port)
 #else:
 #  print "Windows (or what?) using " + winTTYs
 ##  tty=SerialPort(winTTYs, 70, 19200)
-
-rdOnly="12345678"
-H8cmd=hexlify(chr(23))
-reqStatus="0800000000"
     
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 UDPSock.bind(addr)
-
-def requestStatus():
-  print "Requesting status: " + rdOnly+H8cmd+reqStatus
-#  tty.write(unhexlify(rdOnly+H8cmd+reqStatus))
 
 from configDisplay import *
 
@@ -41,8 +33,6 @@ reply=True
 #print unhexlify(rdOnly+H8cmd+reqStatus)
 c=0
 #d=0
-
-
 
 while 1:
   data = UDPSock.recv(buf)

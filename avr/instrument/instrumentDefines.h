@@ -9,7 +9,7 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-volatile uint8_t timeDiv, newWarnings, timeOut;
+volatile uint8_t timeDiv, newWarnings, timeOut, preScaler;
 
 volatile uint16_t newRPM, newSpeed;
 

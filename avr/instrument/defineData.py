@@ -17,7 +17,7 @@ statusCamTrigP2=meas(30)
 statusChokerAdd=meas(32)
 statusLambdaPWM=meas(34)
 
-waterTemp=meas(46,-150.0/3840,120) #old gain: 0.01
+waterTemp=meas(46,-150.0/3840,120)
 airTemp=meas(48,-150.0/3840,120)
 potmeter=meas(50)
 rpm=meas(54,0.9408)
