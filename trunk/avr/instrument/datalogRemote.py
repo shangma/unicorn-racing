@@ -20,12 +20,45 @@ dataLogPath="C:\\Documents and Settings\\Laptop\\Skrivebord\\dataLogs\\"
 fileName=dataLogPath + "dataLog " + strftime("%y-%m-%d %H%M") + ".txt"
 print fileName
 
+rdOnly="12345678"
+H8cmd=hexlify(chr(23))
+reqStatus="0800000000"
+
 if name=="posix":
   print "Linux (I think) using " + linTTYs
-  tty=serial.Serial(linTTYs, 19200, timeout=0.15)
+  tty=serial.Serial(linTTYs, 19200, timeout=0.25)
 else:
   print "Windows (or what?) using " + winTTYs
-  tty=serial.Serial(winTTYs, 19200, timeout=0.15)
+  tty=serial.Serial(winTTYs, 19200, timeout=0.25)
+
+tty.setDTR(1)   #DTR is used to power the CarrierDetect generator circuit
+
+def requestStatus():
+  print "Requesting status: " + rdOnly+H8cmd+reqStatus
+  tty.write(unhexlify(rdOnly+H8cmd+reqStatus))
+
+tty.flushInput()
+sleep(1)
+print "SENDING: +++"
+tty.write("+++")
+sleep(5)
+tmp=tty.inWaiting()
+print "RECEIVING: " + tty.read(tmp)
+sleep(2)
+print "SENDING: AT^SETUP"
+tty.write("\r\nAT^SETUP\r\n")
+sleep(5)
+tmp=tty.inWaiting()
+print "RECEIVING: " + tty.read(tmp)
+sleep(2)
+print "SENDING: ATO"
+tty.write("\r\nATO\r\n")
+sleep(5)
+tmp=tty.inWaiting()
+print "RECEIVING: " + tty.read(tmp)
+sleep(2)
+
+print tty.read(10)
 
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 logFile=open(fileName,"w")
@@ -34,15 +67,22 @@ w=0
 
 while 1:
 
-  while not tty.getCD():
-    sleep(0.001)
-    continue
+############################# 
+#  while not tty.getCD():
+#    sleep(0.001)
+#    continue
   tty.flushInput()
+
+############################# ADDED FOR DIRECT DATALOG  
+  requestStatus()
+  sleep(0.5)
+#############################  
   try:
     data=hexlify(tty.read(114))
     if len(data)!=228:
       print len(data)
-    tmp=tty.inWaiting()
+      continue
+#    tmp=tty.inWaiting()
   except:
     print "Timeout, resynch..."
     sleep(1)
