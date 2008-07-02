@@ -1,5 +1,48 @@
 from classMeas import *
 
+def rot(xyzi):
+  xx=0.0715
+  yy=-0.351
+  zz=0
+  x1=xyzi[0].value()
+  y1=xyzi[1].value()
+  z1=xyzi[2].value()
+  i=xyzi[3]
+  
+  ### Rot. about x
+  x2=x1
+  y2=cos(xx)*y1-sin(xx)*z1
+  z2=sin(xx)*y1+cos(xx)*z1
+  
+  ### Rot. about y
+  x3=cos(yy)*x2+sin(yy)*z2
+  y3=y2
+  z3=-sin(yy)*x2+cos(yy)*z2
+
+  ### Rot. about z
+  x=cos(zz)*x3-sin(zz)*y3
+  y=sin(zz)*x3+cos(zz)*y3
+  z=z3
+  
+  g=[x,y,z]
+  return g[i]
+  
+def decFlags(flags):
+  flags=flags[0].value()
+  string=""
+  if flags & 0x04:
+    string+="Fuel "
+  if flags & 0x01:
+    string+="Main "
+  if flags & 0x02:
+    string+="KL15 "
+  if flags & 0x20:
+    string+="Error "
+  return string
+
+
+#### ACTUAL MEASUREMENTS
+
 fuelPressure=meas(0)
 statusLapCount=meas(2)
 statusInjSum=meas(4)
@@ -38,3 +81,14 @@ dwellTime=meas(84)
 gX=meas(96,1.0/16384,t="i")
 gY=meas(98,1.0/16384,t="i")
 gZ=meas(100,1.0/16384,t="i")
+
+motorFlags=meas(111,l=1)
+outBits=meas(113,l=1)
+
+#### VIRTUAL MEASUREMENTS
+
+x=virtMeas([gX,gY,gZ,0],rot)
+y=virtMeas([gX,gY,gZ,1],rot)
+z=virtMeas([gX,gY,gZ,2],rot)
+
+flags=virtMeas([outBits],decFlags)

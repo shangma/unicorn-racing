@@ -1,5 +1,6 @@
-from dataLog import dataM
+#from dataLog import dataM
 from fpformat import fix
+from math import sin, cos
 
 class meas:
   
@@ -27,6 +28,8 @@ class meas:
       tmp=self.retWord()
     elif self.dataType=="i":
       tmp=self.retInt()
+    elif self.dataType=="b":
+      tmp=self.retByte()
     return tmp*self.gain+self.offset
     
   def retHex(self):
@@ -44,18 +47,34 @@ class meas:
       return tmp
     else:
       return -(0xffff-tmp)
-    
+  
   def s(self):
     return str(fix(self.value(),self.decimals))[:6]
     
-  def scrollData(self):
-    global d
-    global data
-    data=dataM[d]
-    d=(d+1)%len(dataM)
+#  def scrollData(self):
+#    global d
+#    global data
+#    data=dataM[d]
+#    d=(d+1)%len(dataM)
   
   def updateData(self,nData):
     global data
     data=nData
 
-d=0
+#d=0
+
+class virtMeas:
+  label=""
+  upperL=1000
+  lowerL=-1000
+  decimals=1
+  
+  def __init__(self,inputs,function):
+    self.inputs=inputs
+    self.function=function
+    
+  def s(self):
+    return str(self.value())
+    
+  def value(self):
+    return self.function(self.inputs)

@@ -9,6 +9,7 @@ waterTemp.lowerL=75
 roadSpeed.label="Speed"
 
 rpm.label="RPM"
+rpm.decimals=0
 rpm.upperL=10000
 rpm.lowerL=5000
 
@@ -17,30 +18,47 @@ statusLapCount.label="Lap #"
 statusLapCount.decimals=0
 
 potmeter.label="TP"
-gX.label="X"
-gX.upperL=1.5
-gX.lowerL=-1.5
-gX.decimals=3
+#gX.label="X"
+#gX.upperL=1.5
+#gX.lowerL=-1.5
+#gX.decimals=3
 
-gY.label="Y"
-gY.upperL=1.5
-gY.lowerL=-1.5
-gY.decimals=3
+#gY.label="Y"
+#gY.upperL=1.5
+#gY.lowerL=-1.5
+#gY.decimals=3
 
-gZ.label="Z"
-gZ.upperL=1.5
-gZ.lowerL=0.5
-gZ.decimals=3
+#gZ.label="Z"
+#gZ.upperL=1.5
+#gZ.lowerL=0.5
+#gZ.decimals=3
 
 triggerErr.label="Synch"
 triggerErr.decimals=0
 
 airTemp.label="IAT"
 mapSensor.label="MAP"
+mapSensor.decimals=0
 lambdaV.label="lambda"
+lambdaV.decimals=0
 load.label="Load"
 
 batteryV.label="Bat"
+
+x.label="X"
+x.upperL=1.5
+x.lowerL=-1.5
+x.decimals=3
+
+y.label="Y"
+y.upperL=1.5
+y.lowerL=-1.5
+y.decimals=3
+
+z.label="Z"
+z.upperL=1.5
+z.lowerL=0.5
+z.decimals=3
 
 display=[]
 display.append(statusTime)
@@ -50,9 +68,9 @@ display.append(roadSpeed)
 display.append(statusLapCount)
 display.append(statusLapTime)
 display.append(potmeter)
-display.append(gX)
-display.append(gY)
-display.append(gZ)
+display.append(x)
+display.append(y)
+display.append(z)
 display.append(airTemp)
 display.append(mapSensor)
 display.append(triggerErr)
