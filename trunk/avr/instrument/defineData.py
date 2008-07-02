@@ -1,5 +1,7 @@
 from classMeas import *
 
+############################
+
 def rot(xyzi):
   xx=0.0715
   yy=-0.351
@@ -26,7 +28,9 @@ def rot(xyzi):
   
   g=[x,y,z]
   return g[i]
-  
+
+############################
+
 def decFlags(flags):
   flags=flags[0].value()
   string=""
@@ -40,6 +44,14 @@ def decFlags(flags):
     string+="Error "
   return string
 
+############################
+
+def calcRatio(data):
+  rpm=data[0]
+  speed=data[1]
+  if rpm==0:
+    return None
+  return speed/rpm
 
 #### ACTUAL MEASUREMENTS
 
@@ -92,3 +104,5 @@ y=virtMeas([gX,gY,gZ,1],rot)
 z=virtMeas([gX,gY,gZ,2],rot)
 
 flags=virtMeas([outBits],decFlags)
+
+ratio=virtMeas([rpm,roadSpeed],calcRatio)
