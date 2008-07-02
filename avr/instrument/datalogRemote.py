@@ -10,7 +10,10 @@ from string import strip
 #### MODE
 # FIXME: AUTODETECT
 remote=True
+remote=False
+
 passive=True
+#passive=False
 ################################
 
 #### READ CONFIG

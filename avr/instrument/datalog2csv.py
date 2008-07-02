@@ -8,7 +8,7 @@ from time import sleep
 
 def writeLabels(csvFile):
   for item in display:
-    csvFile.write(item.label + ", ")
+    csvFile.write(item.label + ",\t")
 #    print item.label
 #    sleep(0.5)
 
@@ -32,7 +32,7 @@ def writeData(logFile,csvFile):
     
     rpm.updateData(data)
     for item in display:
-      csvFile.write(str(item.value()) + ", ")
+      csvFile.write(str(fix(item.value(),item.decimals)) + ",\t")
       
     csvFile.write("\n")
 #    sleep(0.1)
@@ -46,8 +46,11 @@ if len(argv)==1:
   exit()
 
 argv=argv[1:]
+####
+#argv=["c:\\datalog.txt"]
+
 for log in argv:
-#  print log
+  print log
   logFile=open(log,"r")
   csvFile=open(log + ".csv","w")
   writeLabels(csvFile)
