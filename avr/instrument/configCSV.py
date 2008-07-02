@@ -40,6 +40,8 @@ z.decimals=3
 
 flags.label="Flags"
 
+ratio.label="Ratio"
+
 display=[]
 display.append(statusTime)
 display.append(waterTemp)
@@ -57,4 +59,5 @@ display.append(triggerErr)
 display.append(lambdaV)
 display.append(load)
 display.append(batteryV)
+display.append(ratio)
 display.append(flags)
