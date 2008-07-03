@@ -1,3 +1,8 @@
+#### CONFIGURATION FOR THE CSV GENERATOR
+## DEFINE LABELS AND DECIMALS, DEFAULTS TO "" AND 1
+##
+## THE AVAILABLE OBJECTS ARE DEFINED IN "defineData.py"
+
 from defineData import *
 
 statusTime.label="Time"
@@ -11,13 +16,6 @@ statusLapCount.label="Lap #"
 statusLapCount.decimals=0
 
 potmeter.label="TP"
-
-#gX.label="X"
-#gX.decimals=3
-#gY.label="Y"
-#gY.decimals=3
-#gZ.label="Z"
-#gZ.decimals=3
 
 triggerErr.label="Synch"
 triggerErr.decimals=0
@@ -41,6 +39,8 @@ z.decimals=3
 flags.label="Flags"
 
 ratio.label="Ratio"
+
+#### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
 display=[]
 display.append(statusTime)

@@ -1,5 +1,7 @@
 #! /usr/bin/python
 
+#### LIVE DECODING OF THE LOGGED DATA
+
 from binascii import hexlify, unhexlify
 from time import sleep
 

@@ -8,15 +8,20 @@ import socket
 from string import strip
 
 #### MODE
-# FIXME: AUTODETECT
+## REMOTE: THROUGH RADIO
+## PASSIVE: EXTERNALY GENERATED STATUS REQUESTS
+##
+## FIXME: AUTODETECT
+
 remote=True
 remote=False
 
 passive=True
 #passive=False
+
 ################################
 
-#### READ CONFIG
+#### READ CONFIGURATION FILE
 print "Reading config:\t\tdatalogConfig.txt"
 configFile=open("datalogConfig.txt","r")
 dataLogPath=strip(configFile.readline(),"\n\r")
@@ -35,7 +40,7 @@ addr = (host,port)
 print "Serial interface:\t" + ttyName
 tty=serial.Serial(ttyName, 19200, timeout=0.25)
 
-tty.setDTR(1)   #DTR is used to power the CarrierDetect generator circuit
+tty.setDTR(1)   #DTR is used for powering the CarrierDetect generator circuit
 
 ################################
 

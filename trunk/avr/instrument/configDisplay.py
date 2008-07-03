@@ -1,3 +1,9 @@
+#### CONFIGURATION FOR THE LIVE DECODER
+## DEFINE LABELS AND DECIMALS, DEFAULTS TO "" AND 1
+## UPPER AND LOWER LIMITS FOR "WARNINGS"
+##
+## THE AVAILABLE OBJECTS ARE DEFINED IN "defineData.py"
+
 from defineData import *
 
 statusTime.label="Time"
@@ -61,6 +67,8 @@ z.lowerL=0.5
 z.decimals=3
 
 ratio.label="Ratio"
+
+#### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
 display=[]
 display.append(statusTime)

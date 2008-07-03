@@ -1,5 +1,8 @@
 #! /usr/bin/python
 
+#### GENERATE CSV FILE FROM DATALOG
+## JUST DRAG A "dataLog yy-mm-dd hhmm.txt" TO THIS FILES ICON
+
 from sys import argv
 from configCSV import *
 from time import sleep

@@ -1,6 +1,4 @@
-#from dataLog import dataM
 from fpformat import fix
-from math import sin, cos
 
 class meas:
   
