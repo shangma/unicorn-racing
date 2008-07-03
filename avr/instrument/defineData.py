@@ -1,6 +1,10 @@
-from classMeas import *
+#### DEFINE MEAS OBJECTS FROM BYTE OFFSET, SCALING, OFFSET, TYPE AND LENGTH
+## DEFINE VIRTMEAS OBJECTS AND THEIR "SPECIAL FUNCTIONS"
 
-############################
+from classMeas import *
+from math import sin, cos
+
+#### ROTATION OF THE G-MAESUREMENTS
 
 def rot(xyzi):
   xx=0.0715
@@ -11,17 +15,17 @@ def rot(xyzi):
   z1=xyzi[2].value()
   i=xyzi[3]
   
-  ### Rot. about x
+  ## Rot. about x
   x2=x1
   y2=cos(xx)*y1-sin(xx)*z1
   z2=sin(xx)*y1+cos(xx)*z1
   
-  ### Rot. about y
+  ## Rot. about y
   x3=cos(yy)*x2+sin(yy)*z2
   y3=y2
   z3=-sin(yy)*x2+cos(yy)*z2
 
-  ### Rot. about z
+  ## Rot. about z
   x=cos(zz)*x3-sin(zz)*y3
   y=sin(zz)*x3+cos(zz)*y3
   z=z3
@@ -29,7 +33,8 @@ def rot(xyzi):
   g=[x,y,z]
   return g[i]
 
-############################
+#### DECODE THE FLAGS
+## FIXME: seperat value() og s()
 
 def decFlags(flags):
   flags=flags[0].value()
@@ -44,7 +49,7 @@ def decFlags(flags):
     string+="Error "
   return string
 
-############################
+#### CALCULATE THE GEAR RATIO
 
 def calcRatio(data):
   rpm=data[0]
@@ -54,6 +59,8 @@ def calcRatio(data):
   return speed/rpm
 
 #### ACTUAL MEASUREMENTS
+## meas(n=0,g=1,o=0,t="w",l=2)
+## byteOffset,gain,offset,type,length
 
 fuelPressure=meas(0)
 statusLapCount=meas(2)
@@ -98,6 +105,8 @@ motorFlags=meas(111,l=1)
 outBits=meas(113,l=1)
 
 #### VIRTUAL MEASUREMENTS
+## virtMeas(inputs,function)
+## FIXME: Det er lidt et hack, lav evt. seperate funktioner til value() og s()
 
 x=virtMeas([gX,gY,gZ,0],rot)
 y=virtMeas([gX,gY,gZ,1],rot)
