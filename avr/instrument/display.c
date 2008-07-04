@@ -3,35 +3,40 @@
 void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   display_t dispData;
   int8_t c;
-  uint8_t gearData[8]={0,disp1,disp2,disp3,disp4,disp5,disp6,dispN};
-  uint8_t rpmScale[5]={92,108,124,139,155};
-  /*6000 7000 8000 9000 10000*/
+  uint8_t gearData[5]={0,2,3,7,15};
+  uint8_t rpmScale[6]={6000/64,7000/64,8000/64,9000/64,10000/64,11000/64};
   
-  dispData.rpm=0x3ff;
+  dispData.rpm=0;
   
-  for(c=0;c<5;c++){
+  for(c=0;c<6;c++){
     if(rpm>rpmScale[c]){
-      dispData.rpm&=~_BV(c)&~_BV(9-c);
-/*      if(c){
-        dispData.rpm|=_BV(c-1);   //dot-style
-      }*/
-    }else{
-      break;
+      dispData.rpm|=_BV(c);
     }
   }
   
-  if(rpm>172){
-    dispData.rpm=0x3ff*((timeDiv&0x04)!=0);
+  if(rpm>(11000/65)){
+    dispData.rpm=dispData.rpm*((timeDiv&0x02)!=0);
   }
   
+  if(gear>4){
+    gear=4;
+  }
   dispData.gear=gearData[gear];
   dispData.flags=(uint8_t)~flags;
   
   PORTB&=~pStr;               //disable strobe
   _delay_us(displayDelay);
 
-  for(c=7;c>=0;c--){
-    if(dispData.gear&_BV(c)){
+/*  for(c=4;c>0;c--){
+    //SPARE OUTPUT
+    _delay_us(displayDelay);
+    PORTB|=pClock;
+    _delay_us(displayDelay);
+    PORTB&=~pClock;
+  }*/
+
+  for(c=4;c>0;c--){
+    if(dispData.gear&_BV(c-1)){
       PORTB|=pData;
     }else{
       PORTB&=~pData;
@@ -42,11 +47,11 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     PORTB&=~pClock;
   }
 
-  for(c=5;c>=0;c--){
-    if(dispData.flags&_BV(c)){
-      PORTB|=pData;
-    }else{
+  for(c=2;c>0;c--){
+    if(dispData.flags&_BV(c-1)){
       PORTB&=~pData;
+    }else{
+      PORTB|=pData;
     }
     _delay_us(displayDelay);
     PORTB|=pClock;
@@ -54,8 +59,8 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     PORTB&=~pClock;
   }
   
-  for(c=9;c>=0;c--){
-    if(dispData.rpm&_BV(c)){
+  for(c=6;c>0;c--){
+    if(dispData.rpm&_BV(c-1)){
       PORTB|=pData;
     }else{
       PORTB&=~pData;

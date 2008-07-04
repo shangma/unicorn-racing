@@ -40,6 +40,8 @@ flags.label="Flags"
 
 ratio.label="Ratio"
 
+oilPressure.label="OilP"
+
 #### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
 display=[]
@@ -60,4 +62,5 @@ display.append(lambdaV)
 display.append(load)
 display.append(batteryV)
 display.append(ratio)
+display.append(oilPressure)
 display.append(flags)

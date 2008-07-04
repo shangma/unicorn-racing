@@ -52,8 +52,8 @@ def decFlags(flags):
 #### CALCULATE THE GEAR RATIO
 
 def calcRatio(data):
-  rpm=data[0]
-  speed=data[1]
+  rpm=data[0].value()
+  speed=data[1].value()
   if rpm==0:
     return None
   return speed/rpm

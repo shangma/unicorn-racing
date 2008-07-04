@@ -29,7 +29,7 @@ $(PRG).elf: $(OBJ)
 
 lst:  $(PRG).lst
 
-doBurn:	$(PRG).hex
+doBurn:	clean $(PRG).hex
 	@echo "==================================================="
 	@echo "Trying to burn $(PRG).hex to device..."
 	@echo "run 'make compile [...]' to disable burn-on-compile"

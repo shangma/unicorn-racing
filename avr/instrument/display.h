@@ -52,9 +52,9 @@ E |  G  | C
 #define displayDelay  100
 
 typedef struct{
-  uint16_t  rpm:  10;
-  uint8_t  flags:  6;
-  uint8_t  gear:  8;
+  uint16_t  rpm:  6;
+  uint8_t  flags:  2;
+  uint8_t  gear:  4;
 }display_t;
 
 void display(uint8_t rpm, uint8_t gear, uint8_t flags);
