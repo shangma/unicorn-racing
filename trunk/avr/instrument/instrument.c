@@ -29,10 +29,10 @@ int main(void){
   
   init();
   
-  while(timeDiv<50){
+  while(timeDiv<100){
     if(flags.refresh){
       flags.refresh=false;
-      display(timeDiv*3,timeDiv/8,0x3F);
+      display(timeDiv*2,timeDiv/20,0x03);
     }
   }
   
@@ -46,7 +46,12 @@ int main(void){
       rpm=(newRPM>>6);
 /*      gear=calcGear();*/
       gear=(newSpeed>>6);
-      warnings=newWarnings;
+      if(newCLT<384){   /* (120-Temp)/(150/3840) -> 384=105*C */
+        warnings|=0x01;
+      }
+      if(newOilP<40){
+        warnings|=0x02;
+      }
     }
   
     if(flags.refresh){

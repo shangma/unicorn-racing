@@ -11,6 +11,18 @@ ISR(USART_RX_vect){
   }
   PORTD&=~pDCD;
   switch(siCount){
+    case 10:
+      dirtyPointer=(uint8_t*)&newOilP;
+      dirtyPointer[1]=UDR0;
+    case 11:
+      dirtyPointer=(uint8_t*)&newOilP;
+      dirtyPointer[0]=UDR0;
+    case 46:
+      dirtyPointer=(uint8_t*)&newCLT;
+      dirtyPointer[1]=UDR0;
+    case 47:
+      dirtyPointer=(uint8_t*)&newCLT;
+      dirtyPointer[0]=UDR0;
     case 54:
       dirtyPointer=(uint8_t*)&newRPM;
       dirtyPointer[1]=UDR0;
@@ -27,8 +39,8 @@ ISR(USART_RX_vect){
       dirtyPointer=(uint8_t*)&newSpeed;
       dirtyPointer[0]=UDR0;
       break;
-    case 113:  //113
-      newWarnings=UDR0;
+    case 113:  //OUTBITS
+      tmp=UDR0;
       flags.newMeasure=true;
       flags.reply=true;
       break;
