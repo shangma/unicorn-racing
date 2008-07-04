@@ -10,6 +10,8 @@ void init(void){
   DDRD=0xFE;  /*set RX as input*/
   PORTD=0x01; /*to enable pullup*/
 
+  display(0,0,0);
+
 /*  OSCCAL=0xb4;*/
   
   siInit();
@@ -26,6 +28,8 @@ void init(void){
 
 int main(void){
   uint8_t gear, rpm, warnings;
+  
+  display(0,0,0);
   
   init();
   
