@@ -72,7 +72,7 @@ class virtMeas:
     self.function=function
     
   def s(self):
-    return str(self.value())
+    return str(fix(self.value(),self.decimals))
     
   def value(self):
     return self.function(self.inputs)

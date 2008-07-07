@@ -6,6 +6,10 @@
 #define true 1
 #define false 0
 
+#define cltCold (120-70)*26 /* cold @ 75*C */
+#define cltWarn (120-110)*26
+#define cltStop (120-115)*26
+
 #include <avr/io.h>
 #include <stdint.h>
 

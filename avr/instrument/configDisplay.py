@@ -67,6 +67,7 @@ z.lowerL=0.5
 z.decimals=3
 
 ratio.label="Ratio"
+oilPressure.label="OilP"
 
 #### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
@@ -75,16 +76,18 @@ display.append(statusTime)
 display.append(waterTemp)
 display.append(rpm)
 display.append(roadSpeed)
-display.append(statusLapCount)
-display.append(statusLapTime)
+#display.append(statusLapCount)
+#display.append(statusLapTime)
 display.append(potmeter)
 display.append(x)
 display.append(y)
 display.append(z)
 display.append(airTemp)
-display.append(mapSensor)
-display.append(triggerErr)
-display.append(lambdaV)
-display.append(load)
+#display.append(mapSensor)
+#display.append(triggerErr)
+#display.append(lambdaV)
+#display.append(load)
 display.append(batteryV)
 display.append(ratio)
+display.append(oilPressure)
+
