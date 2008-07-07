@@ -14,7 +14,7 @@ from string import strip
 ## FIXME: AUTODETECT
 
 remote=True
-remote=False
+#remote=False
 
 passive=True
 #passive=False
@@ -38,7 +38,7 @@ buf = 1024
 addr = (host,port)
 
 print "Serial interface:\t" + ttyName
-tty=serial.Serial(ttyName, 19200, timeout=0.25)
+tty=serial.Serial(ttyName, 19200, timeout=0.35)
 
 tty.setDTR(1)   #DTR is used for powering the CarrierDetect generator circuit
 
@@ -56,25 +56,25 @@ tty.flushInput()
 ################################
 
 def initRadio():
-  sleep(2)
+  sleep(1)
   print "SENDING: +++"
   tty.write("+++")
-  sleep(5)
+  sleep(3)
   tmp=tty.inWaiting()
-  print "RECEIVING: " + tty.read(tmp)
-  sleep(2)
+#  print "RECEIVING: " + tty.read(tmp)
+  sleep(1)
   print "SENDING: AT^SETUP"
   tty.write("\r\nAT^SETUP\r\n")
-  sleep(5)
+  sleep(3)
   tmp=tty.inWaiting()
-  print "RECEIVING: " + tty.read(tmp)
-  sleep(2)
+#  print "RECEIVING: " + tty.read(tmp)
+  sleep(1)
   print "SENDING: ATO"
   tty.write("\r\nATO\r\n")
-  sleep(5)
+  sleep(3)
   tmp=tty.inWaiting()
-  print "RECEIVING: " + tty.read(tmp)
-  sleep(2)
+#  print "RECEIVING: " + tty.read(tmp)
+  sleep(1)
 
 ################################
 
@@ -101,6 +101,8 @@ while 1:
     data=hexlify(tty.read(114))
     if len(data)!=228:
       print len(data)
+      if len(data)==0:
+        tty.write("\r\nATO\r\n")
       continue
 #    tmp=tty.inWaiting()
   except:

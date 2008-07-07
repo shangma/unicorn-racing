@@ -4,6 +4,23 @@
 from classMeas import *
 from math import sin, cos
 
+#### ERROR DETECTION
+
+def correct():
+  if rpm.value()>15000 or rpm.value()<0:
+    return False
+  if waterTemp.value()>125 or waterTemp.value()<-10:
+    return False
+  if potmeter.value()>115 or potmeter.value()<-15:
+    return False
+  if airTemp.value()>125 or airTemp.value()<-20:
+    return False
+  if load.value()>110 or load.value()<-10:
+    return False
+  if mapSensor.value()>2000 or mapSensor.value()<500:
+    return False
+  return True
+
 #### ROTATION OF THE G-MAESUREMENTS
 
 def rot(xyzi):
@@ -53,9 +70,9 @@ def decFlags(flags):
 
 def calcRatio(data):
   rpm=data[0].value()
-  speed=data[1].value()
+  speed=100*data[1].value()
   if rpm==0:
-    return None
+    return 0
   return speed/rpm
 
 #### ACTUAL MEASUREMENTS
@@ -81,12 +98,12 @@ statusLambdaPWM=meas(34)
 
 waterTemp=meas(46,-150.0/3840,120)
 airTemp=meas(48,-150.0/3840,120)
-potmeter=meas(50)
+potmeter=meas(50,1/25.1,-487/25.1)
 rpm=meas(54,0.9408)
 triggerErr=meas(56)
 camAngle1=meas(58,t="i")
 camAngle2=meas(60,t="i")
-roadSpeed=meas(62)
+roadSpeed=meas(62,0.01)
 mapSensor=meas(64)
 batteryV=meas(66,1.0/210)
 lambdaV=meas(68,t="i")

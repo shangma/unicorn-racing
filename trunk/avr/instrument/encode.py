@@ -10,7 +10,7 @@ from os import name
 
 #### SERIAL PORT CONFIGURATION
 linTTYs="/dev/ttyS0"
-winTTYs="COM3"
+winTTYs="COM1"
 ##############################
 
 print "Simulating Fartstrup ECU."

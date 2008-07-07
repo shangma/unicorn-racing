@@ -3,7 +3,7 @@
 void display(uint8_t rpm, uint8_t gear, uint8_t flags){
   display_t dispData;
   int8_t c;
-  uint8_t gearData[5]={0,2,3,7,15};
+  uint8_t gearData[7]={0,2,3,7,15,15,15};
   uint8_t rpmScale[6]={6000/64,7000/64,8000/64,9000/64,10000/64,11000/64};
   
   dispData.rpm=0;
@@ -18,10 +18,12 @@ void display(uint8_t rpm, uint8_t gear, uint8_t flags){
     dispData.rpm=dispData.rpm*((timeDiv&0x02)!=0);
   }
   
-  if(gear>4){
-    gear=4;
+  if(gear==7){
+    dispData.gear=gearData[4]*((timeDiv&0x04)!=0);
+  }else{
+    dispData.gear=gearData[gear];
   }
-  dispData.gear=gearData[gear];
+  
   dispData.flags=(uint8_t)~flags;
   
   PORTB&=~pStr;               //disable strobe

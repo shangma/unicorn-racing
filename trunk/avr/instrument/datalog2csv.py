@@ -11,7 +11,8 @@ from time import sleep
 
 def writeLabels(csvFile):
   for item in display:
-    csvFile.write(item.label + ",\t")
+#    csvFile.write(item.label + ",\t")
+    csvFile.write(item.label + ", ")
 #    print item.label
 #    sleep(0.5)
 
@@ -34,8 +35,11 @@ def writeData(logFile,csvFile):
       continue
     
     rpm.updateData(data)
+    if not correct():
+      continue
     for item in display:
-      csvFile.write(str(fix(item.value(),item.decimals)) + ",\t")
+#      csvFile.write(str(fix(item.value(),item.decimals)) + ",\t")
+      csvFile.write(str(fix(item.value(),item.decimals)) + ", ")
       
     csvFile.write("\n")
 #    sleep(0.1)
