@@ -42,9 +42,22 @@ int main(void){
     if(flags.newMeasure){
       flags.newMeasure=false;
       rpm=(newRPM>>6);
-/*      gear=calcGear();
-      gear=(newSpeed>>6);*/
-      gear=0;
+      gear=newSpeed/rpm;
+      if(gear<45){
+        gear=0;
+      }else if(gear<65){
+        gear=1;
+      }else if(gear<83){
+        gear=2;
+      }else if(gear<98){
+        gear=3;
+      }else if(gear<110){
+        gear=4;
+      }else if(gear<120){
+        gear=5;
+      }else{
+        gear=6;
+      }
       warnings=0;
       if(newCLT>cltCold){
         warnings|=0x01*((timeDiv&0x20)!=0);
