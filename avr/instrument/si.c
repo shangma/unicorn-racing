@@ -9,6 +9,7 @@ ISR(USART_RX_vect){
   if(!(UCSR0A&_BV(RXC0))){
     return;
   }
+	timeOut=0x04;
   PORTD&=~pDCD;
   switch(siCount){
     case 10:
@@ -43,23 +44,20 @@ ISR(USART_RX_vect){
       tmp=UDR0;
       flags.newMeasure=true;
       flags.reply=true;
+			flags.timeOut=false;
       break;
     default:
       tmp=UDR0;
       break;
   }
-/*  dirtyPointer=(uint8_t*)&newRPM;
-  reqCmd[0]=(newRPM>>6);
-  reqCmd[1]=dirtyPointer[0];
-  reqCmd[2]=dirtyPointer[1];*/
   siCount++;
 }
 
 void siInit(void){
-  UBRR0=12; /*19200baud at 4MHz*/
-  UCSR0B|=_BV(TXEN0)|_BV(RXEN0)|_BV(RXCIE0);
-/*  UCSR0C|=_BV(USBS0); /*2 stop bits*/
-  
+/*  UBRR0=12; /*19200baud at 4MHz*/
+	UBRR0=11; /*19200baud at 3.6864MHz*/
+/*  UBRR0=23; /*19200baud at 7.3728MHz*/
+  UCSR0B|=_BV(TXEN0)|_BV(RXEN0)|_BV(RXCIE0);  
 }
 
 void reqInfo(void){

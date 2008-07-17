@@ -8,5 +8,6 @@
 #define pConfigD _BV(7)
 
 void radioInit(void);
+void radioInit2(void);
 
 #endif

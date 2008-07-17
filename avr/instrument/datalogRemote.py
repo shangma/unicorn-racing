@@ -56,25 +56,25 @@ tty.flushInput()
 ################################
 
 def initRadio():
-  sleep(1)
-  print "SENDING: +++"
-  tty.write("+++")
-  sleep(3)
-  tmp=tty.inWaiting()
+#  sleep(1)
+#  print "SENDING: +++"
+#  tty.write("+++")
+#  sleep(3)
+#  tmp=tty.inWaiting()
 #  print "RECEIVING: " + tty.read(tmp)
-  sleep(1)
+#  sleep(1)
   print "SENDING: AT^SETUP"
   tty.write("\r\nAT^SETUP\r\n")
-  sleep(3)
+  sleep(0.5)
   tmp=tty.inWaiting()
 #  print "RECEIVING: " + tty.read(tmp)
-  sleep(1)
+  sleep(0.5)
   print "SENDING: ATO"
   tty.write("\r\nATO\r\n")
-  sleep(3)
-  tmp=tty.inWaiting()
+#  sleep(1)
+#  tmp=tty.inWaiting()
 #  print "RECEIVING: " + tty.read(tmp)
-  sleep(1)
+#  sleep(1)
 
 ################################
 

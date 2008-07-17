@@ -16,27 +16,29 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
 
   TCNT2|=0x40;
   
-/*  newRPM=40;
-  newSpeed=40;
-  newWarnings=0;*/
-  
   flags.refresh=true;
   timeDiv++;
   
-  if (timeOut>0){
+  if(timeOut>0){
     timeOut--;
   }
   
-  if (timeOut==0||flags.reply==true){
-    flags.reply=false;
-    flags.reqInfo=true;
+	if(timeOut==0){
+		flags.timeOut=true;
+		flags.reqInfo=true;
     timeOut=0x0f;
-    if (flags.forward){
-      PORTD&=~_BV(7);
+	}
+	
+	if(flags.reply==true){
+		flags.reply=false;
+		flags.reqInfo=true;
+    timeOut=0x0f;
+		if(flags.forward && flags.online){
+      PORTD&=~pConfigD;
       flags.forward=false;
     }else{
-      PORTD|=_BV(7);
+      PORTD|=pConfigD;
       flags.forward=true;
-    } 
-  }
+    }
+	}
 }
