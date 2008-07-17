@@ -7,8 +7,8 @@ void init(void){
   DDRC=0xFF&(~pNeutralIN);
   PORTC=0x00|pNeutralIN;
   
-  DDRD=0xFE;  /*set RX as input*/
-  PORTD=0x01; /*to enable pullup*/
+  DDRD=0xDE;  /*set RX and PCINT21 as input*/
+  PORTD=0x21; /*to enable pullup*/
 
   timeDiv=2;
 
@@ -21,7 +21,7 @@ void init(void){
 /*  dectInit();*/
   
   CLKPR=_BV(CLKPCE);  /*Allow prescaler change*/
-  CLKPR=0x01;         /*Prescale by two (CLK=4MHz)*/
+  CLKPR=0x01;         /*Prescale by two (CLK=3.6864MHz)*/
   
   radioInit();
   
@@ -30,17 +30,22 @@ void init(void){
 
 int main(void){
   uint8_t gear, rpm, warnings;
+	uint16_t clt, oilP;
   
   init();
   
   gear=7;
   rpm=0;
   warnings=0;
+	clt=0;
+	oilP=0;
   
   while(1){
     gear=0;
     if(flags.newMeasure){
       flags.newMeasure=false;
+			clt=newCLT;
+			oilP=newOilP;
       rpm=(newRPM>>6);
       gear=newSpeed/rpm;
       if(gear<45){
@@ -58,31 +63,32 @@ int main(void){
       }else{
         gear=6;
       }
-      warnings=0;
-      if(newCLT>cltCold){
+    }
+	  
+    if(flags.refresh){
+      flags.refresh=false;
+      
+//			if((PINC&pNeutralIN)==0||flags.online==true){
+			if((PINC&pNeutralIN)==0){
+      	gear=7;
+    	}
+			
+    	warnings=0;
+      if(clt>cltCold){
         warnings|=0x01*((timeDiv&0x20)!=0);
-      }else if(newCLT<cltStop){
+      }else if(clt<cltStop){
         warnings|=0x01*((timeDiv&0x02)!=0);
-      }else if(newCLT<cltWarn){
+      }else if(clt<cltWarn){
         warnings|=0x01;
       }else{
         warnings&=(~0x01);
       }
-      if(newOilP<40){
+//      if(oilP<40){
+			if(flags.timeOut==true){
         warnings|=0x02;
       }else{
         warnings&=(~0x02);
       }
-    }
-  
-    if((PINC&pNeutralIN)==0){
-      gear=7;
-    }
-  
-    if(flags.refresh){
-      flags.refresh=false;
-      
-      /*make blinking effect on warnings*/
       
       display(rpm,gear,warnings);
     }
