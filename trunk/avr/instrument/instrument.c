@@ -68,8 +68,8 @@ int main(void){
     if(flags.refresh){
       flags.refresh=false;
       
-//			if((PINC&pNeutralIN)==0||flags.online==true){
-			if((PINC&pNeutralIN)==0){
+			if((PINC&pNeutralIN)==0||flags.online==true){
+//			if((PINC&pNeutralIN)==0){
       	gear=7;
     	}
 			

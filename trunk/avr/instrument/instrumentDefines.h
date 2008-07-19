@@ -13,7 +13,7 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-volatile uint8_t timeDiv, timeOut, preScaler;
+volatile uint8_t timeDiv, timeOut, preScaler, radioTimeout;
 
 volatile uint16_t newRPM, newSpeed, newCLT, newOilP;
 

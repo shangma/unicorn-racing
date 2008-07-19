@@ -7,14 +7,14 @@ void radioInit(void){
   uint8_t c;
 
 	flags.online=false;
-	flags.online=true;
+//	flags.online=true;
 	
-//	PCMSK2=0x20;
+	PCMSK2=0x20;
 
   PORTD|=pConfigD;    /*Disable ECU->Radio forward*/
   PORTB|=pConfigB;    /*Disable ECU TX, Enable Radio RX/TX*/
   
-  _delay_ms(500);
+//  _delay_ms(50);
   
   for(c=0;c<14;c++){
     while(!(UCSR0A&_BV(UDRE0))){
@@ -22,7 +22,7 @@ void radioInit(void){
     UDR0=connectCMD[c];
   }
   
-  _delay_ms(500);
+//  _delay_ms(50);
 	
 	radioInit2();
 	
@@ -36,7 +36,7 @@ void radioInit2(void){
 	PORTD|=pConfigD;    /*Disable ECU->Radio forward*/
   PORTB|=pConfigB;    /*Disable ECU TX, Enable Radio RX/TX*/
 	
-	_delay_ms(1);
+//	_delay_ms(50);
 	
   for(c=0;c<7;c++){
     while(!(UCSR0A&_BV(UDRE0))){
@@ -44,7 +44,7 @@ void radioInit2(void){
     UDR0=onlineCMD[c];
   }
 	
-  _delay_ms(1);
+//  _delay_ms(50);
 	
   PORTB&=~pConfigB;   /*Enable ECU TX, Disable Radio RX/TX*/
 	
