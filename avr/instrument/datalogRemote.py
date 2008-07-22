@@ -100,7 +100,7 @@ while 1:
   try:
     data=hexlify(tty.read(114))
     if len(data)!=228:
-      print len(data)
+      print len(data),
       if len(data)==0:
         tty.write("\r\nATO\r\n")
       continue
