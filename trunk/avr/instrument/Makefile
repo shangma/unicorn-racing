@@ -36,6 +36,9 @@ doBurn:	clean $(PRG).hex
 	@echo "==================================================="
 	avrdude -p atmega88 -c pony-stk200 -e -U flash:w:$(PRG).hex
 
+buffer:
+	avrdude -p atmega88 -c buffer -E vcc
+
 parport:
 	-sudo mknod /dev/parport0 c 99 0
 	-sudo chmod a+rw /dev/parport0

@@ -6,7 +6,7 @@ void timerInit(void){
   timeDiv=0;
   timeOut=0x0f;
   preScaler=0;
-	radioTimeout=0x0f;
+	radioTimeout=0x21;
 }
 
 ISR(TIMER2_OVF_vect){
@@ -46,36 +46,33 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
 			radioTimeout++;
 			switch(radioTimeout){
 				case 1:
-					PORTC|=pResetC;
-					break;
-				case 2:
 					PORTC&=~pResetC;
 					break;
-				case 3:
+				case 10:
+					PORTC|=pResetC;
+					break;
+				case 20:
 					radioInit();
 					break;
-				case 4:
+				case 21:
 					radioInit2();
 					break;
-				case 5:
-					if(PCIFR&_BV(PCIF2)){
-						PCIFR|=_BV(PCIF2);
-					}
-					break;
-				case 0x10:
+				case 0xf1:
 					radioTimeout=0;
 					break;
 				default:
 					if(PCIFR&_BV(PCIF2)){
 						PCIFR|=_BV(PCIF2);
-						flags.online=true;
+						if(radioTimeout>25){
+              flags.online=true;
+            }
 					}
 					break;
 			}
 		}else if(PCIFR&_BV(PCIF2)){
 			flags.online=false;
 			PCIFR|=_BV(PCIF2);
-			radioTimeout=0x0f;
+			radioTimeout=0x21;
 		}
 	}
 }

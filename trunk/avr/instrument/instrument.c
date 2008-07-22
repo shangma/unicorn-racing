@@ -23,8 +23,16 @@ void init(void){
   CLKPR=_BV(CLKPCE);  /*Allow prescaler change*/
   CLKPR=0x01;         /*Prescale by two (CLK=3.6864MHz)*/
   
+  PORTC|=pResetC;
+  _delay_ms(200);
+  flags.online=false;
   radioInit();
-  
+  radioInit2();
+  PORTD&=~pConfigD;
+  _delay_ms(200);
+  if(PCIFR&_BV(PCIF2)){
+		PCIFR|=_BV(PCIF2);
+	}
   sei();
 }
 
