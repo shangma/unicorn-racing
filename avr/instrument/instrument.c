@@ -4,11 +4,11 @@ void init(void){
   DDRB=0xFF;  /*1=output; 0=input*/
   PORTB=0x00;
   
-  DDRC=0xFF&(~pNeutralIN);
+  DDRC=0xFF&~(pNeutralIN);
   PORTC=0x00|pNeutralIN;
   
-  DDRD=0xDE;  /*set RX and PCINT21 as input*/
-  PORTD=0x21; /*to enable pullup*/
+  DDRD=0xFF&~(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 as inputs
+  PORTD=0x00|(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 with pullup
 
   timeDiv=2;
 
@@ -18,6 +18,7 @@ void init(void){
   
   siInit();
   timerInit();
+  gearInit();
 /*  dectInit();*/
   
   CLKPR=_BV(CLKPCE);  /*Allow prescaler change*/
@@ -38,12 +39,13 @@ void init(void){
 
 int main(void){
   uint8_t gear, rpm, warnings;
-	uint16_t clt, oilP;
+	uint16_t clt, oilP, speed;
   
   init();
   
-  gear=7;
+  gear=0;
   rpm=0;
+  speed=0;
   warnings=0;
 	clt=0;
 	oilP=0;
@@ -55,31 +57,14 @@ int main(void){
 			clt=newCLT;
 			oilP=newOilP;
       rpm=(newRPM>>6);
-      gear=newSpeed/rpm;
-      if(gear<45){
-        gear=0;
-      }else if(gear<65){
-        gear=1;
-      }else if(gear<83){
-        gear=2;
-      }else if(gear<98){
-        gear=3;
-      }else if(gear<110){
-        gear=4;
-      }else if(gear<120){
-        gear=5;
-      }else{
-        gear=6;
-      }
+      speed=newSpeed;
+      
     }
 	  
     if(flags.refresh){
       flags.refresh=false;
       
-			if((PINC&pNeutralIN)==0||flags.online==true){
-//			if((PINC&pNeutralIN)==0){
-      	gear=7;
-    	}
+    	gear=calcGear(speed,rpm);
 			
     	warnings=0;
       if(clt>cltCold){

@@ -6,7 +6,6 @@
 #include "timer.h"
 #include "si.h"
 #include "radio.h"
-
-#define pNeutralIN  _BV(3)
+#include "gear.h"
 
 #endif
