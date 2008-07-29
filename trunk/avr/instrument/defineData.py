@@ -104,9 +104,9 @@ triggerErr=meas(56)
 camAngle1=meas(58,t="i")
 camAngle2=meas(60,t="i")
 roadSpeed=meas(62,0.01)
-mapSensor=meas(64)
+mapSensor=meas(64,1.0/800/5*3000)
 batteryV=meas(66,1.0/210)
-lambdaV=meas(68,t="i")
+lambdaV=meas(68,-14.7*0.6/3840,0.7*14.7,"i")
 
 load=meas(74,100.0/3840)
 
