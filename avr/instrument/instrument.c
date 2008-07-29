@@ -4,8 +4,8 @@ void init(void){
   DDRB=0xFF;  /*1=output; 0=input*/
   PORTB=0x00;
   
-  DDRC=0xFF&~(pNeutralIN);
-  PORTC=0x00|pNeutralIN;
+  DDRC=0xFF&~(pNeutralIN|pModeC);
+  PORTC=0x00|pNeutralIN|pModeC;
   
   DDRD=0xFF&~(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 as inputs
   PORTD=0x00|(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 with pullup
@@ -81,6 +81,11 @@ int main(void){
         warnings|=0x02;
       }else{
         warnings&=(~0x02);
+      }
+      
+      if(PINC&pModeC){
+        warnings=0x01*((timeDiv&0x04)!=0);
+        warnings|=0x02*((timeDiv&0x04)==0);
       }
       
       display(rpm,gear,warnings);

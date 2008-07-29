@@ -24,7 +24,7 @@ airTemp.label="IAT"
 mapSensor.label="MAP"
 mapSensor.decimals=0
 lambdaV.label="lambda"
-lambdaV.decimals=0
+lambdaV.decimals=2
 load.label="Load"
 
 batteryV.label="Bat"
@@ -42,6 +42,9 @@ ratio.label="Ratio"
 ratio.decimals=3
 
 oilPressure.label="OilP"
+
+ignitionTime.label="ign"
+ignitionTime.decimals=2
 
 #### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
@@ -64,4 +67,5 @@ display.append(load)
 display.append(batteryV)
 display.append(ratio)
 display.append(oilPressure)
+display.append(ignitionTime)
 #display.append(flags)

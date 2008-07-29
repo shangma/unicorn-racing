@@ -42,7 +42,7 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
       flags.forward=true;
     }
 		
-		if(flags.online==false){
+		if(flags.online==false && !(PINC&pModeC)){
 			radioTimeout++;
 			switch(radioTimeout){
 				case 1:
