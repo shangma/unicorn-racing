@@ -75,6 +75,30 @@ def calcRatio(data):
     return 0
   return speed/rpm
 
+def calcRatio2(data):
+  rpm=data[0].retWord()/64
+  speed=data[1].retWord()
+  if rpm==0:
+    return 0
+  return speed/rpm
+
+def calcGear(data):
+  ratio=data[0].value()
+  if ratio < 42:
+    return 0
+  elif ratio < 60:
+    return 1
+  elif ratio < 77:
+    return 2
+  elif ratio < 90:
+    return 3
+  elif ratio < 102:
+    return 4
+  elif ratio < 111:
+    return 5
+  else:
+    return 6
+
 #### ACTUAL MEASUREMENTS
 ## meas(n=0,g=1,o=0,t="w",l=2)
 ## byteOffset,gain,offset,type,length
@@ -132,3 +156,5 @@ z=virtMeas([gX,gY,gZ,2],rot)
 flags=virtMeas([outBits],decFlags)
 
 ratio=virtMeas([rpm,roadSpeed],calcRatio)
+ratio2=virtMeas([rpm,roadSpeed],calcRatio2)
+gear=virtMeas([ratio2],calcGear)

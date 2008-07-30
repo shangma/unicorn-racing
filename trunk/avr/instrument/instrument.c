@@ -7,8 +7,8 @@ void init(void){
   DDRC=0xFF&~(pNeutralIN|pModeC);
   PORTC=0x00|pNeutralIN|pModeC;
   
-  DDRD=0xFF&~(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 as inputs
-  PORTD=0x00|(1<<0|1<<2|1<<3|1<<5); //RX|INT0|INT1|PCINT21 with pullup
+  DDRD=0xFF&~(1<<0|pUpD|pDownD|1<<5); //RX|INT0|INT1|PCINT21 as inputs
+  PORTD=0x00|(1<<0|pUpD|pDownD|1<<5); //RX|INT0|INT1|PCINT21 with pullup
 
   timeDiv=2;
 
