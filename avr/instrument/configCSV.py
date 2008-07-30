@@ -41,6 +41,10 @@ flags.label="Flags"
 ratio.label="Ratio"
 ratio.decimals=3
 
+ratio2.label="Ratio2"
+
+gear.label="Gear"
+
 oilPressure.label="OilP"
 
 ignitionTime.label="ign"
@@ -65,7 +69,8 @@ display.append(triggerErr)
 display.append(lambdaV)
 display.append(load)
 display.append(batteryV)
-display.append(ratio)
+display.append(ratio2)
+display.append(gear)
 display.append(oilPressure)
 display.append(ignitionTime)
 #display.append(flags)

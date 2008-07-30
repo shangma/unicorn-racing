@@ -66,6 +66,8 @@ z.upperL=1.5
 z.lowerL=0.5
 z.decimals=3
 
+gear.label="Gear"
+
 ratio.label="Ratio"
 oilPressure.label="OilP"
 
@@ -88,6 +90,7 @@ display.append(airTemp)
 #display.append(lambdaV)
 #display.append(load)
 display.append(batteryV)
-display.append(ratio)
+display.append(ratio2)
+display.append(gear)
 display.append(oilPressure)
 
