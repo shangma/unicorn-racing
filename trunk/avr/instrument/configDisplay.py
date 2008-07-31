@@ -92,5 +92,5 @@ display.append(airTemp)
 display.append(batteryV)
 display.append(ratio2)
 display.append(gear)
-display.append(oilPressure)
+#display.append(oilPressure)
 
