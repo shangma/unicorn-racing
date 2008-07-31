@@ -6,15 +6,8 @@ void gearInit(void){
 
 uint8_t calcGear(uint16_t speed, uint8_t rpm){
 
-  uint8_t ratio;
+  uint8_t ratio, shift;
   static uint8_t gear, gearTmp, tOffset, shiftUp, shiftDown;
-  
-  if((PINC&pNeutralIN)==0){
-    tOffset=timeDiv;
-    gear=7;
-  }else if(gear==7){
-    gear=0;
-  }
   
   if(((timeDiv-tOffset)&0x03)==0){
   
@@ -103,6 +96,18 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       shiftDown=0;
       break;
     }
-  }  
+  }
+  
+  shift=shiftUp|shiftDown;
+  
+  if((PINC&pNeutralIN)==0){
+    if(!(shift>4|shift<10)){
+      tOffset=timeDiv;
+      gear=7;
+    }
+  }else if(gear==7){
+    gear=0;
+  }
+  
   return gear;
 }
