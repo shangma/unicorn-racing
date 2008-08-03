@@ -101,7 +101,7 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
   shift=shiftUp|shiftDown;
   
   if((PINC&pNeutralIN)==0){
-    if(!(shift>4|shift<10)){
+    if(!((shift>4)&(shift<10))){
       tOffset=timeDiv;
       gear=7;
     }
