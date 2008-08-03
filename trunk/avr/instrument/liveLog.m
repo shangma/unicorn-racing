@@ -25,7 +25,8 @@ mean_iat=0;
 mean_rpm=0;
 
 while 1
-  dat=fread(conn,1)';
+  pause(0.2)
+  dat=fread(conn,228)';
   
   if length(dat)<220
     continue
@@ -38,6 +39,7 @@ while 1
   new_map=hex2dec(char(dat(64*2+1:64*2+2)))*1.0/800/5*3000;
   new_bat=hex2dec(char(dat(66*2+1:67*2+2)))*1.0/210;
   new_lambda=hex2dec(char(dat(68*2+1:69*2+2)));
+  
   if new_lambda<32768
     new_lambda=new_lambda*-14.7*0.6/3840+0.7*14.7;
   else
@@ -58,15 +60,16 @@ while 1
     if mod(i,10)==1
       mean_rpm=mean(rpm);
       mean_rpm_s=num2str(mean_rpm);
-    
       mean_clt=mean(clt);
       mean_clt_s=num2str(mean_clt);
       mean_iat=mean(iat);
       mean_iat_s=num2str(mean_iat);
+      min_bat=min(bat);
+      min_bat_s=num2str(min_bat);
     end
     
     figure(1)
-    subplot(3,2,1)
+    subplot(2,2,1)
     hold off
     plot(rpm)
     hold on
@@ -76,7 +79,7 @@ while 1
     legend(mean_rpm_s)
     grid on
     
-    subplot(3,2,2)
+    subplot(2,2,2)
     hold off
     plot(speed)
     hold on
@@ -84,40 +87,42 @@ while 1
     axis([0 l 0 120])
     grid on
     
-    subplot(3,2,3)
+    subplot(2,2,3)
     hold off
-    plot(clt,'m')
+    plot([0:5:l-1],clt(1:5:end),'m')
     hold on
-    plot(iat,'b')
+    plot([0:5:l-1],iat(1:5:end),'b')
     plot([i,i],[0,120],'r')
     axis([0 l 10 120])
     plot([0,l],[mean_clt,mean_clt],'m--')
     legend(mean_clt_s,mean_iat_s)
     grid on
     
-    subplot(3,2,4)
+%    subplot(2,2,4)
+%    hold off
+%    plot(map)
+%    hold on
+%%    plot([i,i],[500,1500],'r')
+%%    axis([0 100 500 1500])
+%    grid on
+    
+    subplot(2,2,4)
     hold off
-    plot(map)
+    plot([0:5:l-1],bat(1:5:end))
     hold on
-%    plot([i,i],[500,1500],'r')
-%    axis([0 100 500 1500])
+    plot([0,l],[min_bat,min_bat],'b--')
+    plot([i,i],[10,15],'r')
+    axis([0 l 10 15])
+    legend(min_bat_s)
     grid on
     
-    subplot(3,2,5)
-    hold off
-    plot(bat)
-    hold on
-    plot([i,i],[5,15],'r')
-    axis([0 l 5 15])
-    grid on
-    
-    subplot(3,2,6)
-    hold off
-    plot(lambda)
-    hold on
-    plot([i,i],[9,15],'r')
-    axis([0 l 9 15])
-    grid on
+%    subplot(3,2,6)
+%    hold off
+%    plot(lambda)
+%    hold on
+%    plot([i,i],[9,15],'r')
+%    axis([0 l 9 15])
+%    grid on
     
     
     i=mod(i,l)+1;

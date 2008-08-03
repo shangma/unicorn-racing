@@ -109,7 +109,10 @@ while 1:
     print "Timeout, resynch..."
     sleep(1)
     continue
-    
+  t=hex(int(strftime("%H%M")))[2:]
+  t="0000"[0:4-len(t)]+t
+#  t=t[2:]+t[:2]
+  data=data+t
   logFile.write(data+"\n")
   if w==2:
     UDPSock.sendto(data,addr)

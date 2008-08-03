@@ -145,6 +145,8 @@ gZ=meas(100,1.0/16384,t="i")
 motorFlags=meas(111,l=1)
 outBits=meas(113,l=1)
 
+time=meas(115)
+
 #### VIRTUAL MEASUREMENTS
 ## virtMeas(inputs,function)
 ## FIXME: Det er lidt et hack, lav evt. seperate funktioner til value() og s()
