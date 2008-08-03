@@ -67,6 +67,7 @@ z.lowerL=0.5
 z.decimals=3
 
 gear.label="Gear"
+gear.decimals=0
 
 ratio.label="Ratio"
 oilPressure.label="OilP"

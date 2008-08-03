@@ -50,6 +50,9 @@ oilPressure.label="OilP"
 ignitionTime.label="ign"
 ignitionTime.decimals=2
 
+camAngle1.label="cam1"
+camAngle2.label="cam2"
+
 #### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
 display=[]
@@ -73,4 +76,6 @@ display.append(ratio2)
 display.append(gear)
 display.append(oilPressure)
 display.append(ignitionTime)
+#display.append(camAngle1)
+#display.append(camAngle2)
 #display.append(flags)
