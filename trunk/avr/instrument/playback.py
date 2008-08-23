@@ -12,7 +12,7 @@ addr = (host,port)
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
 logPath="C:\\Documents and Settings\\Jeppe Holm\\Desktop\\unicorn\\datalogs\\"
-logFile=open(logPath+"dataLog 08-08-02 1403.txt","r")
+logFile=open(logPath+"dataLog 08-08-08 2109.txt","r")
 c=0
 eof=False
 while not eof:
@@ -20,7 +20,7 @@ while not eof:
   if len(data)==0:
     eof=True
     continue
-  if not (len(data)==229 or len(data)==230):
+  if not (len(data)==229 or len(data)==230 or len(data)==233):
     continue
 
   UDPSock.sendto(data,addr)

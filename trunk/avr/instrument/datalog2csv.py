@@ -31,7 +31,7 @@ def writeData(logFile,csvFile):
     if len(data)==0:
       eof=True
       continue
-    if not (len(data)==229 or len(data)==230):
+    if not (len(data)==229 or len(data)==230 or len(data)==233 or len(data)==232) :
       continue
     
     rpm.updateData(data)
@@ -54,7 +54,7 @@ if len(argv)==1:
 
 argv=argv[1:]
 ####
-#argv=["c:\\datalog.txt"]
+#argv=["C:\Documents and Settings\\Jeppe Holm\\Desktop\\unicorn\\datalogs\\fartstrup\\fsg-acce.dat.txt"]
 
 for log in argv:
   print log

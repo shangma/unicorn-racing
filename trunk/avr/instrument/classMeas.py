@@ -31,7 +31,11 @@ class meas:
     return tmp*self.gain+self.offset
     
   def retHex(self):
-    return data[self.dataOffset:self.dataOffset+self.dataLength]
+    tmp=data[self.dataOffset:self.dataOffset+self.dataLength]
+#    print len(tmp)
+    if len(tmp)<2:
+      tmp="0"
+    return tmp
     
   def retWord(self):
     return int(self.retHex(),16)

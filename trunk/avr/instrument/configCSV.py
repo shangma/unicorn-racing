@@ -30,11 +30,11 @@ load.label="Load"
 batteryV.label="Bat"
 
 x.label="X"
-x.decimals=3
+x.decimals=2
 y.label="Y"
-y.decimals=3
+y.decimals=2
 z.label="Z"
-z.decimals=3
+z.decimals=2
 
 flags.label="Flags"
 
@@ -52,6 +52,9 @@ ignitionTime.decimals=2
 
 camAngle1.label="cam1"
 camAngle2.label="cam2"
+
+time.label="Clock"
+time.decimals=0
 
 #### APPEND THE WANTED MODULES TO THE DISPLAY LIST
 
@@ -76,6 +79,7 @@ display.append(ratio2)
 display.append(gear)
 display.append(oilPressure)
 display.append(ignitionTime)
+display.append(time)
 #display.append(camAngle1)
 #display.append(camAngle2)
 #display.append(flags)

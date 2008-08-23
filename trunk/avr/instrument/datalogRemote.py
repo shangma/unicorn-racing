@@ -114,7 +114,8 @@ while 1:
 #  t=t[2:]+t[:2]
   data=data+t
   logFile.write(data+"\n")
-  if w==2:
+#  if w==2:
+  if w==0:
     UDPSock.sendto(data,addr)
     w=0
   else:
