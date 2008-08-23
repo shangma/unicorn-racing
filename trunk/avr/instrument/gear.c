@@ -7,7 +7,7 @@ void gearInit(void){
 uint8_t calcGear(uint16_t speed, uint8_t rpm){
 
   uint8_t ratio, shift;
-  static uint8_t gear, gearTmp, tOffset, shiftUp, shiftDown;
+  static uint8_t gear, gearTmp, tOffset, shiftUp, shiftDown, clutchCount;
   
   ratio=0;
   
@@ -15,8 +15,6 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
   
     if(rpm>0){
       ratio=speed/rpm;
-    }else{
-      ratio=0;
     }
    
     if(ratio>48 && ratio<53){
@@ -50,10 +48,18 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       }
       gearTmp=6;
     }else{
-      if(gearTmp==0){
-        ratio=0;
+      ratio=0;
+      if(gear!=7){
+        clutchCount++;
+      }
+      if(clutchCount>5){
+        clutchCount=6;
+        gear=0;
       }
       gearTmp=0;
+    }
+    if(ratio!=0){
+      clutchCount=0;
     }
   }
   
@@ -70,7 +76,7 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       }
       if(shiftDown==2){
         tOffset=timeDiv;
-        
+        clutchCount=0;
         if(gear==7){
           gear=1;
         }else if(gear>1){
@@ -85,7 +91,7 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       }
       if(shiftUp==2){
         tOffset=timeDiv;
-        
+        clutchCount=0;
         if(gear==7){
           gear=2;
         }else if(gear<6){
@@ -103,12 +109,13 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
   shift=shiftUp|shiftDown;
   
   if((PINC&pNeutralIN)==0){
-    if(!((shift>1)&(shift<10))){
+    if((shift<1)|(shift>10)){
       tOffset=timeDiv;
       gear=7;
+      clutchCount=0;
     }
   }else if(gear==7){
-    if(!((shift>1)&(shift<10))){
+    if((shift<1)|(shift>10)){
 //      tOffset=timeDiv;
       gear=0;
     }

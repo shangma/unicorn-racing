@@ -25,4 +25,3 @@ while not eof:
 
   UDPSock.sendto(data,addr)
   sleep(0.5)
-
