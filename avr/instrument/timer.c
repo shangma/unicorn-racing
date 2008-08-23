@@ -41,7 +41,7 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
       PORTD|=pConfigD;
       flags.forward=true;
     }
-		
+	}  //Test
 		if(flags.online==false && !(PINC&pModeC)){
 			radioTimeout++;
 			switch(radioTimeout){
@@ -70,9 +70,14 @@ F_CPU=4MHz, Timer2 prescaler=1024 -> 3906Hz
 					break;
 			}
 		}else if(PCIFR&_BV(PCIF2)){
-			flags.online=false;
+		  preScaler++;
+		  if(preScaler==4){
+        flags.online=false;
+      }
 			PCIFR|=_BV(PCIF2);
 			radioTimeout=0x21;
-		}
-	}
+		}else{
+      preScaler=0;
+    }
+//	}
 }

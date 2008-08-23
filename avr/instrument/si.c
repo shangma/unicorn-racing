@@ -71,4 +71,18 @@ void reqInfo(void){
     UDR0=reqCmd[c];
   }
   
+  if(flags.timeOut==true && !(PINC&pModeC)){
+    
+    while(!(UCSR0A&_BV(UDRE0))){
+    }
+    _delay_ms(2);
+    PORTB|=pConfigB;    /*Disable ECU TX, Enable Radio RX/TX*/
+    _delay_ms(2);
+    UDR0='a';
+    while(!(UCSR0A&_BV(UDRE0))){
+    }
+    _delay_ms(2);
+    PORTB&=~pConfigB;   /*Enable ECU TX, Disable Radio RX/TX*/
+  }
+  
 }

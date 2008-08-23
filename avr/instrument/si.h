@@ -2,7 +2,7 @@
 #define _SI_H_
 
 #include "instrumentDefines.h"
-
+#include "radio.h"
 #include <avr/interrupt.h>
 
 #define pDCD _BV(4)

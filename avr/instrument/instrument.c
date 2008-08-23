@@ -24,8 +24,11 @@ void init(void){
   CLKPR=_BV(CLKPCE);  /*Allow prescaler change*/
   CLKPR=0x01;         /*Prescale by two (CLK=3.6864MHz)*/
   
+  PORTC&=~pResetC;
+  _delay_ms(200);
   PORTC|=pResetC;
   _delay_ms(200);
+  
   flags.online=false;
   radioInit();
   radioInit2();
@@ -84,6 +87,8 @@ int main(void){
       }
       
       if(PINC&pModeC){
+        flags.online=false;
+        PORTD&=~pConfigD;
         warnings=0x01*((timeDiv&0x04)!=0);
         warnings|=0x02*((timeDiv&0x04)==0);
       }
