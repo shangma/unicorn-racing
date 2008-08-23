@@ -24,9 +24,22 @@ def correct():
 #### ROTATION OF THE G-MAESUREMENTS
 
 def rot(xyzi):
+
+#### G2
   xx=0.0715
   yy=-0.351
   zz=0
+
+#### G3  
+  xx=0.1095
+  yy=-0.205
+  zz=-0.43
+  
+### Jeppe
+#  xx=0.2014
+#  yy=-0.2625  
+#  zz=0.4429
+  
   x1=xyzi[0].value()
   y1=xyzi[1].value()
   z1=xyzi[2].value()
@@ -122,7 +135,7 @@ statusLambdaPWM=meas(34)
 
 waterTemp=meas(46,-150.0/3840,120)
 airTemp=meas(48,-150.0/3840,120)
-potmeter=meas(50,1/25.1,-487/25.1)
+potmeter=meas(50,0.0510,-31.4)
 rpm=meas(54,0.9408)
 triggerErr=meas(56)
 camAngle1=meas(58,0.75,0,"i")
@@ -145,7 +158,7 @@ gZ=meas(100,1.0/16384,t="i")
 motorFlags=meas(111,l=1)
 outBits=meas(113,l=1)
 
-time=meas(115)
+time=meas(114)
 
 #### VIRTUAL MEASUREMENTS
 ## virtMeas(inputs,function)

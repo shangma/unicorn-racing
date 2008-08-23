@@ -9,6 +9,8 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
   uint8_t ratio, shift;
   static uint8_t gear, gearTmp, tOffset, shiftUp, shiftDown;
   
+  ratio=0;
+  
   if(((timeDiv-tOffset)&0x03)==0){
   
     if(rpm>0){
@@ -66,7 +68,7 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       if(shiftDown<11){
         shiftDown++;
       }
-      if(shiftDown==7){
+      if(shiftDown==2){
         tOffset=timeDiv;
         
         if(gear==7){
@@ -81,7 +83,7 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
       if(shiftUp<11){
         shiftUp++;
       }
-      if(shiftUp==7){
+      if(shiftUp==2){
         tOffset=timeDiv;
         
         if(gear==7){
@@ -101,12 +103,16 @@ uint8_t calcGear(uint16_t speed, uint8_t rpm){
   shift=shiftUp|shiftDown;
   
   if((PINC&pNeutralIN)==0){
-    if(!((shift>4)&(shift<10))){
+    if(!((shift>1)&(shift<10))){
       tOffset=timeDiv;
       gear=7;
     }
   }else if(gear==7){
-    gear=0;
+    if(!((shift>1)&(shift<10))){
+//      tOffset=timeDiv;
+      gear=0;
+    }
+//    gear=0;
   }
   
   return gear;
