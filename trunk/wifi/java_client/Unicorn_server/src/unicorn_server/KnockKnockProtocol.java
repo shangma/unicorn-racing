@@ -59,13 +59,21 @@ public class KnockKnockProtocol {
 
     public String processInput(String theInput) {
         String theOutput = null;
+        
+        String fileData = null;
+        try {
+        RandomAccessFile dataLog = new RandomAccessFile("Datalog.txt","r");
+        
+        fileData=dataLog.readLine();
 
+        
         if (state == WAITING) {
             theOutput = "Knock! Knock!";
             state = SENTKNOCKKNOCK;
         } else if (state == SENTKNOCKKNOCK) {
             if (theInput.equalsIgnoreCase("Who's there?")) {
-                theOutput = clues[currentJoke];
+                //theOutput = clues[currentJoke];
+                theOutput = fileData;
                 state = SENTCLUE;
             } else {
                 theOutput = "You're supposed to say \"Who's there?\"! " +
@@ -94,6 +102,10 @@ public class KnockKnockProtocol {
                 theOutput = "Bye.";
                 state = WAITING;
             }
+        }
+        
+        }   catch(IOException e){
+            System.out.println("File not found \n");
         }
         return theOutput;
     }
