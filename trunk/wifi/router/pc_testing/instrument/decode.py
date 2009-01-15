@@ -9,7 +9,7 @@ from os import name
 import socket
 
 host = "192.168.2.219"
-port = 3000
+port = 21567
 buf = 1024
 addr = (host,port)
     
