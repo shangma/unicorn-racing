@@ -24,7 +24,7 @@ from time import sleep
 #Create a socket to receive data
 host = "192.168.2.219"
 port = 21567
-buf = 1024
+buf = 255
 addr = (host,port)
 
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -41,23 +41,39 @@ class UpdateData (threading.Thread):
 			#Retreive data from the socket
 			data_buf = UDPSock.recv(buf)
 			data=hexlify(data_buf)
+			print data
+			print data[1]+data[2]+data[3]+data[4]+data[5]+data[6]+data[7]+data[8]+data[9]+data[10]
+			for i in range (1,8):
+				if data[i]=='0':
+					print "Part of data valid"
+					data_valid=1
+				else:
+					data_valid=0
 	
 			#Decoding the received data set. 
 			## meas(data,n=0,g=1,o=0,t="w",l=2)
 			## data,byteOffset,gain,offset,type,length
-		
-			waterTemp=meas(data,46,-150.0/3840,120).value()
-			airTemp=meas(data,48,-150.0/3840,120).value()
-			potmeter=meas(data,50,0.0510,-31.4).value()
-			rpm=meas(data,54,0.9408).value()
+			if data_valid == 1:
+				waterTemp=meas(data,46,-150.0/3840,120).value()
+				airTemp=meas(data,48,-150.0/3840,120).value()
+				potmeter=meas(data,50,0.0510,-31.4).value()
+				rpm=meas(data,54,0.9408).value()
+				mapSensor=meas(data,64,1.0/800/5*3000).value()
+				batteryV=meas(data,66,1.0/210).value()
+				lambdaV=meas(data,68,-14.7*0.6/3840,0.7*14.7,"i").value()
 	
-			ecutime=meas(data,12,0.000001,0,"l",4).value()
+				ecutime=meas(data,12,0.000001,0,"l",4).value()
 	
-			##Update the label in the GUI
-			upobj.rpm_label.set_text(str(fix(rpm,0)))
-			upobj.clt_label.set_text(str(fix(waterTemp,1)))
-			upobj.iat_label.set_text(str(fix(airTemp,1)))
-			upobj.time_label.set_text(str(fix(ecutime,1)))
+				##Update the label in the GUI
+				upobj.rpm_label.set_text(str(fix(rpm,0)))
+				upobj.clt_label.set_text(str(fix(waterTemp,1)))
+				upobj.iat_label.set_text(str(fix(airTemp,1)))
+				upobj.time_label.set_text(str(fix(ecutime,1)))
+				upobj.vbat_label.set_text(str(fix(batteryV,1)))
+				upobj.afr_label.set_text(str(fix(lambdaV,1)))
+				upobj.map_label.set_text(str(fix(mapSensor,1)))
+			else:
+				print "Data invalid"
 
 			#print "Runs: " + str(runs)
 			#runs=runs+1
@@ -81,37 +97,81 @@ class MainWindow(threading.Thread):
 		hbox.pack_start(vbox, False, False, 0)
 		
 		#Create a 10x10 table, used to display engineinformation
-		engine_table = gtk.Table(10, 10, False)		
-		engine_frame = gtk.Frame("Engineinformation")
+		engine_table = gtk.Table(2, 10, False)
+		engine_table.set_col_spacings(20)
+    
+    		
+		engine_frame = gtk.Frame("Motor status")
 		engine_frame.add(engine_table)
 
-		label = gtk.Label("RPM:")
+		label = gtk.Label("RPM")
 		engine_table.attach(label,1,2,1,2)
 		self.rpm_label = gtk.Label("0")
 		engine_table.attach(self.rpm_label,2,3,1,2)
-
-		label = gtk.Label("Intake air temperature:")
+		
+		label = gtk.Label("Coolant temperatur")
 		engine_table.attach(label,1,2,2,3)
-		self.iat_label = gtk.Label("0")
-		engine_table.attach(self.iat_label,2,3,2,3)
-
-		label = gtk.Label("Coolant temperature:")
-		engine_table.attach(label,1,2,3,4)
 		self.clt_label = gtk.Label("0")
-		engine_table.attach(self.clt_label,2,3,3,4)
+		engine_table.attach(self.clt_label,2,3,2,3)
+
+		label = gtk.Label("Intake air temperature")
+		engine_table.attach(label,1,2,3,4)
+		self.iat_label = gtk.Label("0")
+		engine_table.attach(self.iat_label,2,3,3,4)
+		
+		label = gtk.Label("Intake manifold pressure")
+		engine_table.attach(label,1,2,4,5)
+		self.map_label = gtk.Label("0")
+		engine_table.attach(self.map_label,2,3,4,5)
+		
+		label = gtk.Label("Oil pressure")
+		engine_table.attach(label,1,2,5,6)
+		self.oilpres_label = gtk.Label("0")
+		engine_table.attach(self.oilpres_label,2,3,5,6)
+		
+		label = gtk.Label("AFR")
+		engine_table.attach(label,1,2,6,7)
+		self.afr_label = gtk.Label("0")
+		engine_table.attach(self.afr_label,2,3,6,7)
 
 		label = gtk.Label("Speed (km/t)")
-		engine_table.attach(label,1,2,4,5)
+		engine_table.attach(label,1,2,7,8)
 		self.speed_label = gtk.Label("0")
-		engine_table.attach(self.speed_label,2,3,4,5)
-
+		engine_table.attach(self.speed_label,2,3,7,8)
+		
+		label = gtk.Label("Trigger error")
+		engine_table.attach(label,1,2,8,9)
+		self.trigerror_label = gtk.Label("0")
+		engine_table.attach(self.trigerror_label,2,3,8,9)
+		
 		label = gtk.Label("ECU time:")
-		engine_table.attach(label,1,2,5,6)
+		engine_table.attach(label,1,2,9,10)
 		self.time_label = gtk.Label("0")
-		engine_table.attach(self.time_label,2,3,5,6)	
-
+		engine_table.attach(self.time_label,2,3,9,10)
+		
 		#Pack the engine information in a frame
 		vbox.pack_start(engine_frame, False, False, 0)
+		
+		
+		#New vobx for other information
+		vbox=gtk.VBox(False, 5)
+		vbox.set_border_width(10)
+		hbox.pack_start(vbox, False, False, 0)
+		
+		misc_table = gtk.Table(2, 10, False)
+		misc_table.set_col_spacings(20)
+    		
+		misc_frame = gtk.Frame("Misc information")
+		misc_frame.add(misc_table)
+		
+		
+		label = gtk.Label("Battery voltage:")
+		misc_table.attach(label,1,2,9,10)
+		self.vbat_label = gtk.Label("0")
+		misc_table.attach(self.vbat_label,2,3,9,10)
+		
+		#Pack the misc information in a frame
+		vbox.pack_start(misc_frame, False, False, 0)
 
 
 		gtk.gdk.threads_enter()
