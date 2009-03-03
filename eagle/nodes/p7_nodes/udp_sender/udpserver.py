@@ -6,7 +6,7 @@ import socket
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-server_socket.bind(("", 3000))
+server_socket.bind(("192.168.1.2", 1200))
 
 print"UDPServer Waiting for client on port 3000"
 

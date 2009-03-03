@@ -21,6 +21,8 @@ from defineData import *
 
 from time import sleep
 
+nodemeas=0.0
+
 #Create a socket to receive data
 host = "192.168.2.219"
 port = 21567
@@ -61,7 +63,16 @@ class UpdateData (threading.Thread):
 				mapSensor=meas(data,64,1.0/800/5*3000).value()
 				batteryV=meas(data,66,1.0/210).value()
 				lambdaV=meas(data,68,-14.7*0.6/3840,0.7*14.7,"i").value()
-	
+				if data[237]=='0':
+					if data[235]=='0':
+						nodemeas=data[231]+data[233]
+					else:
+						nodemeas=data[231]+data[233]+data[235]
+				else:
+					nodemeas=data[231]+data[233]+data[235]+data[237]
+				
+				nodemeas=float(nodemeas)*5.0
+				nodemeas=nodemeas/1.024	
 				ecutime=meas(data,12,0.000001,0,"l",4).value()
 	
 				##Update the label in the GUI
@@ -72,6 +83,7 @@ class UpdateData (threading.Thread):
 				upobj.vbat_label.set_text(str(fix(batteryV,1)))
 				upobj.afr_label.set_text(str(fix(lambdaV,1)))
 				upobj.map_label.set_text(str(fix(mapSensor,1)))
+				upobj.nodemeas_label.set_text(str(fix(nodemeas,1)))
 			else:
 				print "Data invalid"
 
@@ -170,6 +182,11 @@ class MainWindow(threading.Thread):
 		self.vbat_label = gtk.Label("0")
 		misc_table.attach(self.vbat_label,2,3,9,10)
 		
+		label = gtk.Label("Node measurement:")
+		misc_table.attach(label,1,2,11,12)
+		self.nodemeas_label = gtk.Label("0")
+		misc_table.attach(self.nodemeas_label,2,3,11,12)
+	
 		#Pack the misc information in a frame
 		vbox.pack_start(misc_frame, False, False, 0)
 
