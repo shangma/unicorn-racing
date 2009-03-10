@@ -24,7 +24,7 @@ from time import sleep
 nodemeas=0.0
 
 #Create a socket to receive data
-host = "192.168.2.219"
+host = "127.0.0.1"
 port = 21567
 buf = 255
 addr = (host,port)
@@ -74,6 +74,7 @@ class UpdateData (threading.Thread):
 				nodemeas=float(nodemeas)*5.0
 				nodemeas=nodemeas/1.024	
 				ecutime=meas(data,12,0.000001,0,"l",4).value()
+				tp=meas(data,50,0.0510,-31.4).value()
 	
 				##Update the label in the GUI
 				upobj.rpm_label.set_text(str(fix(rpm,0)))
@@ -84,6 +85,8 @@ class UpdateData (threading.Thread):
 				upobj.afr_label.set_text(str(fix(lambdaV,1)))
 				upobj.map_label.set_text(str(fix(mapSensor,1)))
 				upobj.nodemeas_label.set_text(str(fix(nodemeas,1)))
+				upobj.tp_label.set_text(str(fix(tp,1)))
+
 			else:
 				print "Data invalid"
 
@@ -109,7 +112,7 @@ class MainWindow(threading.Thread):
 		hbox.pack_start(vbox, False, False, 0)
 		
 		#Create a 10x10 table, used to display engineinformation
-		engine_table = gtk.Table(2, 10, False)
+		engine_table = gtk.Table(2, 11, False)
 		engine_table.set_col_spacings(20)
     
     		
@@ -161,6 +164,11 @@ class MainWindow(threading.Thread):
 		self.time_label = gtk.Label("0")
 		engine_table.attach(self.time_label,2,3,9,10)
 		
+		label = gtk.Label("Throttle position:")
+		engine_table.attach(label,1,2,10,11)
+		self.tp_label = gtk.Label("0")
+		engine_table.attach(self.tp_label,2,3,10,11)
+
 		#Pack the engine information in a frame
 		vbox.pack_start(engine_frame, False, False, 0)
 		
