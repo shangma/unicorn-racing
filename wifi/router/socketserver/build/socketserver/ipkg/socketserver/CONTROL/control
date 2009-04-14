@@ -1,8 +1,0 @@
-Package: socketserver
-Priority: optional
-Section: misc
-Description: The GNU hello world program
-Maintainer: OpenWrt Developers Team <openwrt-devel@openwrt.org>
-Source: http://svn.openwrt.org/openwrt/trunk/openwrt/package/socketserver
-Version: 1-1
-Architecture: mipsel
