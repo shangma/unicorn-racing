@@ -1,0 +1,59 @@
+Unicorn - EL-del
+================
+
+ECU
+===
+Purpose:
+Controls fuel injection and ignition timing based on measurements from sensors, lookup tables and calculations.
+
+Choices:
+G2 uses a MegaSquirt II, which has been modified to support dual ignition (a MicroSquirt feature).
+
+Experience:
+When the basics are configured it seems to work very well.
+
+Ignition
+========
+Purpose:
+Responsible for generating sparks when told by the ECU.
+
+Choices:
+With four cylinders and dual spark control from the ECU, we use wasted spark. We have build an ignition module, which consist of four coil drivers, some logic to kill the ignition while changing gear and some input filters to eliminate noise and prevent very long charging of the ignition coils.
+
+Experience:
+It turned out that the coils are designed for CDI with a primary voltage of at least 100v. Although it seems to work ok, real CDI or ignition coils designed for non-CDI use should be considered.
+
+Wire harness
+============
+Purpose:
+Connects the electrical components, e.g. the sensors to the ECU.
+
+Choices:
+We have used different colors of silicone insulated wire and weather pack connectors.
+
+Experience:
+The different colors helps to maintain an overview of the connections. The silicone insulation is very resistant to heat (150+ 'C). Too many connectors makes the harness clumsy: sensors with their own connector should not have extra connectors. Use of different wire thickness could reduce the weight.
+
+Instrumentation
+===============
+Purpose:
+Present the most important information to the driver, let the driver control certain parameters.
+
+Choices:
+We designed a box to mount on the steering wheel, which received RPM, speed, water t., oil p., clutch and gear up/down signals. It presented the current RPM and selected gear to the driver. In case of low oil p. or high water t. this was also presented to the driver.
+
+
+Experience:
+Too much electronics in the confined space of the wheel-mounted box resulted in inflexibility i.e. it was very hard to get to the components of the lower layer. The many thin signal wires had a tendency to break. The brightness of the LED's was to low to be seen in bright sunlight.
+
+
+Transmission control
+====================
+Purpose:
+Electrical control of the sequential transmission,
+
+Choices:
+We use a PowerShift actuator and controller from TransLogic. The PowerShift controller also generates a signal to kill the ignition while up-shifting, which allows clutch-less up-shifts.
+
+Experience:
+This solution is quiet expensive, but we were unable to find other products to satisfy the purpose.
