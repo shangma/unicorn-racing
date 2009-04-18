@@ -1,8 +1,0 @@
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\ResolveAssemblyReference.cache
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\Unicorn.Form1.resources
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\Unicorn.Properties.Resources.resources
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\Unicorn.csproj.GenerateResource.Cache
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\bin\Debug\Unicorn.exe
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\bin\Debug\Unicorn.pdb
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\Unicorn.exe
-C:\STUFF\unicorn\svn\pc\wingui\Unicorn\Unicorn\obj\Debug\Unicorn.pdb
