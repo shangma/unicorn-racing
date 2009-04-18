@@ -10,6 +10,7 @@
  * Chip type           : ATMEGA88 with ENC28J60
  *********************************************/
 #include <avr/io.h>
+#include <string.h>
 #include "avr_compat.h"
 #include "net.h"
 #include "enc28j60.h"
@@ -198,7 +199,7 @@ void make_echo_reply_from_request(uint8_t *buf,uint8_t len)
 }
 
 // you can send a max of 220 bytes of data
-void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *dst_ip)
+void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_t port)
 {
         uint8_t i=0;
         uint16_t ck;
@@ -210,10 +211,6 @@ void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_
         buf[IP_TOTLEN_H_P]=0;
         buf[IP_TOTLEN_L_P]=IP_HEADER_LEN+UDP_HEADER_LEN+datalen;
         make_ip(buf);
-		/*while(i<4){
-                buf[IP_DST_P+i]=dst_ip[i];
-                i++;
-        }*/
         // send to port:
         //buf[UDP_DST_PORT_H_P]=port>>8;
         //buf[UDP_DST_PORT_L_P]=port & 0xff;
@@ -230,7 +227,6 @@ void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_
         buf[UDP_CHECKSUM_H_P]=0;
         buf[UDP_CHECKSUM_L_P]=0;
         // copy the data:
-		i = 0;
         while(i<datalen){
                 buf[UDP_DATA_P+i]=data[i];
                 i++;
@@ -241,23 +237,41 @@ void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_
         enc28j60PacketSend(UDP_HEADER_LEN+IP_HEADER_LEN+ETH_HEADER_LEN+datalen,buf);
 }
 
-void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *dst_ip)
+void udp_test_sender(uint8_t *buf)
 {
         uint8_t i=0;
         uint16_t ck;
-        make_eth(buf);
+        uint8_t datalen;
+        char voresdata[] = "testpakke";
+        datalen = strlen(voresdata);
+
+        buf[ETH_DST_MAC] = 0x00;
+        buf[ETH_DST_MAC+1] = 0x13;
+        buf[ETH_DST_MAC+2] = 0xd4;
+        buf[ETH_DST_MAC+3] = 0x9e;
+        buf[ETH_DST_MAC+4] = 0x9f;
+        buf[ETH_DST_MAC+5] = 0xa0;
+        while(i<6){
+                buf[ETH_SRC_MAC +i]=macaddr[i];
+                i++;
+        }
         if (datalen>220){
                 datalen=220;
         }
         // total length field in the IP header must be set:
         buf[IP_TOTLEN_H_P]=0;
         buf[IP_TOTLEN_L_P]=IP_HEADER_LEN+UDP_HEADER_LEN+datalen;
-       
-	   while(i<4){
-                buf[IP_DST_P+i]=dst_ip[i];
+
+        i = 0;
+        while(i<4){
+
                 buf[IP_SRC_P+i]=ipaddr[i];
                 i++;
         }
+        buf[IP_DST_P]=192;
+        buf[IP_DST_P+1]=168;
+        buf[IP_DST_P+2]=1;
+        buf[IP_DST_P+3]=5;
         // clear the 2 byte checksum
         buf[IP_CHECKSUM_P]=0;
         buf[IP_CHECKSUM_P+1]=0;
@@ -267,13 +281,110 @@ void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *ds
         // calculate the checksum:
         ck=checksum(&buf[IP_P], IP_HEADER_LEN,0);
         buf[IP_CHECKSUM_P]=ck>>8;
-		
+        buf[IP_CHECKSUM_P+1]=ck& 0xff;
+
+
+
         // send to port:
         //buf[UDP_DST_PORT_H_P]=port>>8;
         //buf[UDP_DST_PORT_L_P]=port & 0xff;
         // sent to port of sender and use "port" as own source:
-        buf[UDP_DST_PORT_H_P]=port>>8;
-        buf[UDP_DST_PORT_L_P]= port & 0xff;
+        buf[UDP_DST_PORT_H_P]=0x04;
+        buf[UDP_DST_PORT_L_P]=0xb0;
+        buf[UDP_SRC_PORT_H_P]=0x04;
+        buf[UDP_SRC_PORT_L_P]=0xb0;
+        // source port does not matter and is what the sender used.
+        // calculte the udp length:
+        buf[UDP_LEN_H_P]=0;
+        buf[UDP_LEN_L_P]=UDP_HEADER_LEN+datalen;
+        // zero the checksum
+        buf[UDP_CHECKSUM_H_P]=0;
+        buf[UDP_CHECKSUM_L_P]=0;
+        // copy the data:
+        while(i<datalen){
+                buf[UDP_DATA_P+i]=voresdata[i];
+                i++;
+        }
+        ck=checksum(&buf[IP_SRC_P], 16 + datalen,1);
+        buf[UDP_CHECKSUM_H_P]=ck>>8;
+        buf[UDP_CHECKSUM_L_P]=ck& 0xff;
+        uint8_t tester[200] = {0x00, 0x13, 0xd4, 0x9e, 0x9f, 0xa0, 0x54, 0x55, 0x58, 0x10, 0x00, 0x24, 0x08, 0x00, 0x45, 0x00, 0x00, 0x1f, 0x12, 0x34, 0x40, 0x00, 0xff, 0x11, 0xe6, 0x3f, 0xc0, 0xa8, 0x01, 0x04, 0xc0, 0xa8, 0x01, 0x05, 0x04, 0xb0, 0x04, 0xb0, 0x00, 0x0b, 0x18, 0x32, 'H', 'e', 'j'};
+        enc28j60PacketSend(46,tester);
+}
+
+void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *dstip, char *dstmac)
+{
+        uint8_t i=0;
+        uint16_t ck;
+/*        buf[ETH_DST_MAC]= 0x00;
+        buf[ETH_DST_MAC+1]= 0x1e;
+        buf[ETH_DST_MAC+2]= 0x37;
+        buf[ETH_DST_MAC+3]= 0xd8;
+        buf[ETH_DST_MAC+4]= 0x28;
+        buf[ETH_DST_MAC+5]= 0x08;*/
+
+        buf[ETH_DST_MAC]= dstmac[0];
+        buf[ETH_DST_MAC+1]= dstmac[1];
+        buf[ETH_DST_MAC+2]= dstmac[2];
+        buf[ETH_DST_MAC+3]= dstmac[3];
+        buf[ETH_DST_MAC+4]= dstmac[4];
+        buf[ETH_DST_MAC+5]= dstmac[5];
+
+
+
+        buf[ETH_SRC_MAC]='N';
+        buf[ETH_SRC_MAC+1]='o';
+        buf[ETH_SRC_MAC+2]='d';
+        buf[ETH_SRC_MAC+3]='e';
+        buf[ETH_SRC_MAC+4]='0';
+        buf[ETH_SRC_MAC+5]='1';
+
+        if (datalen>220){
+
+                datalen=220;
+        }
+
+        buf[ETH_TYPE_H_P]=0x08;
+        buf[ETH_TYPE_L_P]=0x00;
+        buf[ETH_TYPE_L_P+1]=0x45;
+        buf[ETH_TYPE_L_P+2]=0x00;
+
+        
+        // total length field in the IP header must be set:
+        buf[IP_TOTLEN_H_P]=0;
+        buf[IP_TOTLEN_L_P]=IP_HEADER_LEN+UDP_HEADER_LEN+datalen;
+
+        buf[IP_DST_P] = dstip[0];
+        buf[IP_DST_P+1] = dstip[1];
+        buf[IP_DST_P+2] = dstip[2];
+        buf[IP_DST_P+3] = dstip[3];
+        
+		buf[IP_SRC_P]=192;
+        buf[IP_SRC_P+1]=168;
+        buf[IP_SRC_P+2]=1;
+        buf[IP_SRC_P+3]=1;
+ 
+        // clear the 2 byte checksum
+        buf[IP_CHECKSUM_P]=0;
+        buf[IP_CHECKSUM_P+1]=0;
+        buf[IP_FLAGS_P]=0x40; // don't fragment
+        buf[IP_FLAGS_P+1]=0;  // fragement offset
+        buf[IP_TTL_P]=64; // ttl
+        buf[IP_TTL_P+1]=0x11; // ttl
+
+
+        // calculate the checksum:
+        ck=checksum(&buf[IP_P], IP_HEADER_LEN,0);
+        buf[IP_CHECKSUM_P]=ck>>8;
+        buf[IP_CHECKSUM_P+1]=ck& 0xff;
+
+
+        // send to port:
+        //buf[UDP_DST_PORT_H_P]=port>>8;
+        //buf[UDP_DST_PORT_L_P]=port & 0xff;
+        // sent to port of sender and use "port" as own source:
+        buf[UDP_DST_PORT_H_P]=buf[UDP_SRC_PORT_H_P];
+        buf[UDP_DST_PORT_L_P]= buf[UDP_SRC_PORT_L_P];
         buf[UDP_SRC_PORT_H_P]=port>>8;
         buf[UDP_SRC_PORT_L_P]=port & 0xff;
         // source port does not matter and is what the sender used.
@@ -284,7 +395,6 @@ void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *ds
         buf[UDP_CHECKSUM_H_P]=0;
         buf[UDP_CHECKSUM_L_P]=0;
         // copy the data:
-		i = 0;
         while(i<datalen){
                 buf[UDP_DATA_P+i]=data[i];
                 i++;
@@ -294,4 +404,7 @@ void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *ds
         buf[UDP_CHECKSUM_L_P]=ck& 0xff;
         enc28j60PacketSend(UDP_HEADER_LEN+IP_HEADER_LEN+ETH_HEADER_LEN+datalen,buf);
 }
+
+
 /* end of ip_arp_udp.c */
+

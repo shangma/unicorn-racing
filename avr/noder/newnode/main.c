@@ -29,6 +29,7 @@ void goADC(void);
 static uint8_t mymac[6] = {0x54,0x55,0x58,0x10,0x00,0x24};
 uint8_t myip[4] = {192,168,0,200};
 uint8_t dstip[4] = {192,168,0,100};
+char dstmac[6] = {'N','o','d','e',0,2};
 static uint16_t myport =1200; // listen port for udp
 // how did I get the mac addr? Translate the first 3 numbers into ascii is: TUX
 
@@ -40,7 +41,7 @@ uint8_t ledstatus=0;
 
 void putmsg(char *str)
 {
-	send_udp(buf,str,strlen(str),myport, dstip);
+	send_udp(buf,str,strlen(str),myport, dstip, dstmac);
 }
 
 
@@ -173,7 +174,7 @@ int main(void){
 		// get the next new packet:
 		
 		plen = enc28j60PacketReceive(BUFFER_SIZE, buf);
-
+		goADC();
 		/*plen will ne unequal to zero if there is a valid 
 		 * packet (without crc error) */
 		if(plen!=0){
@@ -229,7 +230,8 @@ long adc(uint8_t adc_port)
  
     ADCSRA &= ~(1<<ADEN);             // shut down the ADC
     adc_buf=(ADCL|ADCH<<8);	
-return adc_buf;
+
+	return adc_buf;
 }
 
 void init_adc(void){
