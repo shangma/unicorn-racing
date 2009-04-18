@@ -19,8 +19,8 @@ extern uint8_t eth_type_is_ip_and_my_ip(uint8_t *buf,uint8_t len);
 extern void make_arp_answer_from_request(uint8_t *buf,uint8_t len);
 extern void make_echo_reply_from_request(uint8_t *buf,uint8_t len);
 extern void make_udp_reply_from_request(uint8_t *buf,char *data,uint8_t datalen,uint16_t port);
-extern void send_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port, uint8_t *dst_ip);
-
+extern void udp_test_sender(uint8_t *buf);
+extern void send_node02_udp(uint8_t *buf,char *data,uint8_t datalen,uint16_t port);
 
 #endif /* IP_ARP_UDP_H */
 //@}
