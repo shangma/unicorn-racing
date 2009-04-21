@@ -59,7 +59,7 @@ options.c_oflag = 0;
 options.c_lflag = 0;
 options.c_iflag = INPCK | ISTRIP;
 options.c_cc[VTIME] = 1;
-options.c_cc[VMIN] = 0;
+options.c_cc[VMIN] = 114;
 //options.c_line = N_TTY;
 tcsetattr(fd,TCSANOW,&options);
 if ( tcflush( fd, TCIOFLUSH ) < 0 )
@@ -117,7 +117,7 @@ while(1){
 
 	
 	//Receive data from the network node
-	printf("Attempt to get data from node\n");
+	/*printf("Attempt to get data from node\n");
 	if ((servrecv = recvfrom(sockserver, servbuffer, 50, 0, (struct sockaddr *) &clisockaddr, sizeof(clisockaddr))) < 0) {
                 printf("Failed to receive message, error: %d \n",servrecv);
               }
@@ -127,7 +127,7 @@ while(1){
 	for(k=0;k<10;k++){
 		printf("%02x ",servbuffer[k]);
 	}
-	printf("\n");
+	printf("\n");*/
 
 
 
