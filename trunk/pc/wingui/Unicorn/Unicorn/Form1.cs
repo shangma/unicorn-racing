@@ -38,8 +38,8 @@ namespace Unicorn
         public void loadmap()
         {
 
-            geoCoord geoUL = new geoCoord(57.0325105106309, 9.93850708007813);
-            geoCoord geoLR = new geoCoord(57.0287766248462, 9.94536850601435); 
+            geoCoord geoUL = new geoCoord(57.0160664000034, 9.98245239257813);
+            geoCoord geoLR = new geoCoord(57.0123292193698, 9.98931650072336); 
 
             bitmap = new Bitmap("test.jpg");
 
