@@ -14,99 +14,120 @@
   (Folder "Outputs")
   (Folder "Referenced Projects")
   (PartMRUSelector
-    (intake_air_temp_honda
-      (FullPartName "intake_air_temp_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING_BUS\UNICORN_WIRING.OLB")
+    (water_blower_honda
+      (FullPartName "water_blower_honda.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (oil_temp_bosch
-      (FullPartName "oil_temp_bosch.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (water_temp_bosch
-      (FullPartName "water_temp_bosch.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (network_node_unicorn
-      (FullPartName "network_node_unicorn.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (starter_honda
+      (FullPartName "starter_honda.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
     (GND
       (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
       (DeviceIndex "0"))
-    ("DC-to-DC (12V to 5V)"
-      (FullPartName "DC-to-DC (12V to 5V).Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (relay
+      (FullPartName "relay.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (router_asus_unicorn
-      (FullPartName "router_asus_unicorn.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (Fuel_pump
+      (FullPartName "Fuel_pump.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (RESISTOR
+      (FullPartName "RESISTOR.Normal")
+      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (starter_switch
+      (FullPartName "starter_switch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (master_switch
+      (FullPartName "master_switch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
     (starter_relay_honda
       (FullPartName "starter_relay_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (generator_honda
-      (FullPartName "generator_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (brake_over_threshold_switch
+      (FullPartName "brake_over_threshold_switch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (water_blower_honda
-      (FullPartName "water_blower_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (starter_honda
-      (FullPartName "starter_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    ("SW SPST"
-      (FullPartName "SW SPST.Normal")
-      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\DISCRETE.OLB")
-      (DeviceIndex "0"))
-    (lambda_probe_bosch
-      (FullPartName "lambda_probe_bosch.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (speed_honda
-      (FullPartName "speed_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (injector_honda
-      (FullPartName "injector_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (ignition_coil_honda
-      (FullPartName "ignition_coil_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
-      (DeviceIndex "0"))
-    (VCC
-      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+    (switch_cockpit
+      (FullPartName "switch_cockpit.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
     (BATTERY
       (FullPartName "BATTERY.Normal")
       (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\DISCRETE.OLB")
       (DeviceIndex "0"))
-    (watertemp_honda
-      (FullPartName "watertemp_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (network_node_unicorn
+      (FullPartName "network_node_unicorn.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (router_asus_unicorn
+      (FullPartName "router_asus_unicorn.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
     (throttle_honda
       (FullPartName "throttle_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (gear_neutral_honda
-      (FullPartName "gear_neutral_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (watertemp_honda
+      (FullPartName "watertemp_honda.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
-    (cranksensor_honda
-      (FullPartName "cranksensor_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (0
+      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
       (DeviceIndex "0"))
-    (cam_sensor_honda
-      (FullPartName "cam_sensor_honda.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+    (OFFPAGELEFT-R
+      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (OFFPAGELEFT-L
+      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (MAPIAT_bosch
+      (FullPartName "MAPIAT_bosch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (oil_pressure_bosch
+      (FullPartName "oil_pressure_bosch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (lambda_probe_bosch
+      (FullPartName "lambda_probe_bosch.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0"))
     (ECU_fartstrup
       (FullPartName "ECU_fartstrup.Normal")
-      (LibraryName "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (injector_honda
+      (FullPartName "injector_honda.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
+      (DeviceIndex "0"))
+    (ignition_coil_honda
+      (FullPartName "ignition_coil_honda.Normal")
+      (LibraryName
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.OLB")
       (DeviceIndex "0")))
   (GlobalState
     (FileView
@@ -116,17 +137,48 @@
     (Doc
       (Type "COrCapturePMDoc")
       (Frame
-        (Placement "44 0 1 -1 -1 -8 -28 27 664 45 530"))
+        (Placement "44 0 1 0 649 -8 -28 0 637 0 485"))
       (Tab 0))
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 -1 -1 -8 -28 49 1122 38 505")
-        (Scroll "0 407")
+        (Placement "44 0 1 0 645 -8 -28 41 1228 58 652")
+        (Scroll "0 0")
         (Zoom "100")
         (Occurrence "/"))
-      (Path "T:\UNI\UNICORN\ORCAD\UNICORN_WIRING_BUS\UNICORN_WIRING.DSN")
+      (Path
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "SCHEMATIC1")
+      (Page "Wiring"))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 2 3 160 649 -8 -28 656 1729 108 575")
+        (Scroll "0 0")
+        (Zoom "160"))
+      (Path
+         "C:\USERS\CMO\DESKTOP\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
+      (Schematic "final_wiring")
       (Page "PAGE1")))
   (LastUsedLibraryBrowseDirectory "C:\OrCAD\OrCAD_16.0\tools\capture\library")
-  (MPSSessionName "Cmo"))
+  (MPSSessionName "Cmo")
+  (Folder "Simulation Resources"
+    (Folder "Indesign"
+      (File ".\indesign\cds.lib"
+        (Type "Report")
+        (DisplayName ".\Indesign\cds.lib"))
+      (File ".\indesign\hdl.var"
+        (Type "Report")
+        (DisplayName ".\Indesign\hdl.var"))
+      (File ".\indesign\unicorn_wiring.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\unicorn_wiring.vhd"))
+      (File ".\indesign\stubi.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\StubI.vhd"))
+      (File ".\indesign\sdf.cmd"
+        (Type "Report")
+        (DisplayName ".\Indesign\sdf.cmd"))
+      (File ".\indesign\detail.log"
+        (Type "Report")
+        (DisplayName ".\Indesign\detail.log")))))
