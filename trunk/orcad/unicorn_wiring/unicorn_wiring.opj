@@ -143,8 +143,8 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 0 1 -1 -1 -4 -30 44 1121 58 545")
-        (Scroll "0 240")
+        (Placement "44 2 3 -1 -1 -4 -30 44 1121 58 545")
+        (Scroll "0 354")
         (Zoom "100"))
       (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
@@ -152,9 +152,9 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 -1 -1 -4 -30 66 1143 87 574")
-        (Scroll "0 40")
-        (Zoom "100"))
+        (Placement "44 0 1 -1 -1 -4 -30 66 1143 87 574")
+        (Scroll "706 750")
+        (Zoom "138"))
       (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
       (Page "Wiring_with_refs")))
