@@ -132,23 +132,8 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn")
-      (Path "Design Resources"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "SCHEMATIC1")
-      (Path "Design Resources"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "final_wiring")
-      (Path "Design Resources"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "Schematic_with_ref")
       (Path "Design Resources" "Library")
-      (Path "Design Resources" "Library"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.olb")
-      (Select "Design Resources"
-         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "Schematic_with_ref" "Wiring_with_refs"))
+      (Select "Design Resources"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -159,7 +144,7 @@
       (Type "COrSchematicDoc")
       (Frame
         (Placement "44 0 1 -1 -1 -4 -30 44 1121 58 545")
-        (Scroll "0 0")
+        (Scroll "0 240")
         (Zoom "100"))
       (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
@@ -168,7 +153,7 @@
       (Type "COrSchematicDoc")
       (Frame
         (Placement "44 2 3 -1 -1 -4 -30 66 1143 87 574")
-        (Scroll "0 0")
+        (Scroll "0 40")
         (Zoom "100"))
       (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
