@@ -132,15 +132,7 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources"
-         "L:\uni\unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn")
-      (Path "Design Resources"
-         "L:\uni\unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "Schematic_with_ref")
-      (Path "Design Resources" "Library")
-      (Select "Design Resources"
-         "L:\uni\unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
-         "Schematic_with_ref" "Wiring_router_with_refs"))
+      (Path "Design Resources" "Library"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -150,21 +142,12 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 0 645 -8 -28 46 1115 46 509")
-        (Scroll "0 517")
+        (Placement "44 2 3 -1 -1 -4 -30 22 1099 29 516")
+        (Scroll "0 0")
         (Zoom "100"))
-      (Path "L:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
+      (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
-      (Page "Wiring_router_with_refs"))
-    (Doc
-      (Type "COrSchematicDoc")
-      (Frame
-        (Placement "44 0 1 -1 -1 -8 -28 69 1138 69 532")
-        (Scroll "434 0")
-        (Zoom "100"))
-      (Path "L:\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
-      (Schematic "Schematic_with_ref")
-      (Page "Wiring_with_refs")))
+      (Page "Wiring_router_with_refs")))
   (LastUsedLibraryBrowseDirectory "C:\OrCAD\OrCAD_16.0\tools\capture\library")
   (MPSSessionName "Cmo")
   (Folder "Simulation Resources"
