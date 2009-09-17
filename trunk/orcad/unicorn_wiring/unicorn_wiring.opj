@@ -14,6 +14,9 @@
   (Folder "Outputs")
   (Folder "Referenced Projects")
   (PartMRUSelector
+    (OFFPAGELEFT-L
+      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
     (water_blower_honda
       (FullPartName "water_blower_honda.Normal")
       (LibraryName
@@ -96,9 +99,6 @@
     (OFFPAGELEFT-R
       (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
       (DeviceIndex "0"))
-    (OFFPAGELEFT-L
-      (LibraryName "C:\ORCAD\ORCAD_16.0\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
-      (DeviceIndex "0"))
     (MAPIAT_bosch
       (FullPartName "MAPIAT_bosch.Normal")
       (LibraryName
@@ -132,7 +132,15 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources" "Library"))
+      (Path "Design Resources"
+         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn")
+      (Path "Design Resources"
+         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
+         "Schematic_with_ref")
+      (Path "Design Resources" "Library")
+      (Select "Design Resources"
+         "E:\dokumenter\UNI\Unicorn\orcad\unicorn_wiring\unicorn_wiring.dsn"
+         "Schematic_with_ref" "Wiring_with_refs"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -143,11 +151,20 @@
       (Type "COrSchematicDoc")
       (Frame
         (Placement "44 2 3 -1 -1 -4 -30 22 1099 29 516")
-        (Scroll "0 0")
-        (Zoom "100"))
+        (Scroll "1096 3682")
+        (Zoom "448"))
       (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
       (Schematic "Schematic_with_ref")
-      (Page "Wiring_router_with_refs")))
+      (Page "Wiring_router_with_refs"))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 0 1 -1 -1 -4 -30 44 1121 58 545")
+        (Scroll "652 468")
+        (Zoom "112"))
+      (Path "E:\DOKUMENTER\UNI\UNICORN\ORCAD\UNICORN_WIRING\UNICORN_WIRING.DSN")
+      (Schematic "Schematic_with_ref")
+      (Page "Wiring_with_refs")))
   (LastUsedLibraryBrowseDirectory "C:\OrCAD\OrCAD_16.0\tools\capture\library")
   (MPSSessionName "Cmo")
   (Folder "Simulation Resources"
