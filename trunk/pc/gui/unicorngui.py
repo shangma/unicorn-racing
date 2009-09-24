@@ -19,18 +19,23 @@ from fpformat import fix
 from classMeas import *
 from defineData import *
 
-from time import sleep
+from time import sleep, time, strftime
 
 nodemeas=0.0
 
 #Create a socket to receive data
-host = "127.0.0.1"
-port = 21567
+host = "192.168.2.219"
+port = 21000
 buf = 255
 addr = (host,port)
 
 UDPSock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 UDPSock.bind(addr)
+
+dataLogPath="/mnt/lager/unicorn/datalog/"
+
+fileName=dataLogPath + "dataLog " + strftime("%y-%m-%d %H%M") + ".txt"
+print "Logging data to:\t" + fileName
 
 class UpdateData (threading.Thread):
 	def __init__(self, nUpobj):
@@ -39,9 +44,12 @@ class UpdateData (threading.Thread):
 		threading.Thread.__init__ ( self )
 
 	def run(self):
+		logFile=open(fileName,"w")
 		while 1:
 			#Retreive data from the socket
+			print "Retrieving data\n"
 			data_buf = UDPSock.recv(buf)
+			print "Data received"
 			data=hexlify(data_buf)
 			print data
 			print data[1]+data[2]+data[3]+data[4]+data[5]+data[6]+data[7]+data[8]+data[9]+data[10]
@@ -71,8 +79,8 @@ class UpdateData (threading.Thread):
 				else:
 					nodemeas=data[231]+data[233]+data[235]+data[237]
 				
-				nodemeas=float(nodemeas)*5.0
-				nodemeas=nodemeas/1.024	
+				#nodemeas=float(nodemeas)*5.0
+				#nodemeas=nodemeas/1.024	
 				ecutime=meas(data,12,0.000001,0,"l",4).value()
 				tp=meas(data,50,0.0510,-31.4).value()
 	
@@ -86,6 +94,11 @@ class UpdateData (threading.Thread):
 				upobj.map_label.set_text(str(fix(mapSensor,1)))
 				upobj.nodemeas_label.set_text(str(fix(nodemeas,1)))
 				upobj.tp_label.set_text(str(fix(tp,1)))
+				t=hex(int(strftime("%H%M")))[2:]
+  				t="0000"[0:4-len(t)]+t
+				#  t=t[2:]+t[:2]
+  				data=data+t
+  				logFile.write(data+"\n")
 
 			else:
 				print "Data invalid"

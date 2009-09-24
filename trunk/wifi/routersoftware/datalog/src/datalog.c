@@ -88,9 +88,9 @@ strcpy(sendline,"test linje \n");
 memset(&servaddr,0,sizeof(servaddr));
 servaddr.sin_family = AF_INET;
 servaddr.sin_addr.s_addr=inet_addr("192.168.2.219");
-servaddr.sin_port=htons(21567);
+servaddr.sin_port=htons(21000);
 
-
+sendto(sockfd,sendline,BUFLEN,0, (struct sockaddr *)&servaddr,sizeof(servaddr));
 
 
 while(1){
@@ -100,10 +100,10 @@ while(1){
 	//tcflush(fd,TCIOFLUSH);
 
 
-	write(fd,request_status_ecu,10);
+	//write(fd,request_status_ecu,10);
 
 
-	tcdrain(fd);
+	//tcdrain(fd);
 
 
 	usleep(100000);
