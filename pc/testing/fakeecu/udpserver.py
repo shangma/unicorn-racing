@@ -33,13 +33,13 @@ req_status="12345678170800000000"
 
 print"UDPServer Waiting for client on port 5000"
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_socket.bind(("", 3000))
+server_socket.bind(("192.168.2.219", 21000))
 
 ##while 1:
 #	print "Sending request string"
 	#server_socket.sendto(unhexlify(req_status),("192.168.1.1",31337))
 
-SocketSend(1).start();
+#SocketSend(1).start();
 SocketListen(2).start();
 
 
