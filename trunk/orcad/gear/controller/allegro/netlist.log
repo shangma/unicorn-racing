@@ -1,0 +1,16 @@
+{ Using PSTWRITER 16.2.0 p001Nov-03-2009 at 10:08:15 }
+
+#1 Warning [ALG0051] Pin "VCC" is renamed to "VCC#21" after substituting illegal characters in Package AT90CAN128 , U1: SCHEMATIC1, hydraulic controller (2.10, 1.80).
+#2 Warning [ALG0051] Pin "GND" is renamed to "GND#22" after substituting illegal characters in Package AT90CAN128 , U1: SCHEMATIC1, hydraulic controller (2.10, 1.80).
+#3 Warning [ALG0051] Pin "VCC" is renamed to "VCC#52" after substituting illegal characters in Package AT90CAN128 , U1: SCHEMATIC1, hydraulic controller (2.10, 1.80).
+#4 Warning [ALG0051] Pin "GND" is renamed to "GND#53" after substituting illegal characters in Package AT90CAN128 , U1: SCHEMATIC1, hydraulic controller (2.10, 1.80).
+Scanning netlist files ...
+
+Loading... Z:\UNICORN\ORCAD\GEAR\CONTROLLER\allegro/pstchip.dat
+
+Loading... Z:\UNICORN\ORCAD\GEAR\CONTROLLER\allegro/pstchip.dat
+
+Loading... Z:\UNICORN\ORCAD\GEAR\CONTROLLER\allegro/pstxprt.dat
+
+Loading... Z:\UNICORN\ORCAD\GEAR\CONTROLLER\allegro/pstxnet.dat
+packaging the design view...
