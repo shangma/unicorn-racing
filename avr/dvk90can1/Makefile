@@ -24,4 +24,4 @@ clean:
 	rm -f *.o *.map *.out *.hex
 #-------------------
 wf: all
-	avrdude -c AVRUSB500 -p $(MCU) -P /dev/ttyUSB0 -e -v -U flash:w:dvk90.hex
+	avrdude -c AVRUSB500 -p $(MCU) -P /dev/ttyUSB0 -e -v -v -v -v -U flash:w:dvk90.hex
