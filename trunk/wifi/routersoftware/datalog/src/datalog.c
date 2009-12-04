@@ -106,7 +106,7 @@ while(1){
 	//tcdrain(fd);
 
 
-	usleep(100000);
+//	usleep(100000);
 	len=0;
 	//while(len<115){
 	len = read(fd,rxbuffer,114);
