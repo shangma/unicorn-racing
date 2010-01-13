@@ -5,7 +5,7 @@ OBJCOPY=avr-objcopy
 PROJECT=hydrogear
 
 
-INCLUDES = -I"../lib/lib_mcu/can/"
+INCLUDES = -I"../lib/lib_mcu/can/" -I"../lib/lib_mcu/" -I"../lib/lib_board/"
 # optimize for size:
 CFLAGS=-g -mmcu=$(MCU) -Wall -Wstrict-prototypes -Os -mcall-prologues $(INCLUDES)
 
@@ -27,10 +27,10 @@ hydrogear.o:
 	$(CC) $(CFLAGS) -Os -c hydrogear.c
 
 can_drv.o: 
-	$(CC) $(CFLAGS) -c ../lib/lib_mcu/can/can_drv.c
+	$(CC) $(CFLAGS) -c can_drv.c
 
 can_lib.o: .
-	$(CC)  $(CFLAGS) -c  ./lib/lib_mcu/can/can_lib.c
+	$(CC)  $(CFLAGS) -c can_lib.c
 
 
 
@@ -38,4 +38,4 @@ clean:
 	rm -f *.o *.map *.out *.hex
 #-------------------
 wf: all
-	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v -v -v -U flash:w:hydrogear.hex
+	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v  -U flash:w:hydrogear.hex
