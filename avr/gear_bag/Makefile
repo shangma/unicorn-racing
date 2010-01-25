@@ -8,8 +8,10 @@ PROJECT=hydrorear
 INCLUDES = -I"../lib/lib_mcu/can/" -I"../lib/lib_mcu/" -I"../lib/lib_board/"
 # optimize for size:
 CFLAGS=-g -mmcu=$(MCU) -Wall -Wstrict-prototypes -Os -mcall-prologues $(INCLUDES)
+
+
  
-OBJECTS=hydrorear.o can_drv.o can_lib.o uart_lib.o uart_drv.o rtc_drv.o timer16_drv.o timer8_drv.o
+OBJECTS=hydrorear.o can_drv.o can_lib.o uart_lib.o uart_drv.o rtc_drv.o timer16_drv.o timer8_drv.o led_drv.o
 #-------------------test0.hex test1.hex test2.hex
 all: clean hydrorear.hex
 
@@ -41,6 +43,9 @@ uart_drv.o: .
 rtc_drv.o: .
 	$(CC)  $(CFLAGS) -c rtc_drv.c
 
+led_drv.o: .
+	$(CC)  $(CFLAGS) -c led_drv.c
+
 timer8_drv.o: .
 	$(CC)  $(CFLAGS) -c timer8_drv.c
 
@@ -60,3 +65,7 @@ vlfuse:
 
 wlfuse: 
 	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v  -U lfuse:w:0xFF:m
+
+wftest:
+	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v  -U flash:w:can128_collector_node_example_gcc.hex
+

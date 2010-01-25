@@ -39,3 +39,7 @@ clean:
 #-------------------
 wf: all
 	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v  -U flash:w:hydrogear.hex
+
+wftest:
+	sudo avrdude -c AVRispmkii -p $(MCU) -P usb -e -v -v  -U flash:w:can128_sensor_node0x80_example_gcc.hex
+

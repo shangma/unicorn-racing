@@ -2,15 +2,41 @@
 #include "hydrorear.h"
 #include "can_lib.h"
 #include "uart_lib.h"
+#include "led_drv.h"
 #include "rtc_drv.h"
-#include <util/delay.h>
+#include <avr/interrupt.h>
+//#include <util/delay.h>
 
+#define TIME_GEARUP 200
+#define TIME_GEARDOWN 400
 
 #define ID_TAG_BASE 128       //- 0x80 hexa
 #define NB_TARGET   10
 
 int main(void){
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
+
+
+
+	rtc_int_init();
+	uart_init(CONF_8BIT_NOPAR_1STOP,UART_BAUDRATE);
+	wait_for(100);
+    uart_mini_printf("\r\n\n= UNICORN RACE ENGINEERING LAB =\r\n");
+    uart_mini_printf      ("===============================\r\n");
+
+
+	//enable CAN interrupt
+	CANGIT = (1 << CANIT);
+	CANGIE = (1 << ENIT) | (1 << ENRX);
+
+	CANIE1=0x00;
+	CANIE2=(1 << IEMOB0);
+	
+    can_init(0);
+
+	
+	//Enable interrupts
+	sei();
  	U8 i, j;
     U16 temp;
 	U8 tx_remote_buffer[8];
@@ -25,18 +51,15 @@ int main(void){
 
     response_msg.pt_data = &response_buffer[0];
     response_msg.status = 0;
-
-
-	uart_init(CONF_8BIT_NOPAR_1STOP,UART_BAUDRATE);
-	wait_for(100);
-    uart_mini_printf("\r\n\n= UNICORN RACE ENGINEERING LAB =\r\n");
-    uart_mini_printf      ("===============================\r\n");
-
-	can_init(0);
+	
  
     while (1)
     {
-        wait_for(2000);  // 2 secondes between refreshed screen
+//	_delay_ms(2000);
+//        wait_for(100);  // 2 secondes between refreshed screen
+
+		//Kill all LEDs
+		PORTA=0x00;
         uart_mini_printf("\rWaiting for new data\n");
         for(j=0; j<NB_TARGET; j++)
         {
@@ -69,20 +92,33 @@ int main(void){
                 // Printing example: "Target 0: Temp=+21°C, Lum=077, VCC=5.12V"
 				
                 // --- Get "target number" and print it
-                uart_mini_printf("   - Target_ID = 0x%03X, ", response_msg.id.std);
+				                //uart_mini_printf("   - Target_ID = 0x%03X, ", response_msg.id.std);
                 
                 // --- Get "temperature" value and print it               
-                uart_mini_printf("Temp. = %02d degC, ", response_buffer[0]);
+                //uart_mini_printf("Temp. = %02d degC, ", response_buffer[0]);
                 
                 // --- Get "luminosity" and print it
-                uart_mini_printf(", Lum. = %02u, ", response_buffer[1]);
+                //uart_mini_printf(", Lum. = %02u, ", response_buffer[1]);
                 
                 // --- Get "VCC" and print it
-                temp = (((U16)response_buffer[2])<<8) | (U16)response_buffer[3];
-                uart_mini_printf("VCC = %03u0 mV", temp);
+                //temp = (((U16)response_buffer[2])<<8) | (U16)response_buffer[3];
+                //uart_mini_printf("VCC = %03u0 mV", temp);
                 
                 // --- Print "end of line"
-                uart_mini_printf("\r\n");
+                //uart_mini_printf("\r\n");
+				if(response_buffer[0]==0x01){
+					PORTA=0x01;
+					uart_mini_printf("Gear up \n");
+					wait_for(TIME_GEARUP);
+					uart_mini_printf("Done \n");
+				}
+				if(response_buffer[0]==0x02){
+					PORTA=0x02;
+					uart_mini_printf("Gear down\n");
+					wait_for(TIME_GEARDOWN);
+					uart_mini_printf("Done\n");
+				}
+
             }
             else
             {
@@ -91,4 +127,14 @@ int main(void){
             }
         }
     }
+}
+
+
+ISR(CANIT_vect){
+cli();
+PORTA=0xFF;
+wait_for(1000);
+uart_mini_printf("CAN interrupt\n");
+
+sei();
 }
