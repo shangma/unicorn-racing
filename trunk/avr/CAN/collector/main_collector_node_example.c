@@ -10,7 +10,7 @@
 #include "rtc_drv.h"
 
 #define ID_TAG_BASE 128       	// 0x80
-#define NB_TARGET   3			// Antal noder
+#define NB_TARGET   1			// Antal noder
 
 extern void display_sensor_values(void);
 
@@ -33,8 +33,8 @@ int main (void)
 	DDRA = 0xFF; // LED'er output
 	PORTA = 0xFF; // LED'er tændt
 
-    DDRD = 0xFF;
-    PORTD |= 0b1000000;
+    //DDRD = 0xFF;
+    //PORTD |= 0b1000000;
 
 
     // Interrupt
@@ -86,7 +86,7 @@ void display_sensor_values(void)
         wait_for(100);  // x ms between refreshed screen
         for(j=0; j<NB_TARGET; j++)
         {
-            CANGIE |=(1<<ENIT);
+            //CANGIE |=(1<<ENIT);
             // --- Init Rx Commands
       	    for(i=0; i<9; i++) response_buffer[i]=0; // Nulstiller buffer
             response_msg.id.std = ID_TAG_BASE + j;
@@ -120,6 +120,7 @@ ISR(CANIT_vect)
     U8 tmp;
  
     CANGIE &=~(1<<ENIT);
+    CANGIE |=(1<<ENIT);
     
     if (can_get_status(&response_msg) == CAN_STATUS_COMPLETED)
             {

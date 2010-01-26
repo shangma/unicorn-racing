@@ -141,7 +141,7 @@ LOAD /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x2e34
+.text           0x00000000     0x2e02
  *(.vectors)
  .vectors       0x00000000       0x94 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr51/crtcan128.o
                 0x00000000                __vectors
@@ -232,65 +232,65 @@ LOAD /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a
                 0x000000d2                __vector_10
                 0x000000d2                __vector_16
                 0x000000d2                __vector_20
- .text          0x000000d6      0x3e2 main_collector_node_example.o
+ .text          0x000000d6      0x3cc main_collector_node_example.o
                 0x000000d6                main
-                0x00000172                display_sensor_values
-                0x0000028a                __vector_18
- .text          0x000004b8      0x67e can_drv.o
-                0x000004b8                can_clear_all_mob
-                0x00000510                can_get_mob_free
-                0x0000057a                can_get_mob_status
-                0x000005e6                can_get_data
-                0x0000063e                can_auto_baudrate
-                0x00000b00                can_fixed_baudrate
- .text          0x00000b36     0x14f8 can_lib.o
-                0x00000b36                can_init
-                0x00000b72                can_cmd
-                0x00001dec                can_get_status
- .text          0x0000202e      0x10e led_drv.o
-                0x0000202e                led_init
-                0x0000204a                write_led
-                0x00002066                swap_nibble_led
-                0x0000209e                toggle_led
-                0x000020b4                write_led_number
- .text          0x0000213c      0x2d0 rtc_drv.o
-                0x0000213c                wait_for
-                0x00002238                rtc_int_init
-                0x0000233c                __vector_9
- .text          0x0000240c       0x6c uart_drv.o
-                0x0000240c                uart_rx_get_3_data
-                0x0000244a                uart_rx_get_data
- .text          0x00002478      0x8f0 uart_lib.o
-                0x00002478                uart_init
-                0x00002562                uart_test_hit
-                0x0000257c                uart_putchar
-                0x000025c0                uart_getchar
-                0x000025f2                uart_put_string
-                0x0000262c                uart_mini_printf
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodhi4.o)
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodhi4.o)
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodsi4.o)
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodsi4.o)
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
- .text          0x00002d68        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_clear_bss.o)
-                0x00002d68                . = ALIGN (0x2)
+                0x0000015c                display_sensor_values
+                0x00000266                __vector_18
+ .text          0x000004a2      0x67e can_drv.o
+                0x000004a2                can_clear_all_mob
+                0x000004fa                can_get_mob_free
+                0x00000564                can_get_mob_status
+                0x000005d0                can_get_data
+                0x00000628                can_auto_baudrate
+                0x00000aea                can_fixed_baudrate
+ .text          0x00000b20     0x14f8 can_lib.o
+                0x00000b20                can_init
+                0x00000b5c                can_cmd
+                0x00001dd6                can_get_status
+ .text          0x00002018      0x10e led_drv.o
+                0x00002018                led_init
+                0x00002034                write_led
+                0x00002050                swap_nibble_led
+                0x00002088                toggle_led
+                0x0000209e                write_led_number
+ .text          0x00002126      0x2d0 rtc_drv.o
+                0x00002126                wait_for
+                0x00002222                rtc_int_init
+                0x00002326                __vector_9
+ .text          0x000023f6       0x50 uart_drv.o
+                0x000023f6                uart_rx_get_3_data
+                0x00002426                uart_rx_get_data
+ .text          0x00002446      0x8f0 uart_lib.o
+                0x00002446                uart_init
+                0x00002530                uart_test_hit
+                0x0000254a                uart_putchar
+                0x0000258e                uart_getchar
+                0x000025c0                uart_put_string
+                0x000025fa                uart_mini_printf
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodhi4.o)
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodhi4.o)
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodsi4.o)
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodsi4.o)
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
+ .text          0x00002d36        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_clear_bss.o)
+                0x00002d36                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00002d68       0x28 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodhi4.o)
-                0x00002d68                __udivmodhi4
- .text.libgcc   0x00002d90       0x26 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodhi4.o)
-                0x00002d90                __divmodhi4
-                0x00002d90                _div
- .text.libgcc   0x00002db6       0x44 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodsi4.o)
-                0x00002db6                __udivmodsi4
- .text.libgcc   0x00002dfa       0x36 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodsi4.o)
-                0x00002dfa                __divmodsi4
- .text.libgcc   0x00002e30        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
- .text.libgcc   0x00002e30        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_clear_bss.o)
-                0x00002e30                . = ALIGN (0x2)
+ .text.libgcc   0x00002d36       0x28 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodhi4.o)
+                0x00002d36                __udivmodhi4
+ .text.libgcc   0x00002d5e       0x26 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodhi4.o)
+                0x00002d5e                __divmodhi4
+                0x00002d5e                _div
+ .text.libgcc   0x00002d84       0x44 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_udivmodsi4.o)
+                0x00002d84                __udivmodsi4
+ .text.libgcc   0x00002dc8       0x36 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_divmodsi4.o)
+                0x00002dc8                __divmodsi4
+ .text.libgcc   0x00002dfe        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
+ .text.libgcc   0x00002dfe        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_clear_bss.o)
+                0x00002dfe                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00002e30        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
-                0x00002e30                exit
-                0x00002e30                _exit
+ .fini9         0x00002dfe        0x0 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
+                0x00002dfe                exit
+                0x00002dfe                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -309,11 +309,11 @@ LOAD /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00002e30        0x4 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
+ .fini0         0x00002dfe        0x4 /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a(_exit.o)
  *(.fini0)
-                0x00002e34                _etext = .
+                0x00002e02                _etext = .
 
-.data           0x00800100      0x25a load address 0x00002e34
+.data           0x00800100      0x25a load address 0x00002e02
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr51/crtcan128.o
@@ -371,8 +371,8 @@ LOAD /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a
                 0x00800379                rtc_hours
                 0x0080037a                rtc_seconds
                 0x0080037b                PROVIDE (__bss_end, .)
-                0x00002e34                __data_load_start = LOADADDR (.data)
-                0x0000308e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00002e02                __data_load_start = LOADADDR (.data)
+                0x0000305c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080037b        0x0
                 0x0080037b                PROVIDE (__noinit_start, .)
@@ -488,15 +488,15 @@ LOAD /usr/lib/gcc/avr/4.3.4/avr51/libgcc.a
  .debug_abbrev  0x000004bd       0x8c uart_drv.o
  .debug_abbrev  0x00000549      0x113 uart_lib.o
 
-.debug_line     0x00000000     0x150a
+.debug_line     0x00000000     0x14fa
  *(.debug_line)
- .debug_line    0x00000000      0x253 main_collector_node_example.o
- .debug_line    0x00000253      0x47c can_drv.o
- .debug_line    0x000006cf      0x46d can_lib.o
- .debug_line    0x00000b3c      0x120 led_drv.o
- .debug_line    0x00000c5c      0x208 rtc_drv.o
- .debug_line    0x00000e64       0xb4 uart_drv.o
- .debug_line    0x00000f18      0x5f2 uart_lib.o
+ .debug_line    0x00000000      0x243 main_collector_node_example.o
+ .debug_line    0x00000243      0x47c can_drv.o
+ .debug_line    0x000006bf      0x46d can_lib.o
+ .debug_line    0x00000b2c      0x120 led_drv.o
+ .debug_line    0x00000c4c      0x208 rtc_drv.o
+ .debug_line    0x00000e54       0xb4 uart_drv.o
+ .debug_line    0x00000f08      0x5f2 uart_lib.o
 
 .debug_frame    0x00000000      0x230
  *(.debug_frame)
