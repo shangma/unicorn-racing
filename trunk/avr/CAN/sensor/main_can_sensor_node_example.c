@@ -6,7 +6,7 @@
 //#include "sensor_drv.h"
 #include "prototypes.h"
 
-#define MY_ID_TAG 0x80       //- 128 decimal
+#define MY_ID_TAG 0x82       //- 128 decimal
 
 	U8 dummy_counter = 0;
     U8  sensor_buffer[9];
@@ -25,6 +25,9 @@ int main (void)
 
 	DDRA = 0xFF; // LED'er output
 	PORTA = 0xFF; // LED'er tændt
+
+    DDRD = 0xFF;
+    PORTD |= 0b1000000;
 
     // Interrupt
     sei();

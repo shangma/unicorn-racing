@@ -35,7 +35,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I "/home/css/Desktop/CAN/sensor/lib" 
+INCLUDES = -I "lib" 
 
 ## Objects that must be built in order to link
 OBJECTS = main_can_sensor_node_example.o adc_drv.o can_drv.o can_lib.o sensor_drv.o rtc_drv.o 
@@ -44,7 +44,7 @@ OBJECTS = main_can_sensor_node_example.o adc_drv.o can_drv.o can_lib.o sensor_dr
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) can_sensor_node_example_gcc.hex can_sensor_node_example_gcc.eep can_sensor_node_example_gcc.lss size
+all: $(TARGET) can_sensor_node_example_gcc.hex can_sensor_node_example_gcc.eep can_sensor_node_example_gcc.lss
 
 ## Compile
 main_can_sensor_node_example.o: main_can_sensor_node_example.c

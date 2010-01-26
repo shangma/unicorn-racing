@@ -43,7 +43,7 @@
     // -------------- UART LIB CONFIGURATION
     // UART_0 with fixed Baudrate all application long
 #define USE_TIMER16   TIMER16_1
-#define USE_UART      UART_0
+#define USE_UART      UART_1
 #define UART_BAUDRATE 38400
 
     // -------------- MISCELLANEOUS

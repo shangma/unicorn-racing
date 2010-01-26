@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I "/home/css/Desktop/CAN/collector/lib"
+INCLUDES = -I "lib"
 
 ## Objects that must be built in order to link
 OBJECTS = main_collector_node_example.o can_drv.o can_lib.o led_drv.o rtc_drv.o uart_drv.o uart_lib.o 
@@ -51,7 +51,7 @@ LINKONLYOBJECTS =
 
 
 ## Build
-all: $(TARGET) can_collector_node_example_gcc.hex can_collector_node_example_gcc.eep can_collector_node_example_gcc.lss size
+all: $(TARGET) can_collector_node_example_gcc.hex can_collector_node_example_gcc.eep can_collector_node_example_gcc.lss
 
 ## Compile
 main_collector_node_example.o: main_collector_node_example.c
