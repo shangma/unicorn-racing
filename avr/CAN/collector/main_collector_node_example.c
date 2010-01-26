@@ -10,9 +10,12 @@
 #include "rtc_drv.h"
 
 #define ID_TAG_BASE 128       	// 0x80
-#define NB_TARGET   1			// Antal noder
+#define NB_TARGET   3			// Antal noder
 
 extern void display_sensor_values(void);
+
+U8 response_buffer[9];
+st_cmd_t response_msg;
 
 //------------------------------------------------------------------------------
 //! This program performs some remote frames (c.f. NB_TARGET).
@@ -30,19 +33,25 @@ int main (void)
 	DDRA = 0xFF; // LED'er output
 	PORTA = 0xFF; // LED'er tændt
 
+    DDRD = 0xFF;
+    PORTD |= 0b1000000;
+
+
     // Interrupt
     
-    /*
+    
     sei();
 
     CANIE2 = 0xFF;
     CANIE1 = 0xFF;
 
     CANGIE |=(1<<ENRX);
-    CANGIE |=(1<<ENTX);
+    //CANGIE |=(1<<ENTX);
 
     CANGIE |=(1<<ENIT);
-    */
+
+    response_msg.pt_data = &response_buffer[0];
+    response_msg.status = 0;
 
     display_sensor_values();
 
@@ -65,25 +74,19 @@ void display_sensor_values(void)
     U8 tx_remote_buffer[9];
     st_cmd_t tx_remote_msg;
 
-    U8 response_buffer[9];
-    st_cmd_t response_msg;
-
     // --- Init variables
     tx_remote_msg.pt_data = &tx_remote_buffer[0];
     tx_remote_msg.status = 0;
-
-    response_msg.pt_data = &response_buffer[0];
-    response_msg.status = 0;
 
     // UART
     uart_mini_printf("GOGO");
 
     while (1)
     {
-        wait_for(20);  // x ms between refreshed screen
-        
+        wait_for(100);  // x ms between refreshed screen
         for(j=0; j<NB_TARGET; j++)
         {
+            CANGIE |=(1<<ENIT);
             // --- Init Rx Commands
       	    for(i=0; i<9; i++) response_buffer[i]=0; // Nulstiller buffer
             response_msg.id.std = ID_TAG_BASE + j;
@@ -105,16 +108,27 @@ void display_sensor_values(void)
             while(can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
 
             // --- Wait for Tx remote completed
-            while(can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED)
+            while(can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
 
-            wait_for(5); // Wait x ms for a response if exits
-            if (can_get_status(&response_msg) == CAN_STATUS_COMPLETED)
+            wait_for(50); // Wait x ms for a response if exits
+        }
+    }
+}
+
+ISR(CANIT_vect)
+{
+    U8 tmp;
+ 
+    CANGIE &=~(1<<ENIT);
+    
+    if (can_get_status(&response_msg) == CAN_STATUS_COMPLETED)
             {
                 // --- Node ID
 				uart_mini_printf("Node: %d",response_msg.id.std-127);
                 
                 // --- Data               
                	uart_mini_printf(", Data1: %03d", response_buffer[0]);
+
 				uart_mini_printf(", Data2: %03d", response_buffer[1]);
 				uart_mini_printf(", Data3: %03d", response_buffer[2]);
 				uart_mini_printf(", Data4: %03d", response_buffer[3]);
@@ -129,11 +143,5 @@ void display_sensor_values(void)
                 response_msg.cmd = CMD_ABORT;
   	            while (can_cmd(&response_msg) != CAN_CMD_ACCEPTED);
             }
-        }
-    }
-}
-ISR(CANIT_vect)
-{
-    PORTA ^=_BV(PORTA7);
 }
 
