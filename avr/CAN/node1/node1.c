@@ -95,8 +95,10 @@ void display_sensor_values(void)
             // --- Rx Command
             while(can_cmd(&response_msg) != CAN_CMD_ACCEPTED);
 
-	    req_sensor_data(2,3);
-
+	    req_sensor_data(k,3);
+	    k += 1;
+	    if(k == 3)
+		k = 0;
             wait_for(10); // Wait x ms for a response if exits
 
             if (can_get_status(&response_msg) == CAN_STATUS_COMPLETED){
