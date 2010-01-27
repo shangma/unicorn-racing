@@ -10,12 +10,12 @@
 //_____ D E C L A R A T I O N S ________________________________________________
 extern void display_sensor_values(void);
 void init(void);
-unsigned short int waitReceive(void);
-void transmit(void);
-void setSensorData(unsigned short int dataType);
-unsigned short int dataType = 0;
+unsigned short int wait_CAN_request(void);
+void CAN_transmit(void);
+void set_sensor_data(unsigned short int dataType);
 
 //_____ VARIABLES ______________________________________________________________
+unsigned short int dataType = 0;
 
 // Transmit buffer
 U8 tx_remote_buffer[8];
@@ -28,6 +28,8 @@ st_cmd_t response_msg;
 int main (void)
 {	
     CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
+
+    // Init CAN, UART, I/O
     init();
 
     // --- Init variables
@@ -40,15 +42,15 @@ int main (void)
     while (1)
     {
         // Venter på datakald
-        dataType = waitReceive();
+        dataType = wait_CAN_request();
 
         uart_mini_printf("DataType: %d \n\r", dataType);
 
         // Sætter udgående sensordata
-        setSensorData(dataType);
+        set_sensor_data(dataType);
 
         // Transmittere sensordata
-        transmit(); 
+        CAN_transmit(); 
     }
 
     return 0;
@@ -66,7 +68,7 @@ void init(void)
     DDRA = 0xFF;
 }
 
-unsigned short int waitReceive(void)
+unsigned short int wait_CAN_request(void)
 {
     unsigned short int i = 0;
     // --- Init Rx Commands        
@@ -86,7 +88,7 @@ unsigned short int waitReceive(void)
 
 return response_buffer[0];}
 
-void transmit(void)
+void CAN_transmit(void)
 {
     tx_remote_msg.id.std = ID_BASE;
     tx_remote_msg.ctrl.ide = 0;
@@ -101,7 +103,7 @@ void transmit(void)
     while(can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);   
 }
 
-void setSensorData(unsigned short int dataType)
+void set_sensor_data(unsigned short int dataType)
 {
     unsigned short int i = 0;
 
