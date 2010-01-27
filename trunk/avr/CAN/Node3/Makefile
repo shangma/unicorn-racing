@@ -7,13 +7,15 @@ PROJECT = node3
 MCU = at90can128
 TARGET = node3.elf
 CC = avr-gcc
+ProgrammerMCU = c128
+AVRDUDE = avrdude
 
 ## Options common to compile, link and assembly rules
 COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2  -Os -funsigned-char -funsigned-bitfields
+CFLAGS += -Wall -gdwarf-2  -O0 -funsigned-char -funsigned-bitfields
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -27,7 +29,7 @@ LDFLAGS +=  -Wl,-Map=node3.map
 
 
 ## Intel Hex file production flags
-HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
+HEX_FLASH_FLAGS = -R .eeprom
 
 HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
@@ -35,13 +37,18 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I "lib" 
+INCLUDES = -I "lib"
 
 ## Objects that must be built in order to link
-OBJECTS = node3.o adc_drv.o can_drv.o can_lib.o sensor_drv.o rtc_drv.o 
+OBJECTS = node3.o can_drv.o can_lib.o led_drv.o rtc_drv.o uart_drv.o uart_lib.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
+
+## Brænd for satan
+## install: avrdude -c avrispmkii -P usb -p $(ProgrammerMCU) -U flash:w:node3.hex
+
+
 
 ## Build
 all: $(TARGET) node3.hex node3.eep node3.lss
@@ -50,19 +57,22 @@ all: $(TARGET) node3.hex node3.eep node3.lss
 node3.o: node3.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-adc_drv.o: lib/adc_drv.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 can_drv.o: lib/can_drv.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 can_lib.o: lib/can_lib.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-sensor_drv.o: lib/sensor_drv.c
+led_drv.o: lib/led_drv.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 rtc_drv.o: lib/rtc_drv.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+uart_drv.o: lib/uart_drv.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+uart_lib.o: lib/uart_lib.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -90,4 +100,3 @@ clean:
 
 ## Other dependencies
 -include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
-
