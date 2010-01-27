@@ -6,7 +6,7 @@
 //#include "sensor_drv.h"
 #include "prototypes.h"
 
-#define MY_ID_TAG 0x82       //- 128 decimal
+#define MY_ID_TAG 0x80       //- 128 decimal
 
 	U8 dummy_counter = 0;
     U8  sensor_buffer[9];
@@ -75,12 +75,14 @@ void send_data_CAN(void)
         sensor_message.ctrl.ide = 0;            //- CAN 2.0A
         sensor_message.dlc = 8;                 //- Message with x-byte data
         sensor_message.id.std = MY_ID_TAG;
-        sensor_message.cmd = CMD_REPLY_MASKED;
+        sensor_message.cmd = CMD_RX;
 
         // --- Enable reply
         while(can_cmd(&sensor_message) != CAN_CMD_ACCEPTED);
         // --- Wait for Reply completed
         while(can_get_status(&sensor_message) == CAN_STATUS_NOT_COMPLETED);
+
+        PORTA ^=_BV(PORTA7);
 		
 		dummy_counter++;
         
