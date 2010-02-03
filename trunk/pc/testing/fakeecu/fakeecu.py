@@ -3,7 +3,7 @@ from string import strip
 from binascii import hexlify, unhexlify
 from time import sleep
 
-tty=serial.Serial("/dev/ttyUSB0",19200,timeout=0.35)
+tty=serial.Serial("/dev/ttyUSB0",19200,timeout=0.05)
 datalogfile=open("testdatalog.txt","r")
 
 while 1:
