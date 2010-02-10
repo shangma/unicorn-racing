@@ -70,7 +70,7 @@
 #       error This CAN_BAUDRATE value is not in "can_drv.h" file
 #   endif
 
-#elif FOSC == 12000           //!< Fclkio = 12 MHz, Tclkio = 83.333 ns
+#elif FOSC == 110592           //!< Fclkio = 12 MHz, Tclkio = 83.333 ns
 #   if   CAN_BAUDRATE == 100       //!< -- 100Kb/s, 20x Tscl, sampling at 75%
 #       define CONF_CANBT1  0x0A       // Tscl  = 6x Tclkio = 500 ns
 #       define CONF_CANBT2  0x0E       // Tsync = 1x Tscl, Tprs = 8x Tscl, Tsjw = 1x Tscl
