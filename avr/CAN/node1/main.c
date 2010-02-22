@@ -118,7 +118,7 @@ int main (void)
 
     	uart_put(84);
 	/* Join xitoa module to uart module */
-	xfunc_out = (void (*)(char))uart1_put;
+	xfunc_out = (void (*)(char))uart_put;
     _delay_ms(2000);
 	xprintf(PSTR("System startet\n"));
         xprintf(PSTR("Initialize disk 0\n"));    
@@ -129,8 +129,8 @@ int main (void)
         xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
     //display_sensor_values();
     while(1) {
-        while ((UCSR1A & (1 << RXC1)) == 0) {};
-        d = UDR1;
+        while ((UCSR0A & (1 << RXC0)) == 0) {};
+        d = UDR0;
         if (d == 'c') {
             xprintf(PSTR("\nCloseing file\n"));
             xprintf(PSTR("rc=%d\n"), (WORD)f_close(&file1));
@@ -138,7 +138,7 @@ int main (void)
                 if (f_write(&file1, data, 90, e) != 0) {
                     xprintf(PSTR("Error\n"));
                 }
-        uart1_put(d);
+        uart_put(d);
 	    }
     }
 }
