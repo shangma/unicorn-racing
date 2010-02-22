@@ -51,6 +51,7 @@ writeflash: hex
 	 -p $(PROGRAMMER_MCU) -V -P usb       \
 	 -U flash:w:$(HEXROMTRG)
 
+install: writeflash
 
 text: hex
 hex:  $(TARGET).hex
