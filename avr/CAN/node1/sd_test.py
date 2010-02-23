@@ -4,13 +4,13 @@ import serial
 import time
 
 ser = serial.Serial()
-ser.baud = 9600 
+ser.baud = 38400
 ser.port = '/dev/ttyUSB0'
 ser.open()
 
+ser.write('a')
+ser.read(1)
 t1 = time.time()
-for i in range(1000):
-	ser.write('s')
-	ser.read(1)
+ser.read(1)
 t2 = time.time()
 print t2-t1

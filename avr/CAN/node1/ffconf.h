@@ -26,7 +26,7 @@
 /  f_truncate and useless f_getfree. */
 
 
-#define _FS_MINIMIZE	0	/* 0, 1, 2 or 3 */
+#define _FS_MINIMIZE	2	/* 0, 1, 2 or 3 */
 /* The _FS_MINIMIZE option defines minimization level to remove some functions.
 /
 /   0: Full function.
@@ -40,7 +40,7 @@
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
-#define	_USE_MKFS	1		/* 0 or 1 */
+#define	_USE_MKFS	0		/* 0 or 1 */
 /* To enable f_mkfs function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 
 

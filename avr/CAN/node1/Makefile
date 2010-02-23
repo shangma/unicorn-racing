@@ -48,7 +48,7 @@ lst:  $(TARGET).lst
 
 writeflash: hex
 	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID)   \
-	 -p $(PROGRAMMER_MCU) -V -P usb       \
+	 -p $(PROGRAMMER_MCU) -P usb -B 1     \
 	 -U flash:w:$(HEXROMTRG)
 
 install: writeflash

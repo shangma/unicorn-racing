@@ -110,9 +110,10 @@ int main (void)
 	DIR dir;				/* Directory object */
 	FIL file1, file2;			/* File object */
 	int i=0;
+    int x=1;
     char d = 'A';
     char e;
-    //char data[] = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
+    char data[] = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
 
 	IoInit();
 
@@ -127,10 +128,25 @@ int main (void)
         xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
         xprintf(PSTR("Opening file hej\n"));
         xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
-    display_sensor_values();
+    //display_sensor_values();
+
     while(1) {
-        uart1_put('a');
-        _delay_ms(500);
+        while ((UCSR0A & (1 << RXC0)) == 0) {};
+        d = UDR0;
+        if (d == 'c') {
+            xprintf(PSTR("\nCloseing file\n"));
+            xprintf(PSTR("rc=%d\n"), (WORD)f_close(&file1));
+        } else { 
+            uart_put(d);
+            while (x != 1000){
+                x++;
+                if ( f_write(&file1, data, 90, e) != 0 ) {
+                    xprintf(PSTR("Error\n"));
+                }
+            }  
+            uart_put(d);
+            x = 1;
+        }
     }
 }
 
