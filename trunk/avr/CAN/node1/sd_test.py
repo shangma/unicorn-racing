@@ -4,6 +4,7 @@ import serial
 import time
 
 ser = serial.Serial()
+ser.baud = 9600 
 ser.port = '/dev/ttyUSB0'
 ser.open()
 
