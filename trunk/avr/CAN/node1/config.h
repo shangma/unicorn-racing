@@ -40,7 +40,7 @@
 //#define CAN_BAUDRATE   CAN_AUTOBAUD
 
     // -------------- UART
-#define BAUD0 9600 
+#define BAUD0 38400 
 #define BAUD1 9600  // Xbee
 
 //_____ D E C L A R A T I O N S ________________________________________________
