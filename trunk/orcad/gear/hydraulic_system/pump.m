@@ -18,7 +18,7 @@ pump_vol_min=0.05;
 pump_vol_max=1;
 
 pump_min_rpm=1000;
-pump_max_rpm=6000;
+pump_max_rpm=3000;
 
 pump_vol=pump_vol_min:0.005:pump_vol_max;
 
@@ -42,7 +42,7 @@ legend('Push','Pull');
 
 subplot(2,1,2)
 plot(pump_vol,t_clutch)
-ylabel('Force [N]')
-xlabel('Hydraulic pressure')
+ylabel('Time [ms]')
+xlabel('Pump displacement')
 axis([pump_vol_min pump_vol_max*1.1 0 max(t_clutch)])
 grid on
