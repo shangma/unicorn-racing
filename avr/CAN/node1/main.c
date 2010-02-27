@@ -14,11 +14,12 @@
 #include "diskio.h"
 #include "rtc.h"
 #include "can_lib.h"
+#include "can_func.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
 
-void display_sensor_values(void);
+void can(void);
 void req_sensor_data(U8 pakke, U8 node);
 
 DWORD acc_size;				/* Work register for fs command */
@@ -28,8 +29,6 @@ FILINFO Finfo;
 char Lfname[_MAX_LFN+1];
 #endif
 
-
-BYTE Line[120];				/* Console input buffer */
 
 FATFS Fatfs[2];				/* File system object for each logical drive */
 BYTE Buff[1024];			/* Working buffer */
@@ -99,7 +98,6 @@ void IoInit ()
 
 int main (void)
 {
-	char *ptr, *ptr2;
 	DWORD p1, p2, p3;
 	BYTE res, b1;
 	WORD w1;
@@ -109,11 +107,7 @@ int main (void)
 	FATFS *fs;
 	DIR dir;				/* Directory object */
 	FIL file1, file2;			/* File object */
-	int i=0;
-    int x=1;
-    char d = 'A';
-    char e;
-    char data[] = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
+    U8 i;
 
 	IoInit();
 
@@ -122,112 +116,55 @@ int main (void)
 	xfunc_out = (void (*)(char))uart_put;
     _delay_ms(2000);
 	xprintf(PSTR("System startet\n"));
-        xprintf(PSTR("Initialize disk 0\n"));    
-	    xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));
-        xprintf(PSTR("Initialize logical drice 0\n"));
-        xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
-        xprintf(PSTR("Opening file hej\n"));
-        xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
-    display_sensor_values();
+    xprintf(PSTR("Initialize disk 0\n"));    
+	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));
+    xprintf(PSTR("Initialize logical drice 0\n"));
+    xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
+    xprintf(PSTR("Opening file hej\n"));
+    xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
+
+    init_can_data_mobs();
+
+    for (i=0; i<num_of_response_mobs; i++) {
+            can_data_mob_setup(i);
+    }
 
     while(1) {
-        while ((UCSR0A & (1 << RXC0)) == 0) {};
-        d = UDR0;
-        if (d == 'c') {
-            xprintf(PSTR("\nCloseing file\n"));
-            xprintf(PSTR("rc=%d\n"), (WORD)f_close(&file1));
-        } else { 
-            uart_put(d);
-            while (x != 1000){
-                x++;
-                if ( f_write(&file1, data, 90, e) != 0 ) {
-                    xprintf(PSTR("Error\n"));
+            can();
+    }
+}
+
+void can(void)
+{
+    U8 i,j;
+
+    for (j=0; j<num_of_response_mobs; j++){
+        if (can_get_status(&response_msg[j]) == CAN_STATUS_COMPLETED){
+            if (bufferindex >= data_buffer_num){
+                xprintf(PSTR("Buffer full error\n"));
+            } else {
+                for (i=0; i<9; i++) {
+                        databuffer[bufferindex][i] = response_buffer[j][i];
+                        response_buffer[j][i] = 0;
                 }
-            }  
-            uart_put(d);
-            x = 1;
-        }
-    }
-}
-
-void display_sensor_values(void)
-{
-    U8 i, j=0;
-    U8 k = 0;
-
-    U8 response_buffer[9];
-    st_cmd_t response_msg;
-
-    // --- Init variables
-    response_msg.pt_data = &response_buffer[0];
-    response_msg.status = 0;
-
-    // UART
-    xprintf(PSTR("GOGO"));
-
-    while (1)
-    {
-        _delay_ms(100);  // x ms between refreshed screen
-        for(j=0; j<NB_TARGET; j++)
-        {
-            //CANGIE |=(1<<ENIT);
-            // --- Init Rx Commands
-      	    for(i=0; i<9; i++) response_buffer[i]=0; // Nulstiller buffer
-            response_msg.id.std = ID_TAG_BASE + j;
-            response_msg.ctrl.ide = 0;
-            response_msg.ctrl.rtr = 0;
-            response_msg.dlc = 8;
-            response_msg.cmd = CMD_RX_DATA_MASKED;
-            // --- Rx Command
-            while(can_cmd(&response_msg) != CAN_CMD_ACCEPTED);
-
-	    req_sensor_data(k,3);
-	    k += 1;
-	    if(k == 3)
-		k = 0;
-            _delay_ms(10); // Wait x ms for a response if exits
-
-            if (can_get_status(&response_msg) == CAN_STATUS_COMPLETED){
-                // --- Node ID
-	xprintf(PSTR("Node: %d"),response_msg.id.std-127);
-                
-                // --- Data               
-               	xprintf(PSTR(", Data1: %03d"), response_buffer[0]);
-
-		xprintf(PSTR(", Data2: %03d"), response_buffer[1]);
-		xprintf(PSTR(", Data3: %03d"), response_buffer[2]);
-		xprintf(PSTR(", Data4: %03d"), response_buffer[3]);
-		xprintf(PSTR(", Data5: %03d"), response_buffer[4]);
-		xprintf(PSTR(", Data6: %03d"), response_buffer[5]);
-		xprintf(PSTR(", Data7: %03d"), response_buffer[6]);                
-		xprintf(PSTR(", Data8: %03d"), response_buffer[7]);
-		xprintf(PSTR("\r\n"));  
-            }else{
-                response_msg.cmd = CMD_ABORT;
-          	    while (can_cmd(&response_msg) != CAN_CMD_ACCEPTED);
+                bufferindex++;
             }
+            can_data_mob_setup(i);
         }
     }
-}
 
-void req_sensor_data(U8 pakke, U8 node)
-{
-	U8 tx_remote_buffer[9];
-   	st_cmd_t tx_remote_msg;
-
-	tx_remote_msg.pt_data = &tx_remote_buffer[0];
-	tx_remote_msg.status = 0;
-	
-	tx_remote_buffer[0]=pakke; // Nulstiller buffer
-
-    tx_remote_msg.id.std = ID_TAG_BASE+node;
-    tx_remote_msg.ctrl.ide = 0;
-    tx_remote_msg.ctrl.rtr = 1;
-    tx_remote_msg.dlc = 8; // Antal data bytes der skal modtages 
-    tx_remote_msg.cmd = CMD_TX_DATA;
-    // --- Tx Command
-    while(can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
-
-	// --- Wait for Tx remote completed
-        while(can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
+    for (i=0; i<bufferindex; i++) {         
+        xprintf(PSTR("Buf: %d"), i), 
+        xprintf(PSTR(", Data1: %03d"), databuffer[i][0]);
+	    xprintf(PSTR(", Data2: %03d"), databuffer[i][1]);
+        xprintf(PSTR(", Data3: %03d"), databuffer[i][2]);
+    	xprintf(PSTR(", Data4: %03d"), databuffer[i][3]);
+        xprintf(PSTR(", Data5: %03d"), databuffer[i][4]);
+        xprintf(PSTR(", Data6: %03d"), databuffer[i][5]);
+	    xprintf(PSTR(", Data7: %03d"), databuffer[i][6]);                
+    	xprintf(PSTR(", Data8: %03d"), databuffer[i][7]);
+	    xprintf(PSTR("\r\n"));
+    }
+    bufferindex = 0;
+    _delay_ms(1300);
 }
