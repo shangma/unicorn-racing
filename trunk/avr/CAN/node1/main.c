@@ -19,7 +19,7 @@
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
 
-void can(void);
+void can(FIL *file_to_log);
 void req_sensor_data(U8 pakke, U8 node);
 
 DWORD acc_size;				/* Work register for fs command */
@@ -30,7 +30,7 @@ char Lfname[_MAX_LFN+1];
 #endif
 
 
-FATFS Fatfs[2];				/* File system object for each logical drive */
+FATFS Fatfs[1];				/* File system object for each logical drive */
 BYTE Buff[1024];			/* Working buffer */
 
 volatile WORD Timer;		/* 100Hz increment timer */
@@ -106,8 +106,9 @@ int main (void)
 	RTC rtc;
 	FATFS *fs;
 	DIR dir;				/* Directory object */
-	FIL file1, file2;			/* File object */
+	FIL file1;			/* File object */
     U8 i;
+    U8 open = 0;
 
 	IoInit();
 
@@ -122,6 +123,7 @@ int main (void)
     xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
     xprintf(PSTR("Opening file hej\n"));
     xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
+    open = 1;
 
     init_can_data_mobs();
 
@@ -130,13 +132,24 @@ int main (void)
     }
 
     while(1) {
-            can();
+        if ((UCSR0A & _BV(RXC0))) {
+                if (UDR0 == 'c') {
+                        if (f_close(&file1) != 0) {
+                            xprintf(PSTR("Error on file closing\r\n"));
+                        }
+                        open = 0;
+                }
+        }
+        if (open == 1) {
+            can(&file1);
+        }
     }
 }
 
-void can(void)
+void can(FIL *file)
 {
     U8 i,j;
+    char e;
 
     for (j=0; j<num_of_response_mobs; j++){
         if (can_get_status(&response_msg[j]) == CAN_STATUS_COMPLETED){
@@ -154,8 +167,8 @@ void can(void)
     }
 
     for (i=0; i<bufferindex; i++) {         
-        xprintf(PSTR("Buf: %d"), i), 
-        xprintf(PSTR(", Data1: %03d"), databuffer[i][0]);
+        xprintf(PSTR("B %d"), i); 
+        /*xprintf(PSTR(", Data1: %03d"), databuffer[i][0]);
 	    xprintf(PSTR(", Data2: %03d"), databuffer[i][1]);
         xprintf(PSTR(", Data3: %03d"), databuffer[i][2]);
     	xprintf(PSTR(", Data4: %03d"), databuffer[i][3]);
@@ -163,8 +176,10 @@ void can(void)
         xprintf(PSTR(", Data6: %03d"), databuffer[i][5]);
 	    xprintf(PSTR(", Data7: %03d"), databuffer[i][6]);                
     	xprintf(PSTR(", Data8: %03d"), databuffer[i][7]);
-	    xprintf(PSTR("\r\n"));
+	    xprintf(PSTR("\r\n"));*/
     }
+    if (f_write(file, databuffer, 9*bufferindex, e) != 0)
+            xprintf(PSTR("Write error\r\n"));
     bufferindex = 0;
-    _delay_ms(1300);
 }
+
