@@ -1,0 +1,11 @@
+Hydraulikpumpe
+  - 350W
+  - 12V
+  
+Moogs
+  - Strømstyres
+  
+  
+  
+Andre tanker:
+  - Montering af tryk sensor? Analog ingang
