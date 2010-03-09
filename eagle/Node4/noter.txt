@@ -4,6 +4,7 @@ Hydraulikpumpe
   
 Moogs
   - Strømstyres
+	- IC: ROHM BH2219FVM
   
   
   
