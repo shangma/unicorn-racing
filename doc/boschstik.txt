@@ -1,5 +1,3 @@
-Hvad passer sammen
-
 MAP/IAT 0 281 002 205
 	- 4-polet
 	- Connector hus: 1 928 403 913
