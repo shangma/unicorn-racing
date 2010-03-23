@@ -1,7 +1,6 @@
 //_____ I N C L U D E S ________________________________________________________
 #include "config.h"
 #include "can_lib.h"
-#include "uart_lib.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -44,8 +43,6 @@ int main (void)
         // Venter på datakald
         dataType = wait_CAN_request();
 
-        uart_mini_printf("DataType: %d \n\r", dataType);
-
         // Sætter udgående sensordata
         set_sensor_data(dataType);
 
@@ -60,9 +57,6 @@ void init(void)
 {
     // CAN Init
     can_init(0);
-
-    // UART Init
-    uart_init(CONF_8BIT_NOPAR_1STOP,UART_BAUDRATE);
 
     // IO Init
     DDRA = 0xFF;
@@ -86,7 +80,7 @@ unsigned short int wait_CAN_request(void)
     // Venter på data er modtaget
     while(can_get_status(&response_msg) == CAN_STATUS_NOT_COMPLETED);
 
-return response_buffer[0];}
+return response_buffer[0];}
 
 void CAN_transmit(void)
 {
