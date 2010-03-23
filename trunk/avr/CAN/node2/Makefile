@@ -1,6 +1,6 @@
-TARGET         = avr_mmc
-CSRC           = main.c uart.c ff.c mmc.c rtc.c cc932_avr.c can_drv.c can_lib.c can_func.c
-ASRC           = xitoa.S
+TARGET         = node2
+CSRC           = main.c cc932_avr.c can_drv.c can_lib.c can_func.c
+ASRC           = 
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
 DEFS           =
