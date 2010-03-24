@@ -1,6 +1,7 @@
 //_____ I N C L U D E S ________________________________________________________
 #include "config.h"
 #include "can_lib.h"
+#include <util/delay.h>
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -26,11 +27,23 @@ st_cmd_t response_msg;
 
 int main (void)
 {	
+    int i=0;
     CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 
     // Init CAN, UART, I/O
     init();
 
+    DDRE = 0xFF;
+    PORTE = 0xFF;
+
+    DDRB = 0xFF;
+    PORTB = 0xFF;
+
+    DDRC = 0xFF;
+    PORTC = 0xFF;
+
+    DDRA = 0b11100000;
+    PORTA = 0xFF;
     // --- Init variables
     tx_remote_msg.pt_data = &tx_remote_buffer[0];
     tx_remote_msg.status = 0;
@@ -42,7 +55,22 @@ int main (void)
     {
         // Venter på datakald
         dataType = wait_CAN_request();
-
+        for (i=0;i<9;i++){
+                _delay_ms(100);
+                PORTE = 1<<i;
+        }
+        for (i=0;i<9;i++){
+                PORTB = 1<<i;
+                _delay_ms(100);
+        }
+        for (i=0;i<8;i++){
+                PORTC = 1<<i;
+                _delay_ms(100);
+        }
+        for (i=5;i<9;i++){
+                PORTA = 1<<i;
+                _delay_ms(100);
+        }
         // Sætter udgående sensordata
         set_sensor_data(dataType);
 
