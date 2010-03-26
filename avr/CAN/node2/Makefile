@@ -1,5 +1,5 @@
 TARGET         = node2
-CSRC           = main.c can_drv.c can_lib.c 
+CSRC           = main.c can_drv.c can_lib.c isr.c 
 ASRC           = 
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
@@ -53,6 +53,11 @@ writeflash: hex
 
 install: writeflash
 
+installt: hex
+	$(AVRDUDE) -c usbtiny   \
+	 -p $(PROGRAMMER_MCU) -P usb -B 1     \
+	 -U flash:w:$(HEXROMTRG)
+    
 text: hex
 hex:  $(TARGET).hex
 
