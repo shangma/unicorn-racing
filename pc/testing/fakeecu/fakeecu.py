@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import serial
 from string import strip
 from binascii import hexlify, unhexlify
