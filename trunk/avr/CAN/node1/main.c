@@ -15,6 +15,7 @@
 #include "rtc.h"
 #include "can_lib.h"
 #include "can_func.h"
+#include "../lib/can_defs.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
@@ -107,12 +108,16 @@ int main (void)
 	FATFS *fs;
 	DIR dir;				/* Directory object */
 	FIL file1;			/* File object */
-    U8 i;
+    U8 i,j;
     U8 open = 0;
+    
+    int tmp=0;
+    int tmp2=0;
+
+    char ecu_data[10] = {0x12,0x34,0x56,0x78,0x17,0x08,0,0,0,0}; 
 
 	IoInit();
 
-    	uart_put(84);
 	/* Join xitoa module to uart module */
 	xfunc_out = (void (*)(char))uart_put;
     _delay_ms(2000);
@@ -124,13 +129,92 @@ int main (void)
     xprintf(PSTR("Opening file hej\n"));
     xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
     open = 1;
-
+    _delay_ms(2000);
     init_can_data_mobs();
 
     for (i=0; i<num_of_response_mobs; i++) {
             can_data_mob_setup(i);
     }
+    tx_remote_msg.pt_data = &tx_remote_buffer[0];
+    tx_remote_msg.status = 0;
 
+    j = 0;
+    i = 0;
+    tmp = 0;
+
+    can_send(rpm_msgid, 8, 1);
+    while(1) {
+            tmp = 0;
+            tmp2 = 0;
+            for (i=0;i<=9;i++) {
+                USART0_Transmit(ecu_data[i]); 
+            }
+            for (i=0;i<114;i++) {
+                while (!(UCSR0A & 1<<RXC0));
+                tmp = UDR0;
+                if (i == 54) {
+                    tmp2 = tmp<<8;
+                }else if(i == 55) {
+                    tmp2 += tmp;
+                }
+            }
+            tmp = (int)(tmp2*0.9408)/650;
+	        xprintf(PSTR("Rpm=%d Led=%d\n"), tmp2, tmp);
+            can_send(rpm_msgid, tmp , 1);
+            _delay_ms(50);
+    }
+
+
+/*
+    while (1) {
+           while (!(UCSR0A & 1<<RXC0));
+           i = UDR0;
+           switch (i) {
+                case 'a':
+                    can_send(rpm_msgid, 0, 1);
+                    break;
+                case 'd':
+                    can_send(rpm_msgid, 1, 1);
+                    break;
+                case 'w':
+                    can_send(rpm_msgid, 2, 1);
+                    break;
+                case 's':
+                    can_send(rpm_msgid, 3, 1);
+                    break;
+                case '0':
+                    can_send(gear_status_msgid, 0, 1);
+                    break;
+                case '1':
+                    can_send(gear_status_msgid, 1, 1);
+                    break;
+                case '2':
+                    can_send(gear_status_msgid, 2, 1);
+                    break;
+                case '3':
+                    can_send(gear_status_msgid, 3, 1);
+                    break;
+                case '4':
+                    can_send(gear_status_msgid, 4, 1);
+                    break;
+                case '5':
+                    can_send(gear_status_msgid, 5, 1);
+                    break;
+                case '6':
+                    can_send(gear_status_msgid, 6, 1);
+                    break;
+                case '7':
+                    can_send(gear_status_msgid, 7, 1);
+                    break;
+                case '8':
+                    can_send(gear_status_msgid, 8, 1);
+                    break;
+                case '9':
+                    can_send(gear_status_msgid, 9, 1);
+                    break;
+           }
+    }
+*/
     while(1) {
         if ((UCSR0A & _BV(RXC0))) {
                 if (UDR0 == 'c') {
@@ -180,6 +264,6 @@ void can(FIL *file)
     }
     if (f_write(file, databuffer, 9*bufferindex, e) != 0)
             xprintf(PSTR("Write error\r\n"));
+    _delay_us(1700);
     bufferindex = 0;
 }
-
