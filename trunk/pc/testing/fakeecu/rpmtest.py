@@ -11,7 +11,7 @@ rpmDataSize = 2     # Længden af rmp i byte
 
 ledScale = maxRpm/(leds+1) # +1 da led 16 ellers først vil lyse ved rpm > maxRpm
 
-ser = serial.Serial("/dev/ttyUSB1", 19200)
+ser = serial.Serial("/dev/ttyUSB0", 38400)
 
 for i in range(1000):
     ser.write(unhexlify("12345678"+"17"+"0800000000"))  # Streng der skal sender til ecu for at få data.
