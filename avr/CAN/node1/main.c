@@ -10,10 +10,10 @@
 #include <util/delay.h>
 #include "uart.h"
 #include "xitoa.h"
-#include "ff.h"
-#include "diskio.h"
-#include "rtc.h"
-#include "can_lib.h"
+#include "sdcard/ff.h"
+#include "sdcard/diskio.h"
+#include "sdcard/rtc.h"
+#include "can_std/can_lib.h"
 #include "can_func.h"
 #include "../lib/can_defs.h"
 

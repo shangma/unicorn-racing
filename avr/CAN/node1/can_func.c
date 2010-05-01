@@ -1,5 +1,5 @@
 #include "config.h"
-#include "can_lib.h"
+#include "can_std/can_lib.h"
 #include "can_func.h"
 
 U8 response_buffer[num_of_response_mobs][8];

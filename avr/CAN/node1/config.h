@@ -25,7 +25,7 @@
 #include "compiler.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "at90can_drv.h"
+#include "can_std/at90can_drv.h"
 
 //_____ M A C R O S ____________________________________________________________
 
