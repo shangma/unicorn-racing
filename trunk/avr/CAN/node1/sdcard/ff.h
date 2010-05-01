@@ -16,7 +16,7 @@
 #ifndef _FATFS
 #define _FATFS	0x007E
 
-#include "integer.h"	/* Basic integer types */
+#include "../integer.h"	/* Basic integer types */
 #include "ffconf.h"		/* FatFs configuration options */
 
 #if _FATFS != _FFCONFIG

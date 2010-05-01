@@ -1,4 +1,4 @@
-#include "integer.h"
+#include "../integer.h"
 
 typedef struct {
 	WORD	year;	/* 2000..2099 */
