@@ -36,6 +36,7 @@ void can_data_mob_setup(U8 mob_num)
     while (can_cmd(&response_msg[mob_num]) != CAN_CMD_ACCEPTED);
 }
 
+/* funktion til at sende en besked der er 1 byte lang */
 void can_send(U8 msg_id, U8 msg, U8 dlc)
 {
     tx_remote_buffer[0] = msg; 
