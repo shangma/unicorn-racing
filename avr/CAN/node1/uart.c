@@ -42,13 +42,13 @@ void USART_set_baud_rate(double baudrate0, double baudrate1)
 
 void uart_init()
 {
-   UCSR0B = (1<<RXEN0)|(1<<TXEN0);      // Turn on U(S)ART port
-   UCSR0C = (1<<UCSZ01)|(1<<UCSZ00);   // Set frame format: 8 data bits, 1 stop bit, no parity
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0) | (1<<RXCIE0);  // Turn on U(S)ART port og sæt rec interrupt
+	UCSR0C = (1<<UCSZ01)|(1<<UCSZ00);   // Set frame format: 8 data bits, 1 stop bit, no parity
 
-   UCSR1B = (1<<RXEN0)|(1<<TXEN0);      // Turn on U(S)ART port
-   UCSR1C = (1<<UCSZ01)|(1<<UCSZ00);   // Set frame format: 8 data bits, 1 stop bit, no parity
+	UCSR1B = (1<<RXEN0)|(1<<TXEN0);      // Turn on U(S)ART port
+	UCSR1C = (1<<UCSZ01)|(1<<UCSZ00);   // Set frame format: 8 data bits, 1 stop bit, no parity
    
-   USART_set_baud_rate(BAUD0, BAUD1); //Set baud rate
+	USART_set_baud_rate(BAUD0, BAUD1); //Set baud rate
 }
 
 /* Get a received character */
