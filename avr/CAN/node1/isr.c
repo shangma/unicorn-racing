@@ -7,7 +7,6 @@
 #include "ecu.h"
 
 int RecIndex = 0;
-int TmpData=0;
 int testvar = 0;
 
 ISR(TIMER0_COMP_vect)
@@ -25,14 +24,8 @@ ISR(TIMER0_COMP_vect)
 
 ISR(USART0_RX_vect)
 {
-	int tmp;
-	tmp = UDR0;
-	if (RecIndex == 54) {
-		TmpData = tmp<<8;
-	}else if(RecIndex == 55) {
-		TmpData += tmp;
-		tmp = (int)(TmpData*0.9408)/650;
-		can_send(rpm_msgid, tmp , 1);
+	if (RecIndex < 228) {
+		EcuData[RecIndex] = UDR0;
+		RecIndex++;
 	}
-	RecIndex++;
 }
