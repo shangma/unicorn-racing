@@ -46,7 +46,7 @@
 
     // -------------- UART
 #define BAUD0 19200 // ecu
-#define BAUD1 9600  // Xbee
+#define BAUD1 115200  // Xbee
 
 //_____ D E C L A R A T I O N S ________________________________________________
 

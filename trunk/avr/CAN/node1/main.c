@@ -78,14 +78,18 @@ DWORD get_fattime ()
 static
 void IoInit ()
 {
-   OCR2A = 90-1;      // Timer2: 100Hz interval (OC2)
-   TCCR2A = 0b00001101;
+//	OCR2A = 90-1;      // Timer2: 100Hz interval (OC2)
+//	TCCR2A = 0b00001101;
+//	TIMSK2 = 0b00000010;   // Enable TC2.oc interrupt
 
-   TIMSK2 = 0b00000010;   // Enable TC2.oc interrupt
+	/* Timer 0 bruges til at sende data req til ECU */
+	OCR0A = 100;			// Sæt start værdi
+	TCCR0A |= 1<<CS02 | 1<<CS00;    // prescaler til 1024
+	TIMSK0 |= 1<<OCIE0A; 		// Slår timer compare match interrupt til
 
-   rtc_init();         // Initialize RTC
-   can_init(0);
-   uart_init();
+	rtc_init();         // Initialize RTC
+	can_init(0);
+	uart_init();
 }
 
 /*-----------------------------------------------------------------------*/
@@ -124,25 +128,11 @@ int main (void)
     tx_remote_msg.pt_data = &tx_remote_buffer[0];
     tx_remote_msg.status = 0;
 
-    can_send(rpm_msgid, 8, 1);
-    while(1) {
-            for (i=0;i<=9;i++) {
-                USART0_Transmit(ecu_data[i]); 
-            }
-            for (i=0;i<114;i++) {
-                while (!(UCSR0A & 1<<RXC0));
-                tmp = UDR0;
-                if (i == 54) {
-                    tmp2 = tmp<<8;
-                }else if(i == 55) {
-                    tmp2 += tmp;
-                }
-            }
-            tmp = (int)(tmp2*0.9408)/650;
-	        xprintf(PSTR("Rpm=%d Led=%d\n"), tmp2, tmp);
-            can_send(rpm_msgid, tmp , 1);
-            _delay_ms(50);
-    }
+	can_send(rpm_msgid, 8, 1);
+	sei();
+	while(1) {
+		_delay_ms(50);
+	}
 }
 
 
