@@ -145,6 +145,7 @@ int main (void)
 		speed = (int)(tmp2*SPEEDGAIN);
 		ratio = (speed*(1/SPEEDGAIN))/(rpm>>6);
 		can_send(gear_status_msgid, ratio , 1);
+		can_send(error_msgid, (U8)EcuCommError, 1);
 		send_status();
 		_delay_ms(50);
 	}

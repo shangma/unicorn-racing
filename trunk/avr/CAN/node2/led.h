@@ -91,6 +91,7 @@ volatile extern char LED_REG2;
 #define SEG_7 PORTC = 0b00001011
 #define SEG_8 PORTC = 0b01111111
 #define SEG_9 PORTC = 0b01011011
+#define SEG_E PORTC = 0b01110110
 
 /*  init alle porte til at styre display led'er og slå timer til at styre styrken til.
     Interrupt skal være slået til for at dioderne kan lyse. */

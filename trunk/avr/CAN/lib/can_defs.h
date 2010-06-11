@@ -2,3 +2,4 @@
 #define gear_msgid 132
 #define rpm_msgid 133
 #define gear_status_msgid 134
+#define error_msgid 135
