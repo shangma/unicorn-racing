@@ -15,6 +15,7 @@
 /* Streng der skal sendes til ecu for at få data */
 static const char ecu_data[10] = {0x12,0x34,0x56,0x78,0x17,0x08,0,0,0,0};
 
+/* Indeholder data fra ECU'en */
 U8 EcuData[228]; 
 
 /* RPM */

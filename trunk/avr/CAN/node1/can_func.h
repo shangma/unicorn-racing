@@ -13,4 +13,5 @@ extern st_cmd_t tx_remote_msg;
 void init_can_data_mobs(void);
 void can_data_mob_setup(U8 mob_num);
 
+/* Funktion til at sende en besked via CAN */
 void can_send(U8 msg_id, U8 msg, U8 data_length);
