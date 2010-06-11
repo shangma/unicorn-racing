@@ -17,6 +17,8 @@
 #include "can_func.h"
 #include "../lib/can_defs.h"
 #include "ecu.h"
+#include "comm.h"
+#include "error.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
@@ -132,7 +134,7 @@ int main (void)
 
 	can_send(rpm_msgid, 8, 1);
 	sei();
-	while(1) {
+	while(1) {	
 		tmp2 = EcuData[54]<<8;
 		tmp2 += EcuData[55];
 		rpm = (int)(tmp2*0.9408);
@@ -143,8 +145,7 @@ int main (void)
 		speed = (int)(tmp2*SPEEDGAIN);
 		ratio = (speed*(1/SPEEDGAIN))/(rpm>>6);
 		can_send(gear_status_msgid, ratio , 1);
-		xprintf(PSTR("Ratio: %d\n"), ratio);
-		xprintf(PSTR("speed: %d\n"), speed);
+		send_status();
 		_delay_ms(50);
 	}
 }
