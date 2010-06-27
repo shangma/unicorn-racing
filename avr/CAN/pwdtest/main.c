@@ -1,7 +1,15 @@
+/*************************************************
+* Timer
+*
+* Counter0  (8-bit): Timer til ADC konvertering
+* Counter1 (16-bit): Timer til Motor PWM
+* Counter2  (8-bit): Timer til ventil PWM
+*************************************************/
+
+#include <config.h>
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
-
 
 #define F_CPU 18432000
 #include <util/delay.h>
@@ -11,6 +19,8 @@
 int p = 0;
 float i = 0.0;
 int ref = 60;
+unsigned int ADCconv = 0;
+float pressOld = 0; 
 
 void uartinit(void)
 {
@@ -30,12 +40,12 @@ void uartinit(void)
 
 void PWM_duty_cycle_A_set(unsigned int x)
 {
-	OCR0A = x; 
+	OCR2A = x; 
 }
 
 void PWM_duty_cycle_B_set(unsigned int x)
 {
-	OCR0B = x; 
+	OCR2B = x; 
 }
 
 void PWM_duty_cycle_A16_set(unsigned int x)
@@ -47,24 +57,24 @@ void PWM_duty_cycle_A16_set(unsigned int x)
 void pwm8Init(void)
 {
 	//PWM, 8 bit counter (counter0)
-	// (OC0A) Output
-    DDRB|= (1<<PB3);  
-	// (OC0B) Output
-	DDRB|= (1<<PB4);      
+	// (OC2A) Output
+    DDRD|= (1<<PD6);  
+	// (OC2B) Output
+	DDRD|= (1<<PD7);      
 
 	// Opsætning af compare match.
-	TCCR0A |=(1<<COM0A1);
-	TCCR0A &=~(1<<COM0A0);
+	TCCR2A |=(1<<COM2A1);
+	TCCR2A &=~(1<<COM2A0);
 
-	TCCR0A |=(1<<COM0B1);
-	TCCR0A &=~(1<<COM0B0);
+	TCCR2A |=(1<<COM2B1);
+	TCCR2A &=~(1<<COM2B0);
 
 	// FAST-PWM
-	TCCR0A |=(1<<WGM00);
-	TCCR0A |=(1<<WGM01);
+	TCCR2A |=(1<<WGM20);
+	TCCR2A |=(1<<WGM21);
 
 	// Prescaler, 1
-    TCCR0B |=(1<<CS00);
+    TCCR2B |=(1<<CS20);
 
 	PWM_duty_cycle_A_set(0);
 	PWM_duty_cycle_B_set(0);
@@ -100,6 +110,17 @@ void pwm16Init(void)
 	PWM_duty_cycle_A16_set(0);
 }
 
+void counter0Init(void)
+{
+	//TCCR0B |=(1<<CS00);
+	//TCCR0B &=~(1<<CS01);
+	//TCCR0B |=(1<<CS02);
+
+	TCCR0B |= counter0prescale256;
+
+	TIMSK0 |=(1<<TOIE0);
+}
+
 void sendtekst(char *tekstarray)
 {
 	// Tæller
@@ -113,84 +134,53 @@ void sendtekst(char *tekstarray)
 	}
 }
 
-unsigned int convertanalog(unsigned channel)
+void adcInit(unsigned int channel)
 {
-	unsigned int adlow = 0;
-	unsigned int adhigh = 0; 
-	
-    ADMUX=(1<<REFS0)|(channel & 0x0f);
-    ADCSRA=(1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
-    ADCSRA|= (1<<ADSC);
-    while(bit_is_set(ADCSRA,ADSC)); 
-    adlow=ADCL; 
-    adhigh=ADCH;
-    return((unsigned int)((adhigh<<8)|(adlow & 0xFF)));
+	// ADC channel
+	ADMUX=(channel & 0x0f);
+
+	// Vref config
+	ADMUX |=(1<<REFS0); 
+	ADMUX &=~(1<<REFS1);
+
+	// ADC ENABLE
+	ADCSRA |=(1<<ADEN); 
+
+	// ADC frequency prescaler
+	ADCSRA |=(1<<ADPS0);
+	ADCSRA &=~(1<<ADPS1);
+	ADCSRA |=(1<<ADPS2);
+
+	// ADC Tigger mode
+	/*
+	ADCSRA |=(1<<ADATE); 
+
+	// ADC trigger source
+	ADCSRB &=~(1<<ADTS0); 
+	ADCSRB &=~(1<<ADTS1);
+	ADCSRB |=(1<<ADTS2);
+	*/
+	// ADC interrupt enable
+	ADCSRA |=(1<<ADIE);
 }
 
-
+void adcStop(void)
+{
+	ADCSRA &=~(1<<ADEN); // ADC prescaler disable
+}
 
 int main(void)
 {
     uartinit();
-    pwm8Init();
-    pwm16Init();
+    //pwm8Init();
+    //pwm16Init();
+	adcInit(0);
+	counter0Init();
+	
     sei();
-    char tempchar[5];
-    int press = 0;
 
-    int out = 0;
-    int outP = 0;
-    float outI = 0;    
-
-    float pressOld = 0; 
-
-    while (1){
-
-    _delay_ms(10);
-
-    press = 0.17*convertanalog(0)-18.0;
-
-    if(press<=0)
-        press = 0;
-
-    outP = (ref-press)*p;
-
-    outI = (((ref-press)*0.01+pressOld)*i);
-
-    pressOld = pressOld + (ref-press)*(0.01);
-
-    out = (int)(outP + outI);
-
-    if(pressOld>5000)
-       pressOld = 5000;
-
-    if(pressOld<-5000)
-        pressOld = -5000;
-
-    if(out>1023)
-        out = 1023;
-
-    if(out<=0)
-        out = 0;
-
-    PWM_duty_cycle_A16_set(out);
-
-	itoa(ref, tempchar,10); 
-	sendtekst(tempchar);
-    sendtekst(";");
-	itoa(press, tempchar,10); 
-	sendtekst(tempchar);
-    sendtekst(";");
-	itoa(out, tempchar,10); 
-	sendtekst(tempchar);
-    sendtekst(";");
-	itoa(p, tempchar,10); 
-	sendtekst(tempchar);
-    sendtekst(";");
-	itoa((int)(i*100), tempchar,10); 
-	sendtekst(tempchar);
-    sendtekst("\n\r");
-
+    while (1)
+	{
     }
 
     return 0;

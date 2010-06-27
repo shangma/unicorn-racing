@@ -1,4 +1,4 @@
-GAS LISTING /tmp/ccmypDSg.s 			page 1
+GAS LISTING /tmp/ccJOFRKh.s 			page 1
 
 
    1               		.file	"isr.c"
@@ -10,7 +10,7 @@ GAS LISTING /tmp/ccmypDSg.s 			page 1
    7               	__zero_reg__ = 1
    8               		.global __do_copy_data
    9               		.global __do_clear_bss
-  10               		.stabs	"/home/morten/Documents/unicorn-racing/avr/CAN/pwdtest/",100,0,2,.Ltext0
+  10               		.stabs	"/home/css/Documents/unicorn-racing/avr/CAN/pwdtest/",100,0,2,.Ltext0
   11               		.stabs	"isr.c",100,0,2,.Ltext0
   12               		.text
   13               	.Ltext0:
@@ -58,7 +58,7 @@ GAS LISTING /tmp/ccmypDSg.s 			page 1
   55               		.stabs	"uint_fast16_t:t(4,22)=(4,4)",128,0,228,0
   56               		.stabs	"int_fast32_t:t(4,23)=(4,5)",128,0,233,0
   57               		.stabs	"uint_fast32_t:t(4,24)=(4,6)",128,0,238,0
-GAS LISTING /tmp/ccmypDSg.s 			page 2
+GAS LISTING /tmp/ccJOFRKh.s 			page 2
 
 
   58               		.stabs	"int_fast64_t:t(4,25)=(4,7)",128,0,246,0
@@ -83,737 +83,966 @@ GAS LISTING /tmp/ccmypDSg.s 			page 1
   77               		.stabs	"ldiv_t:t(6,3)=(6,4)=s8quot:(0,3),0,32;rem:(0,3),32,32;;",128,0,77,0
   78               		.stabs	"__compar_fn_t:t(6,5)=(6,6)=*(6,7)=f(0,1)",128,0,80,0
   79               		.stabn	162,0,0,0
-  80               		.data
-  81               	.LC0:
-  82 0000 3B00      		.string	";"
-  83               	.LC1:
-  84 0002 0A0D 00   		.string	"\n\r"
-  85               		.text
-  86               		.stabs	"__vector_20:F(0,15)",36,0,25,__vector_20
-  87               	.global	__vector_20
-  88               		.type	__vector_20, @function
-  89               	__vector_20:
-  90               		.stabd	46,0,0
-   0:isr.c         **** #include <avr/io.h>
-   1:isr.c         **** #include <stdlib.h>
-   2:isr.c         **** #include <avr/interrupt.h>
-   3:isr.c         **** 
-   4:isr.c         **** /*********************************************
-   5:isr.c         ****  * AVR atMega644P Interrupt-service-rutiner
-   6:isr.c         ****  *********************************************/
-   7:isr.c         **** 
-   8:isr.c         **** void sendtekst(char *);
-   9:isr.c         **** void PWM_duty_cycle_A_set(unsigned int);
-  10:isr.c         **** void PWM_duty_cycle_B_set(unsigned int);
-  11:isr.c         **** void PWM_duty_cycle_A16_set(unsigned int);
-  12:isr.c         **** 
-  13:isr.c         **** // Variable
-  14:isr.c         **** char count = 0;
-  15:isr.c         **** char retning = 0;
-  16:isr.c         **** unsigned int speed = 0;
-  17:isr.c         **** 
-  18:isr.c         **** extern int p;
-  19:isr.c         **** extern float i;
-  20:isr.c         **** extern int ref;
-  21:isr.c         **** 
-  22:isr.c         ****  //----- UART Interrupt --------------------------------------------------------
-  23:isr.c         **** ISR(USART0_RX_vect)
-GAS LISTING /tmp/ccmypDSg.s 			page 3
+  80               		.stabs	"__vector_18:F(0,15)",36,0,33,__vector_18
+  81               	.global	__vector_18
+  82               		.type	__vector_18, @function
+  83               	__vector_18:
+  84               		.stabd	46,0,0
+   0:isr.c         **** #include <config.h>
+   1:isr.c         **** #include <prototyper.h>
+   2:isr.c         **** #include <avr/io.h>
+   3:isr.c         **** #include <stdlib.h>
+   4:isr.c         **** #include <avr/interrupt.h>
+   5:isr.c         **** 
+   6:isr.c         **** /*********************************************
+   7:isr.c         ****  * AVR atMega644P Interrupt-service-rutiner
+   8:isr.c         ****  *********************************************/
+   9:isr.c         **** 
+  10:isr.c         **** void sendtekst(char *);
+  11:isr.c         **** void PWM_duty_cycle_A_set(unsigned int);
+  12:isr.c         **** void PWM_duty_cycle_B_set(unsigned int);
+  13:isr.c         **** void PWM_duty_cycle_A16_set(unsigned int);
+  14:isr.c         **** 
+  15:isr.c         **** // Variable
+  16:isr.c         **** char count = 0;
+  17:isr.c         **** char retning = 0;
+  18:isr.c         **** unsigned int speed = 0;
+  19:isr.c         **** 
+  20:isr.c         **** extern int p;
+  21:isr.c         **** extern float i;
+  22:isr.c         **** extern int ref;
+  23:isr.c         **** extern unsigned int ADCconv;
+  24:isr.c         **** 
+  25:isr.c         **** unsigned int adlow = 0;
+  26:isr.c         **** unsigned int adhigh = 0;
+  27:isr.c         **** 
+  28:isr.c         **** char channel = 0;
+  29:isr.c         **** 
+GAS LISTING /tmp/ccJOFRKh.s 			page 3
 
 
-  24:isr.c         **** {
-  91               		.stabn	68,0,25,.LM0-.LFBB1
-  92               	.LM0:
-  93               	.LFBB1:
-  94 0000 1F92      		push __zero_reg__
-  95 0002 0F92      		push r0
-  96 0004 0FB6      		in r0,__SREG__
-  97 0006 0F92      		push r0
-  98 0008 1124      		clr __zero_reg__
-  99 000a 0F93      		push r16
- 100 000c 1F93      		push r17
- 101 000e 2F93      		push r18
- 102 0010 3F93      		push r19
- 103 0012 4F93      		push r20
- 104 0014 5F93      		push r21
- 105 0016 6F93      		push r22
- 106 0018 7F93      		push r23
- 107 001a 8F93      		push r24
- 108 001c 9F93      		push r25
- 109 001e AF93      		push r26
- 110 0020 BF93      		push r27
- 111 0022 EF93      		push r30
- 112 0024 FF93      		push r31
- 113 0026 DF93      		push r29
- 114 0028 CF93      		push r28
- 115 002a 00D0      		rcall .
- 116 002c 00D0      		rcall .
- 117 002e 0F92      		push __tmp_reg__
- 118 0030 CDB7      		in r28,__SP_L__
- 119 0032 DEB7      		in r29,__SP_H__
- 120               	/* prologue: Signal */
- 121               	/* frame size = 5 */
-  25:isr.c         **** 	char data;
-  26:isr.c         **** 	char tempchar[5];	
-  27:isr.c         **** 	data = UDR0;	// Lægger data fra seriel bufffer i variabel
- 122               		.stabn	68,0,28,.LM1-.LFBB1
- 123               	.LM1:
- 124 0034 8091 C600 		lds r24,198
-  28:isr.c         **** 
-  29:isr.c         ****     if(data == 'x')
- 125               		.stabn	68,0,30,.LM2-.LFBB1
- 126               	.LM2:
- 127 0038 8837      		cpi r24,lo8(120)
- 128 003a 01F4      		brne .+2
- 129 003c 00C0      		rjmp .L32
-  30:isr.c         ****     {
-  31:isr.c         ****     ref++;
-  32:isr.c         ****     }
-  33:isr.c         **** 
-  34:isr.c         ****     if(data == 'z')
- 130               		.stabn	68,0,35,.LM3-.LFBB1
- 131               	.LM3:
- 132 003e 8A37      		cpi r24,lo8(122)
- 133 0040 01F4      		brne .+2
- 134 0042 00C0      		rjmp .L33
-  35:isr.c         ****     {
-  36:isr.c         ****     ref--;
-GAS LISTING /tmp/ccmypDSg.s 			page 4
+  30:isr.c         **** // Timer0 (8-bit) overflow interrupt
+  31:isr.c         **** ISR(TIMER0_OVF_vect)
+  32:isr.c         **** {	
+  85               		.stabn	68,0,33,.LM0-.LFBB1
+  86               	.LM0:
+  87               	.LFBB1:
+  88 0000 1F92      		push __zero_reg__
+  89 0002 0F92      		push r0
+  90 0004 0FB6      		in r0,__SREG__
+  91 0006 0F92      		push r0
+  92 0008 1124      		clr __zero_reg__
+  93 000a 8F93      		push r24
+  94 000c 9F93      		push r25
+  95               	/* prologue: Signal */
+  96               	/* frame size = 0 */
+  33:isr.c         **** 	ADMUX &= 0xf8;
+  97               		.stabn	68,0,34,.LM1-.LFBB1
+  98               	.LM1:
+  99 000e 8091 7C00 		lds r24,124
+ 100 0012 887F      		andi r24,lo8(-8)
+ 101 0014 8093 7C00 		sts 124,r24
+  34:isr.c         **** 	ADMUX |= channel++;
+ 102               		.stabn	68,0,35,.LM2-.LFBB1
+ 103               	.LM2:
+ 104 0018 8091 7C00 		lds r24,124
+ 105 001c 9091 0000 		lds r25,channel
+ 106 0020 892B      		or r24,r25
+ 107 0022 8093 7C00 		sts 124,r24
+ 108 0026 9F5F      		subi r25,lo8(-(1))
+ 109 0028 9093 0000 		sts channel,r25
+  35:isr.c         **** 	ADCSRA|=(1<<ADSC);
+ 110               		.stabn	68,0,36,.LM3-.LFBB1
+ 111               	.LM3:
+ 112 002c 8091 7A00 		lds r24,122
+ 113 0030 8064      		ori r24,lo8(64)
+ 114 0032 8093 7A00 		sts 122,r24
+  36:isr.c         **** 
+  37:isr.c         **** 	if(channel>=ADCtotnum)
+ 115               		.stabn	68,0,38,.LM4-.LFBB1
+ 116               	.LM4:
+ 117 0036 9330      		cpi r25,lo8(3)
+ 118 0038 00F0      		brlo .L3
+  38:isr.c         **** 		channel = 0;
+ 119               		.stabn	68,0,39,.LM5-.LFBB1
+ 120               	.LM5:
+ 121 003a 1092 0000 		sts channel,__zero_reg__
+ 122               	.L3:
+ 123               	/* epilogue start */
+  39:isr.c         **** }
+ 124               		.stabn	68,0,40,.LM6-.LFBB1
+ 125               	.LM6:
+ 126 003e 9F91      		pop r25
+ 127 0040 8F91      		pop r24
+ 128 0042 0F90      		pop r0
+ 129 0044 0FBE      		out __SREG__,r0
+ 130 0046 0F90      		pop r0
+ 131 0048 1F90      		pop __zero_reg__
+GAS LISTING /tmp/ccJOFRKh.s 			page 4
 
 
-  37:isr.c         ****     }
-  38:isr.c         **** 
-  39:isr.c         ****     if(data == 'i')
- 135               		.stabn	68,0,40,.LM4-.LFBB1
- 136               	.LM4:
- 137 0044 8936      		cpi r24,lo8(105)
- 138 0046 01F0      		breq .+2
- 139 0048 00C0      		rjmp .L6
-  40:isr.c         ****     {
-  41:isr.c         ****     i = i+0.01;
- 140               		.stabn	68,0,42,.LM5-.LFBB1
- 141               	.LM5:
- 142 004a 6091 0000 		lds r22,i
- 143 004e 7091 0000 		lds r23,(i)+1
- 144 0052 8091 0000 		lds r24,(i)+2
- 145 0056 9091 0000 		lds r25,(i)+3
- 146 005a 2AE0      		ldi r18,lo8(0x3c23d70a)
- 147 005c 37ED      		ldi r19,hi8(0x3c23d70a)
- 148 005e 43E2      		ldi r20,hlo8(0x3c23d70a)
- 149 0060 5CE3      		ldi r21,hhi8(0x3c23d70a)
- 150 0062 0E94 0000 		call __addsf3
- 151 0066 6093 0000 		sts i,r22
- 152 006a 7093 0000 		sts (i)+1,r23
- 153 006e 8093 0000 		sts (i)+2,r24
- 154 0072 9093 0000 		sts (i)+3,r25
- 155               	.L25:
-  42:isr.c         ****     }
-  43:isr.c         **** 
-  44:isr.c         ****     if(data == 'j')
-  45:isr.c         ****     {
-  46:isr.c         ****     i = i-0.01;
-  47:isr.c         ****     }
+ 132 004a 1895      		reti
+ 133               		.size	__vector_18, .-__vector_18
+ 134               	.Lscope1:
+ 135               		.stabs	"",36,0,0,.Lscope1-.LFBB1
+ 136               		.stabd	78,0,0
+ 137               		.data
+ 138               	.LC0:
+ 139 0000 3B00      		.string	";"
+ 140               	.LC1:
+ 141 0002 0A0D 00   		.string	"\n\r"
+ 142               		.text
+ 143               		.stabs	"__vector_20:F(0,15)",36,0,70,__vector_20
+ 144               	.global	__vector_20
+ 145               		.type	__vector_20, @function
+ 146               	__vector_20:
+ 147               		.stabd	46,0,0
+  40:isr.c         **** 
+  41:isr.c         **** // ADC convert complete
+  42:isr.c         **** ISR(ADC_vect)
+  43:isr.c         **** {
+  44:isr.c         **** 	char tempchar[5];
+  45:isr.c         **** 	char channel = 0;
+  46:isr.c         **** 
+  47:isr.c         **** 	channel = ADMUX & 0x07;
   48:isr.c         **** 
-  49:isr.c         ****     if(data == 'p')
-  50:isr.c         ****     {
-  51:isr.c         ****     p++;
-  52:isr.c         ****     }
-  53:isr.c         **** 
-  54:isr.c         ****     if(data == 'l')
-  55:isr.c         ****     {
-  56:isr.c         ****     p--;
-  57:isr.c         ****     }
-  58:isr.c         **** 
-  59:isr.c         ****     if(data == 'c')
-  60:isr.c         ****     {
-  61:isr.c         ****     PWM_duty_cycle_A16_set(0);
-  62:isr.c         ****     }
-  63:isr.c         **** 
-  64:isr.c         ****     if(data == 'v')
-  65:isr.c         ****     {
-  66:isr.c         ****     PWM_duty_cycle_A16_set(1023);
-  67:isr.c         ****     }
-  68:isr.c         **** 
-  69:isr.c         ****     if(data == 'o')
-  70:isr.c         ****     {
-  71:isr.c         ****         speed = speed + 16;
-  72:isr.c         **** 
-GAS LISTING /tmp/ccmypDSg.s 			page 5
+  49:isr.c         ****     adlow=ADCL;
+  50:isr.c         ****     adhigh=ADCH;
+  51:isr.c         **** 	ADCconv = (unsigned int)((adhigh<<8)|(adlow & 0xFF));	
+  52:isr.c         **** /*	
+  53:isr.c         **** 	sendtekst("  ADC ");
+  54:isr.c         **** 	itoa(channel, tempchar,10); 
+  55:isr.c         **** 	sendtekst(tempchar);
+  56:isr.c         **** 	sendtekst(":");
+  57:isr.c         **** 	itoa(ADCconv, tempchar,10); 
+  58:isr.c         **** 	sendtekst(tempchar);
+  59:isr.c         **** */
+  60:isr.c         **** 	if(channel == 0)
+  61:isr.c         **** 		presscontroller(ADCconv);
+  62:isr.c         **** 
+  63:isr.c         **** 	//if(channel>=ADCtotnum-1)
+  64:isr.c         **** 	//	sendtekst("\n\r");
+  65:isr.c         **** }
+  66:isr.c         **** 
+  67:isr.c         ****  //----- UART Interrupt --------------------------------------------------------
+  68:isr.c         **** ISR(USART0_RX_vect)
+  69:isr.c         **** {
+ 148               		.stabn	68,0,70,.LM7-.LFBB2
+ 149               	.LM7:
+ 150               	.LFBB2:
+ 151 004c 1F92      		push __zero_reg__
+ 152 004e 0F92      		push r0
+ 153 0050 0FB6      		in r0,__SREG__
+ 154 0052 0F92      		push r0
+ 155 0054 1124      		clr __zero_reg__
+ 156 0056 0F93      		push r16
+ 157 0058 1F93      		push r17
+ 158 005a 2F93      		push r18
+GAS LISTING /tmp/ccJOFRKh.s 			page 5
 
 
-  73:isr.c         ****         if(speed>=1023)
-  74:isr.c         ****             speed = 1023;
-  75:isr.c         ****     PWM_duty_cycle_A16_set(speed);
-  76:isr.c         ****     }
-  77:isr.c         **** 
-  78:isr.c         ****     if(data == 'n')
-  79:isr.c         ****     {
-  80:isr.c         ****         if(speed<16)
-  81:isr.c         ****             speed = 16;
-  82:isr.c         **** 
-  83:isr.c         ****     speed = speed - 16;
-  84:isr.c         ****     PWM_duty_cycle_A16_set(speed);
-  85:isr.c         ****     }
-  86:isr.c         **** 
-  87:isr.c         ****     if(data == 'a')
-  88:isr.c         ****     {
-  89:isr.c         ****         count = 0;
-  90:isr.c         ****         retning = 0;
-  91:isr.c         ****         PWM_duty_cycle_A_set(0);
-  92:isr.c         **** 	    PWM_duty_cycle_B_set(0);
-  93:isr.c         ****     }
-  94:isr.c         **** 
-  95:isr.c         ****     if(data == 'd')
-  96:isr.c         ****     {
-  97:isr.c         ****         count = 0;
-  98:isr.c         ****         retning = 1;
-  99:isr.c         ****         PWM_duty_cycle_A_set(0);
- 100:isr.c         **** 	    PWM_duty_cycle_B_set(0);
- 101:isr.c         ****     }
- 102:isr.c         **** 	
- 103:isr.c         **** 	if(data == 'w')
- 104:isr.c         **** 	{
- 105:isr.c         ****         if(count>=254)
- 106:isr.c         ****             count = 254;
- 107:isr.c         **** 
- 108:isr.c         ****         count++;
- 109:isr.c         **** 
- 110:isr.c         ****         if(retning)
- 111:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 112:isr.c         ****         else
- 113:isr.c         ****             PWM_duty_cycle_B_set(count);
- 114:isr.c         **** 	}	
- 115:isr.c         **** 	if(data == 's')
- 116:isr.c         **** 	{
- 117:isr.c         ****         if(count<=1)
- 118:isr.c         ****             count = 1;            
- 119:isr.c         **** 
- 120:isr.c         ****         count--;
- 121:isr.c         ****         
- 122:isr.c         ****         if(retning)        
- 123:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 124:isr.c         ****         else
- 125:isr.c         ****             PWM_duty_cycle_B_set(count);
- 126:isr.c         **** 	}
- 127:isr.c         **** 	if(data == 'q')
- 128:isr.c         **** 	{
- 129:isr.c         ****         if(count>=254)
-GAS LISTING /tmp/ccmypDSg.s 			page 6
+ 159 005c 3F93      		push r19
+ 160 005e 4F93      		push r20
+ 161 0060 5F93      		push r21
+ 162 0062 6F93      		push r22
+ 163 0064 7F93      		push r23
+ 164 0066 8F93      		push r24
+ 165 0068 9F93      		push r25
+ 166 006a AF93      		push r26
+ 167 006c BF93      		push r27
+ 168 006e EF93      		push r30
+ 169 0070 FF93      		push r31
+ 170 0072 DF93      		push r29
+ 171 0074 CF93      		push r28
+ 172 0076 00D0      		rcall .
+ 173 0078 00D0      		rcall .
+ 174 007a 0F92      		push __tmp_reg__
+ 175 007c CDB7      		in r28,__SP_L__
+ 176 007e DEB7      		in r29,__SP_H__
+ 177               	/* prologue: Signal */
+ 178               	/* frame size = 5 */
+  70:isr.c         **** 	char data;
+  71:isr.c         **** 	char tempchar[5];	
+  72:isr.c         **** 	data = UDR0;	// Lægger data fra seriel bufffer i variabel
+ 179               		.stabn	68,0,73,.LM8-.LFBB2
+ 180               	.LM8:
+ 181 0080 8091 C600 		lds r24,198
+  73:isr.c         **** 
+  74:isr.c         ****     if(data == 'x')
+ 182               		.stabn	68,0,75,.LM9-.LFBB2
+ 183               	.LM9:
+ 184 0084 8837      		cpi r24,lo8(120)
+ 185 0086 01F4      		brne .+2
+ 186 0088 00C0      		rjmp .L35
+  75:isr.c         ****     {
+  76:isr.c         ****     ref++;
+  77:isr.c         ****     }
+  78:isr.c         **** 
+  79:isr.c         ****     if(data == 'z')
+ 187               		.stabn	68,0,80,.LM10-.LFBB2
+ 188               	.LM10:
+ 189 008a 8A37      		cpi r24,lo8(122)
+ 190 008c 01F4      		brne .+2
+ 191 008e 00C0      		rjmp .L36
+  80:isr.c         ****     {
+  81:isr.c         ****     ref--;
+  82:isr.c         ****     }
+  83:isr.c         **** 
+  84:isr.c         ****     if(data == 'i')
+ 192               		.stabn	68,0,85,.LM11-.LFBB2
+ 193               	.LM11:
+ 194 0090 8936      		cpi r24,lo8(105)
+ 195 0092 01F0      		breq .+2
+ 196 0094 00C0      		rjmp .L10
+  85:isr.c         ****     {
+  86:isr.c         ****     i = i+0.01;
+ 197               		.stabn	68,0,87,.LM12-.LFBB2
+ 198               	.LM12:
+GAS LISTING /tmp/ccJOFRKh.s 			page 6
 
 
- 130:isr.c         ****             count = 254;
+ 199 0096 6091 0000 		lds r22,i
+ 200 009a 7091 0000 		lds r23,(i)+1
+ 201 009e 8091 0000 		lds r24,(i)+2
+ 202 00a2 9091 0000 		lds r25,(i)+3
+ 203 00a6 2AE0      		ldi r18,lo8(0x3c23d70a)
+ 204 00a8 37ED      		ldi r19,hi8(0x3c23d70a)
+ 205 00aa 43E2      		ldi r20,hlo8(0x3c23d70a)
+ 206 00ac 5CE3      		ldi r21,hhi8(0x3c23d70a)
+ 207 00ae 0E94 0000 		call __addsf3
+ 208 00b2 6093 0000 		sts i,r22
+ 209 00b6 7093 0000 		sts (i)+1,r23
+ 210 00ba 8093 0000 		sts (i)+2,r24
+ 211 00be 9093 0000 		sts (i)+3,r25
+ 212               	.L29:
+  87:isr.c         ****     }
+  88:isr.c         **** 
+  89:isr.c         ****     if(data == 'j')
+  90:isr.c         ****     {
+  91:isr.c         ****     i = i-0.01;
+  92:isr.c         ****     }
+  93:isr.c         **** 
+  94:isr.c         ****     if(data == 'p')
+  95:isr.c         ****     {
+  96:isr.c         ****     p++;
+  97:isr.c         ****     }
+  98:isr.c         **** 
+  99:isr.c         ****     if(data == 'l')
+ 100:isr.c         ****     {
+ 101:isr.c         ****     p--;
+ 102:isr.c         ****     }
+ 103:isr.c         **** 
+ 104:isr.c         ****     if(data == 'c')
+ 105:isr.c         ****     {
+ 106:isr.c         ****     PWM_duty_cycle_A16_set(0);
+ 107:isr.c         ****     }
+ 108:isr.c         **** 
+ 109:isr.c         ****     if(data == 'v')
+ 110:isr.c         ****     {
+ 111:isr.c         ****     PWM_duty_cycle_A16_set(1023);
+ 112:isr.c         ****     }
+ 113:isr.c         **** 
+ 114:isr.c         ****     if(data == 'o')
+ 115:isr.c         ****     {
+ 116:isr.c         ****         speed = speed + 16;
+ 117:isr.c         **** 
+ 118:isr.c         ****         if(speed>=1023)
+ 119:isr.c         ****             speed = 1023;
+ 120:isr.c         ****     PWM_duty_cycle_A16_set(speed);
+ 121:isr.c         ****     }
+ 122:isr.c         **** 
+ 123:isr.c         ****     if(data == 'n')
+ 124:isr.c         ****     {
+ 125:isr.c         ****         if(speed<16)
+ 126:isr.c         ****             speed = 16;
+ 127:isr.c         **** 
+ 128:isr.c         ****     speed = speed - 16;
+ 129:isr.c         ****     PWM_duty_cycle_A16_set(speed);
+GAS LISTING /tmp/ccJOFRKh.s 			page 7
+
+
+ 130:isr.c         ****     }
  131:isr.c         **** 
- 132:isr.c         ****         count = 255;
- 133:isr.c         **** 
- 134:isr.c         ****         if(retning)
- 135:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 136:isr.c         ****         else
- 137:isr.c         ****             PWM_duty_cycle_B_set(count);
- 138:isr.c         **** 	}
- 139:isr.c         **** 	if(data == 'e')
- 140:isr.c         **** 	{
- 141:isr.c         ****         if(count>=254)
- 142:isr.c         ****             count = 254;
- 143:isr.c         **** 
- 144:isr.c         ****         count = 0;
- 145:isr.c         **** 
- 146:isr.c         ****         if(retning)
- 147:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 148:isr.c         ****         else
- 149:isr.c         ****             PWM_duty_cycle_B_set(count);
- 150:isr.c         **** 	}	
- 151:isr.c         **** 	
- 152:isr.c         **** 	itoa(count, tempchar,10); 
- 156               		.stabn	68,0,153,.LM6-.LFBB1
- 157               	.LM6:
- 158 0076 8091 0000 		lds r24,count
- 159 007a 90E0      		ldi r25,lo8(0)
- 160 007c 8E01      		movw r16,r28
- 161 007e 0F5F      		subi r16,lo8(-(1))
- 162 0080 1F4F      		sbci r17,hi8(-(1))
- 163 0082 B801      		movw r22,r16
- 164 0084 4AE0      		ldi r20,lo8(10)
- 165 0086 50E0      		ldi r21,hi8(10)
- 166 0088 0E94 0000 		call itoa
- 153:isr.c         **** 	sendtekst(tempchar);
- 167               		.stabn	68,0,154,.LM7-.LFBB1
- 168               	.LM7:
- 169 008c C801      		movw r24,r16
- 170 008e 0E94 0000 		call sendtekst
- 154:isr.c         ****     sendtekst(";");
- 171               		.stabn	68,0,155,.LM8-.LFBB1
- 172               	.LM8:
- 173 0092 80E0      		ldi r24,lo8(.LC0)
- 174 0094 90E0      		ldi r25,hi8(.LC0)
- 175 0096 0E94 0000 		call sendtekst
- 155:isr.c         **** 	itoa(speed, tempchar,10); 
- 176               		.stabn	68,0,156,.LM9-.LFBB1
- 177               	.LM9:
- 178 009a 8091 0000 		lds r24,speed
- 179 009e 9091 0000 		lds r25,(speed)+1
- 180 00a2 B801      		movw r22,r16
- 181 00a4 4AE0      		ldi r20,lo8(10)
- 182 00a6 50E0      		ldi r21,hi8(10)
- 183 00a8 0E94 0000 		call itoa
- 156:isr.c         **** 	sendtekst(tempchar);
- 184               		.stabn	68,0,157,.LM10-.LFBB1
- 185               	.LM10:
-GAS LISTING /tmp/ccmypDSg.s 			page 7
+ 132:isr.c         ****     if(data == 'a')
+ 133:isr.c         ****     {
+ 134:isr.c         ****         count = 0;
+ 135:isr.c         ****         retning = 0;
+ 136:isr.c         ****         PWM_duty_cycle_A_set(0);
+ 137:isr.c         **** 	    PWM_duty_cycle_B_set(0);
+ 138:isr.c         ****     }
+ 139:isr.c         **** 
+ 140:isr.c         ****     if(data == 'd')
+ 141:isr.c         ****     {
+ 142:isr.c         ****         count = 0;
+ 143:isr.c         ****         retning = 1;
+ 144:isr.c         ****         PWM_duty_cycle_A_set(0);
+ 145:isr.c         **** 	    PWM_duty_cycle_B_set(0);
+ 146:isr.c         ****     }
+ 147:isr.c         **** 	
+ 148:isr.c         **** 	if(data == 'w')
+ 149:isr.c         **** 	{
+ 150:isr.c         ****         if(count>=254)
+ 151:isr.c         ****             count = 254;
+ 152:isr.c         **** 
+ 153:isr.c         ****         count++;
+ 154:isr.c         **** 
+ 155:isr.c         ****         if(retning)
+ 156:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 157:isr.c         ****         else
+ 158:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 159:isr.c         **** 	}	
+ 160:isr.c         **** 	if(data == 's')
+ 161:isr.c         **** 	{
+ 162:isr.c         ****         if(count<=1)
+ 163:isr.c         ****             count = 1;            
+ 164:isr.c         **** 
+ 165:isr.c         ****         count--;
+ 166:isr.c         ****         
+ 167:isr.c         ****         if(retning)        
+ 168:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 169:isr.c         ****         else
+ 170:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 171:isr.c         **** 	}
+ 172:isr.c         **** 	if(data == 'q')
+ 173:isr.c         **** 	{
+ 174:isr.c         ****         if(count>=254)
+ 175:isr.c         ****             count = 254;
+ 176:isr.c         **** 
+ 177:isr.c         ****         count = 255;
+ 178:isr.c         **** 
+ 179:isr.c         ****         if(retning)
+ 180:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 181:isr.c         ****         else
+ 182:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 183:isr.c         **** 	}
+ 184:isr.c         **** 	if(data == 'e')
+ 185:isr.c         **** 	{
+ 186:isr.c         ****         if(count>=254)
+GAS LISTING /tmp/ccJOFRKh.s 			page 8
 
 
- 186 00ac C801      		movw r24,r16
- 187 00ae 0E94 0000 		call sendtekst
- 157:isr.c         ****     sendtekst("\n\r");
- 188               		.stabn	68,0,158,.LM11-.LFBB1
- 189               	.LM11:
- 190 00b2 80E0      		ldi r24,lo8(.LC1)
- 191 00b4 90E0      		ldi r25,hi8(.LC1)
- 192 00b6 0E94 0000 		call sendtekst
- 193               	/* epilogue start */
- 158:isr.c         **** }
- 194               		.stabn	68,0,159,.LM12-.LFBB1
- 195               	.LM12:
- 196 00ba 0F90      		pop __tmp_reg__
- 197 00bc 0F90      		pop __tmp_reg__
- 198 00be 0F90      		pop __tmp_reg__
- 199 00c0 0F90      		pop __tmp_reg__
- 200 00c2 0F90      		pop __tmp_reg__
- 201 00c4 CF91      		pop r28
- 202 00c6 DF91      		pop r29
- 203 00c8 FF91      		pop r31
- 204 00ca EF91      		pop r30
- 205 00cc BF91      		pop r27
- 206 00ce AF91      		pop r26
- 207 00d0 9F91      		pop r25
- 208 00d2 8F91      		pop r24
- 209 00d4 7F91      		pop r23
- 210 00d6 6F91      		pop r22
- 211 00d8 5F91      		pop r21
- 212 00da 4F91      		pop r20
- 213 00dc 3F91      		pop r19
- 214 00de 2F91      		pop r18
- 215 00e0 1F91      		pop r17
- 216 00e2 0F91      		pop r16
- 217 00e4 0F90      		pop r0
- 218 00e6 0FBE      		out __SREG__,r0
- 219 00e8 0F90      		pop r0
- 220 00ea 1F90      		pop __zero_reg__
- 221 00ec 1895      		reti
- 222               	.L33:
-  37:isr.c         ****     ref--;
- 223               		.stabn	68,0,37,.LM13-.LFBB1
- 224               	.LM13:
- 225 00ee 8091 0000 		lds r24,ref
- 226 00f2 9091 0000 		lds r25,(ref)+1
- 227 00f6 0197      		sbiw r24,1
- 228 00f8 9093 0000 		sts (ref)+1,r25
- 229 00fc 8093 0000 		sts ref,r24
- 230 0100 00C0      		rjmp .L25
- 231               	.L32:
-  32:isr.c         ****     ref++;
- 232               		.stabn	68,0,32,.LM14-.LFBB1
- 233               	.LM14:
- 234 0102 8091 0000 		lds r24,ref
- 235 0106 9091 0000 		lds r25,(ref)+1
- 236 010a 0196      		adiw r24,1
- 237 010c 9093 0000 		sts (ref)+1,r25
- 238 0110 8093 0000 		sts ref,r24
-GAS LISTING /tmp/ccmypDSg.s 			page 8
+ 187:isr.c         ****             count = 254;
+ 188:isr.c         **** 
+ 189:isr.c         ****         count = 0;
+ 190:isr.c         **** 
+ 191:isr.c         ****         if(retning)
+ 192:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 193:isr.c         ****         else
+ 194:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 195:isr.c         **** 	}	
+ 196:isr.c         **** 	
+ 197:isr.c         **** 	itoa(count, tempchar,10); 
+ 213               		.stabn	68,0,198,.LM13-.LFBB2
+ 214               	.LM13:
+ 215 00c2 8091 0000 		lds r24,count
+ 216 00c6 90E0      		ldi r25,lo8(0)
+ 217 00c8 8E01      		movw r16,r28
+ 218 00ca 0F5F      		subi r16,lo8(-(1))
+ 219 00cc 1F4F      		sbci r17,hi8(-(1))
+ 220 00ce B801      		movw r22,r16
+ 221 00d0 4AE0      		ldi r20,lo8(10)
+ 222 00d2 50E0      		ldi r21,hi8(10)
+ 223 00d4 0E94 0000 		call itoa
+ 198:isr.c         **** 	sendtekst(tempchar);
+ 224               		.stabn	68,0,199,.LM14-.LFBB2
+ 225               	.LM14:
+ 226 00d8 C801      		movw r24,r16
+ 227 00da 0E94 0000 		call sendtekst
+ 199:isr.c         ****     sendtekst(";");
+ 228               		.stabn	68,0,200,.LM15-.LFBB2
+ 229               	.LM15:
+ 230 00de 80E0      		ldi r24,lo8(.LC0)
+ 231 00e0 90E0      		ldi r25,hi8(.LC0)
+ 232 00e2 0E94 0000 		call sendtekst
+ 200:isr.c         **** 	itoa(speed, tempchar,10); 
+ 233               		.stabn	68,0,201,.LM16-.LFBB2
+ 234               	.LM16:
+ 235 00e6 8091 0000 		lds r24,speed
+ 236 00ea 9091 0000 		lds r25,(speed)+1
+ 237 00ee B801      		movw r22,r16
+ 238 00f0 4AE0      		ldi r20,lo8(10)
+ 239 00f2 50E0      		ldi r21,hi8(10)
+ 240 00f4 0E94 0000 		call itoa
+ 201:isr.c         **** 	sendtekst(tempchar);
+ 241               		.stabn	68,0,202,.LM17-.LFBB2
+ 242               	.LM17:
+ 243 00f8 C801      		movw r24,r16
+ 244 00fa 0E94 0000 		call sendtekst
+ 202:isr.c         ****     sendtekst("\n\r");
+ 245               		.stabn	68,0,203,.LM18-.LFBB2
+ 246               	.LM18:
+ 247 00fe 80E0      		ldi r24,lo8(.LC1)
+ 248 0100 90E0      		ldi r25,hi8(.LC1)
+ 249 0102 0E94 0000 		call sendtekst
+ 250               	/* epilogue start */
+ 203:isr.c         **** }
+ 251               		.stabn	68,0,204,.LM19-.LFBB2
+ 252               	.LM19:
+GAS LISTING /tmp/ccJOFRKh.s 			page 9
 
 
- 239 0114 00C0      		rjmp .L25
- 240               	.L6:
-  45:isr.c         ****     if(data == 'j')
- 241               		.stabn	68,0,45,.LM15-.LFBB1
- 242               	.LM15:
- 243 0116 8A36      		cpi r24,lo8(106)
- 244 0118 01F4      		brne .L3
-  47:isr.c         ****     i = i-0.01;
- 245               		.stabn	68,0,47,.LM16-.LFBB1
- 246               	.LM16:
- 247 011a 6091 0000 		lds r22,i
- 248 011e 7091 0000 		lds r23,(i)+1
- 249 0122 8091 0000 		lds r24,(i)+2
- 250 0126 9091 0000 		lds r25,(i)+3
- 251 012a 2AE0      		ldi r18,lo8(0x3c23d70a)
- 252 012c 37ED      		ldi r19,hi8(0x3c23d70a)
- 253 012e 43E2      		ldi r20,hlo8(0x3c23d70a)
- 254 0130 5CE3      		ldi r21,hhi8(0x3c23d70a)
- 255 0132 0E94 0000 		call __subsf3
- 256 0136 6093 0000 		sts i,r22
- 257 013a 7093 0000 		sts (i)+1,r23
- 258 013e 8093 0000 		sts (i)+2,r24
- 259 0142 9093 0000 		sts (i)+3,r25
- 260 0146 00C0      		rjmp .L25
- 261               	.L3:
-  50:isr.c         ****     if(data == 'p')
- 262               		.stabn	68,0,50,.LM17-.LFBB1
- 263               	.LM17:
- 264 0148 8037      		cpi r24,lo8(112)
- 265 014a 01F4      		brne .L5
-  52:isr.c         ****     p++;
- 266               		.stabn	68,0,52,.LM18-.LFBB1
- 267               	.LM18:
- 268 014c 8091 0000 		lds r24,p
- 269 0150 9091 0000 		lds r25,(p)+1
- 270 0154 0196      		adiw r24,1
- 271 0156 9093 0000 		sts (p)+1,r25
- 272 015a 8093 0000 		sts p,r24
- 273 015e 00C0      		rjmp .L25
- 274               	.L5:
-  55:isr.c         ****     if(data == 'l')
- 275               		.stabn	68,0,55,.LM19-.LFBB1
- 276               	.LM19:
- 277 0160 8C36      		cpi r24,lo8(108)
- 278 0162 01F4      		brne .L7
-  57:isr.c         ****     p--;
- 279               		.stabn	68,0,57,.LM20-.LFBB1
- 280               	.LM20:
- 281 0164 8091 0000 		lds r24,p
- 282 0168 9091 0000 		lds r25,(p)+1
- 283 016c 0197      		sbiw r24,1
- 284 016e 9093 0000 		sts (p)+1,r25
- 285 0172 8093 0000 		sts p,r24
- 286 0176 00C0      		rjmp .L25
- 287               	.L7:
-  60:isr.c         ****     if(data == 'c')
- 288               		.stabn	68,0,60,.LM21-.LFBB1
-GAS LISTING /tmp/ccmypDSg.s 			page 9
+ 253 0106 0F90      		pop __tmp_reg__
+ 254 0108 0F90      		pop __tmp_reg__
+ 255 010a 0F90      		pop __tmp_reg__
+ 256 010c 0F90      		pop __tmp_reg__
+ 257 010e 0F90      		pop __tmp_reg__
+ 258 0110 CF91      		pop r28
+ 259 0112 DF91      		pop r29
+ 260 0114 FF91      		pop r31
+ 261 0116 EF91      		pop r30
+ 262 0118 BF91      		pop r27
+ 263 011a AF91      		pop r26
+ 264 011c 9F91      		pop r25
+ 265 011e 8F91      		pop r24
+ 266 0120 7F91      		pop r23
+ 267 0122 6F91      		pop r22
+ 268 0124 5F91      		pop r21
+ 269 0126 4F91      		pop r20
+ 270 0128 3F91      		pop r19
+ 271 012a 2F91      		pop r18
+ 272 012c 1F91      		pop r17
+ 273 012e 0F91      		pop r16
+ 274 0130 0F90      		pop r0
+ 275 0132 0FBE      		out __SREG__,r0
+ 276 0134 0F90      		pop r0
+ 277 0136 1F90      		pop __zero_reg__
+ 278 0138 1895      		reti
+ 279               	.L36:
+  82:isr.c         ****     ref--;
+ 280               		.stabn	68,0,82,.LM20-.LFBB2
+ 281               	.LM20:
+ 282 013a 8091 0000 		lds r24,ref
+ 283 013e 9091 0000 		lds r25,(ref)+1
+ 284 0142 0197      		sbiw r24,1
+ 285 0144 9093 0000 		sts (ref)+1,r25
+ 286 0148 8093 0000 		sts ref,r24
+ 287 014c 00C0      		rjmp .L29
+ 288               	.L35:
+  77:isr.c         ****     ref++;
+ 289               		.stabn	68,0,77,.LM21-.LFBB2
+ 290               	.LM21:
+ 291 014e 8091 0000 		lds r24,ref
+ 292 0152 9091 0000 		lds r25,(ref)+1
+ 293 0156 0196      		adiw r24,1
+ 294 0158 9093 0000 		sts (ref)+1,r25
+ 295 015c 8093 0000 		sts ref,r24
+ 296 0160 00C0      		rjmp .L29
+ 297               	.L10:
+  90:isr.c         ****     if(data == 'j')
+ 298               		.stabn	68,0,90,.LM22-.LFBB2
+ 299               	.LM22:
+ 300 0162 8A36      		cpi r24,lo8(106)
+ 301 0164 01F4      		brne .L7
+  92:isr.c         ****     i = i-0.01;
+ 302               		.stabn	68,0,92,.LM23-.LFBB2
+ 303               	.LM23:
+ 304 0166 6091 0000 		lds r22,i
+ 305 016a 7091 0000 		lds r23,(i)+1
+GAS LISTING /tmp/ccJOFRKh.s 			page 10
 
 
- 289               	.LM21:
- 290 0178 8336      		cpi r24,lo8(99)
- 291 017a 01F4      		brne .L8
-  62:isr.c         ****     PWM_duty_cycle_A16_set(0);
- 292               		.stabn	68,0,62,.LM22-.LFBB1
- 293               	.LM22:
- 294 017c 80E0      		ldi r24,lo8(0)
- 295 017e 90E0      		ldi r25,hi8(0)
- 296 0180 0E94 0000 		call PWM_duty_cycle_A16_set
- 297 0184 00C0      		rjmp .L25
- 298               	.L8:
-  65:isr.c         ****     if(data == 'v')
- 299               		.stabn	68,0,65,.LM23-.LFBB1
- 300               	.LM23:
- 301 0186 8637      		cpi r24,lo8(118)
- 302 0188 01F4      		brne .L9
-  67:isr.c         ****     PWM_duty_cycle_A16_set(1023);
- 303               		.stabn	68,0,67,.LM24-.LFBB1
- 304               	.LM24:
- 305 018a 8FEF      		ldi r24,lo8(1023)
- 306 018c 93E0      		ldi r25,hi8(1023)
- 307 018e 0E94 0000 		call PWM_duty_cycle_A16_set
- 308 0192 00C0      		rjmp .L25
- 309               	.L9:
-  70:isr.c         ****     if(data == 'o')
- 310               		.stabn	68,0,70,.LM25-.LFBB1
- 311               	.LM25:
- 312 0194 8F36      		cpi r24,lo8(111)
- 313 0196 01F4      		brne .L10
-  72:isr.c         ****         speed = speed + 16;
- 314               		.stabn	68,0,72,.LM26-.LFBB1
- 315               	.LM26:
- 316 0198 8091 0000 		lds r24,speed
- 317 019c 9091 0000 		lds r25,(speed)+1
- 318 01a0 4096      		adiw r24,16
- 319 01a2 9093 0000 		sts (speed)+1,r25
- 320 01a6 8093 0000 		sts speed,r24
-  74:isr.c         ****         if(speed>=1023)
- 321               		.stabn	68,0,74,.LM27-.LFBB1
- 322               	.LM27:
- 323 01aa 23E0      		ldi r18,hi8(1023)
- 324 01ac 8F3F      		cpi r24,lo8(1023)
- 325 01ae 9207      		cpc r25,r18
- 326 01b0 00F0      		brlo .L29
-  75:isr.c         ****             speed = 1023;
- 327               		.stabn	68,0,75,.LM28-.LFBB1
- 328               	.LM28:
- 329 01b2 8FEF      		ldi r24,lo8(1023)
- 330 01b4 93E0      		ldi r25,hi8(1023)
- 331 01b6 9093 0000 		sts (speed)+1,r25
- 332 01ba 8093 0000 		sts speed,r24
- 333               	.L29:
-  85:isr.c         ****     PWM_duty_cycle_A16_set(speed);
- 334               		.stabn	68,0,85,.LM29-.LFBB1
- 335               	.LM29:
- 336 01be 0E94 0000 		call PWM_duty_cycle_A16_set
- 337 01c2 00C0      		rjmp .L25
-GAS LISTING /tmp/ccmypDSg.s 			page 10
+ 306 016e 8091 0000 		lds r24,(i)+2
+ 307 0172 9091 0000 		lds r25,(i)+3
+ 308 0176 2AE0      		ldi r18,lo8(0x3c23d70a)
+ 309 0178 37ED      		ldi r19,hi8(0x3c23d70a)
+ 310 017a 43E2      		ldi r20,hlo8(0x3c23d70a)
+ 311 017c 5CE3      		ldi r21,hhi8(0x3c23d70a)
+ 312 017e 0E94 0000 		call __subsf3
+ 313 0182 6093 0000 		sts i,r22
+ 314 0186 7093 0000 		sts (i)+1,r23
+ 315 018a 8093 0000 		sts (i)+2,r24
+ 316 018e 9093 0000 		sts (i)+3,r25
+ 317 0192 00C0      		rjmp .L29
+ 318               	.L7:
+  95:isr.c         ****     if(data == 'p')
+ 319               		.stabn	68,0,95,.LM24-.LFBB2
+ 320               	.LM24:
+ 321 0194 8037      		cpi r24,lo8(112)
+ 322 0196 01F4      		brne .L9
+  97:isr.c         ****     p++;
+ 323               		.stabn	68,0,97,.LM25-.LFBB2
+ 324               	.LM25:
+ 325 0198 8091 0000 		lds r24,p
+ 326 019c 9091 0000 		lds r25,(p)+1
+ 327 01a0 0196      		adiw r24,1
+ 328 01a2 9093 0000 		sts (p)+1,r25
+ 329 01a6 8093 0000 		sts p,r24
+ 330 01aa 00C0      		rjmp .L29
+ 331               	.L9:
+ 100:isr.c         ****     if(data == 'l')
+ 332               		.stabn	68,0,100,.LM26-.LFBB2
+ 333               	.LM26:
+ 334 01ac 8C36      		cpi r24,lo8(108)
+ 335 01ae 01F4      		brne .L11
+ 102:isr.c         ****     p--;
+ 336               		.stabn	68,0,102,.LM27-.LFBB2
+ 337               	.LM27:
+ 338 01b0 8091 0000 		lds r24,p
+ 339 01b4 9091 0000 		lds r25,(p)+1
+ 340 01b8 0197      		sbiw r24,1
+ 341 01ba 9093 0000 		sts (p)+1,r25
+ 342 01be 8093 0000 		sts p,r24
+ 343 01c2 00C0      		rjmp .L29
+ 344               	.L11:
+ 105:isr.c         ****     if(data == 'c')
+ 345               		.stabn	68,0,105,.LM28-.LFBB2
+ 346               	.LM28:
+ 347 01c4 8336      		cpi r24,lo8(99)
+ 348 01c6 01F4      		brne .L12
+ 107:isr.c         ****     PWM_duty_cycle_A16_set(0);
+ 349               		.stabn	68,0,107,.LM29-.LFBB2
+ 350               	.LM29:
+ 351 01c8 80E0      		ldi r24,lo8(0)
+ 352 01ca 90E0      		ldi r25,hi8(0)
+ 353 01cc 0E94 0000 		call PWM_duty_cycle_A16_set
+ 354 01d0 00C0      		rjmp .L29
+ 355               	.L12:
+ 110:isr.c         ****     if(data == 'v')
+GAS LISTING /tmp/ccJOFRKh.s 			page 11
 
 
- 338               	.L10:
-  79:isr.c         ****     if(data == 'n')
- 339               		.stabn	68,0,79,.LM30-.LFBB1
- 340               	.LM30:
- 341 01c4 8E36      		cpi r24,lo8(110)
- 342 01c6 01F4      		brne .L11
-  81:isr.c         ****         if(speed<16)
- 343               		.stabn	68,0,81,.LM31-.LFBB1
- 344               	.LM31:
- 345 01c8 8091 0000 		lds r24,speed
- 346 01cc 9091 0000 		lds r25,(speed)+1
- 347 01d0 8031      		cpi r24,16
- 348 01d2 9105      		cpc r25,__zero_reg__
- 349 01d4 00F4      		brsh .L15
- 350 01d6 80E1      		ldi r24,lo8(16)
- 351 01d8 90E0      		ldi r25,hi8(16)
- 352               	.L15:
-  84:isr.c         ****     speed = speed - 16;
- 353               		.stabn	68,0,84,.LM32-.LFBB1
- 354               	.LM32:
- 355 01da 4097      		sbiw r24,16
- 356 01dc 9093 0000 		sts (speed)+1,r25
- 357 01e0 8093 0000 		sts speed,r24
- 358 01e4 00C0      		rjmp .L29
- 359               	.L11:
-  88:isr.c         ****     if(data == 'a')
- 360               		.stabn	68,0,88,.LM33-.LFBB1
- 361               	.LM33:
- 362 01e6 8136      		cpi r24,lo8(97)
- 363 01e8 01F4      		brne .L12
-  90:isr.c         ****         count = 0;
- 364               		.stabn	68,0,90,.LM34-.LFBB1
- 365               	.LM34:
- 366 01ea 1092 0000 		sts count,__zero_reg__
-  91:isr.c         ****         retning = 0;
- 367               		.stabn	68,0,91,.LM35-.LFBB1
- 368               	.LM35:
- 369 01ee 1092 0000 		sts retning,__zero_reg__
-  92:isr.c         ****         PWM_duty_cycle_A_set(0);
- 370               		.stabn	68,0,92,.LM36-.LFBB1
- 371               	.LM36:
- 372 01f2 80E0      		ldi r24,lo8(0)
- 373 01f4 90E0      		ldi r25,hi8(0)
- 374 01f6 0E94 0000 		call PWM_duty_cycle_A_set
-  93:isr.c         **** 	    PWM_duty_cycle_B_set(0);
- 375               		.stabn	68,0,93,.LM37-.LFBB1
- 376               	.LM37:
- 377 01fa 80E0      		ldi r24,lo8(0)
- 378 01fc 90E0      		ldi r25,hi8(0)
- 379 01fe 0E94 0000 		call PWM_duty_cycle_B_set
- 380 0202 00C0      		rjmp .L25
- 381               	.L12:
-  96:isr.c         ****     if(data == 'd')
- 382               		.stabn	68,0,96,.LM38-.LFBB1
- 383               	.LM38:
- 384 0204 8436      		cpi r24,lo8(100)
- 385 0206 01F4      		brne .L14
-GAS LISTING /tmp/ccmypDSg.s 			page 11
+ 356               		.stabn	68,0,110,.LM30-.LFBB2
+ 357               	.LM30:
+ 358 01d2 8637      		cpi r24,lo8(118)
+ 359 01d4 01F4      		brne .L13
+ 112:isr.c         ****     PWM_duty_cycle_A16_set(1023);
+ 360               		.stabn	68,0,112,.LM31-.LFBB2
+ 361               	.LM31:
+ 362 01d6 8FEF      		ldi r24,lo8(1023)
+ 363 01d8 93E0      		ldi r25,hi8(1023)
+ 364 01da 0E94 0000 		call PWM_duty_cycle_A16_set
+ 365 01de 00C0      		rjmp .L29
+ 366               	.L13:
+ 115:isr.c         ****     if(data == 'o')
+ 367               		.stabn	68,0,115,.LM32-.LFBB2
+ 368               	.LM32:
+ 369 01e0 8F36      		cpi r24,lo8(111)
+ 370 01e2 01F4      		brne .L14
+ 117:isr.c         ****         speed = speed + 16;
+ 371               		.stabn	68,0,117,.LM33-.LFBB2
+ 372               	.LM33:
+ 373 01e4 8091 0000 		lds r24,speed
+ 374 01e8 9091 0000 		lds r25,(speed)+1
+ 375 01ec 4096      		adiw r24,16
+ 376 01ee 9093 0000 		sts (speed)+1,r25
+ 377 01f2 8093 0000 		sts speed,r24
+ 119:isr.c         ****         if(speed>=1023)
+ 378               		.stabn	68,0,119,.LM34-.LFBB2
+ 379               	.LM34:
+ 380 01f6 23E0      		ldi r18,hi8(1023)
+ 381 01f8 8F3F      		cpi r24,lo8(1023)
+ 382 01fa 9207      		cpc r25,r18
+ 383 01fc 00F0      		brlo .L33
+ 120:isr.c         ****             speed = 1023;
+ 384               		.stabn	68,0,120,.LM35-.LFBB2
+ 385               	.LM35:
+ 386 01fe 8FEF      		ldi r24,lo8(1023)
+ 387 0200 93E0      		ldi r25,hi8(1023)
+ 388 0202 9093 0000 		sts (speed)+1,r25
+ 389 0206 8093 0000 		sts speed,r24
+ 390               	.L33:
+ 130:isr.c         ****     PWM_duty_cycle_A16_set(speed);
+ 391               		.stabn	68,0,130,.LM36-.LFBB2
+ 392               	.LM36:
+ 393 020a 0E94 0000 		call PWM_duty_cycle_A16_set
+ 394 020e 00C0      		rjmp .L29
+ 395               	.L14:
+ 124:isr.c         ****     if(data == 'n')
+ 396               		.stabn	68,0,124,.LM37-.LFBB2
+ 397               	.LM37:
+ 398 0210 8E36      		cpi r24,lo8(110)
+ 399 0212 01F4      		brne .L15
+ 126:isr.c         ****         if(speed<16)
+ 400               		.stabn	68,0,126,.LM38-.LFBB2
+ 401               	.LM38:
+ 402 0214 8091 0000 		lds r24,speed
+ 403 0218 9091 0000 		lds r25,(speed)+1
+ 404 021c 8031      		cpi r24,16
+GAS LISTING /tmp/ccJOFRKh.s 			page 12
 
 
-  98:isr.c         ****         count = 0;
- 386               		.stabn	68,0,98,.LM39-.LFBB1
- 387               	.LM39:
- 388 0208 1092 0000 		sts count,__zero_reg__
-  99:isr.c         ****         retning = 1;
- 389               		.stabn	68,0,99,.LM40-.LFBB1
- 390               	.LM40:
- 391 020c 81E0      		ldi r24,lo8(1)
- 392 020e 8093 0000 		sts retning,r24
- 100:isr.c         ****         PWM_duty_cycle_A_set(0);
- 393               		.stabn	68,0,100,.LM41-.LFBB1
- 394               	.LM41:
- 395 0212 80E0      		ldi r24,lo8(0)
- 396 0214 90E0      		ldi r25,hi8(0)
- 397 0216 0E94 0000 		call PWM_duty_cycle_A_set
- 101:isr.c         **** 	    PWM_duty_cycle_B_set(0);
- 398               		.stabn	68,0,101,.LM42-.LFBB1
- 399               	.LM42:
- 400 021a 80E0      		ldi r24,lo8(0)
- 401 021c 90E0      		ldi r25,hi8(0)
- 402 021e 0E94 0000 		call PWM_duty_cycle_B_set
- 403 0222 00C0      		rjmp .L25
- 404               	.L14:
- 104:isr.c         **** 	if(data == 'w')
- 405               		.stabn	68,0,104,.LM43-.LFBB1
- 406               	.LM43:
- 407 0224 8737      		cpi r24,lo8(119)
- 408 0226 01F4      		brne .L16
- 106:isr.c         ****         if(count>=254)
- 409               		.stabn	68,0,106,.LM44-.LFBB1
- 410               	.LM44:
- 411 0228 8091 0000 		lds r24,count
- 412 022c 8E3F      		cpi r24,lo8(-2)
- 413 022e 00F0      		brlo .L19
- 414 0230 8EEF      		ldi r24,lo8(-2)
- 415               	.L19:
- 109:isr.c         ****         count++;
- 416               		.stabn	68,0,109,.LM45-.LFBB1
- 417               	.LM45:
- 418 0232 982F      		mov r25,r24
- 419 0234 9F5F      		subi r25,lo8(-(1))
- 420 0236 9093 0000 		sts count,r25
- 111:isr.c         ****         if(retning)
- 421               		.stabn	68,0,111,.LM46-.LFBB1
- 422               	.LM46:
- 423 023a 8091 0000 		lds r24,retning
- 424 023e 8823      		tst r24
- 425 0240 01F0      		breq .L22
- 426               	.L30:
- 124:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 427               		.stabn	68,0,124,.LM47-.LFBB1
- 428               	.LM47:
- 429 0242 892F      		mov r24,r25
- 430 0244 90E0      		ldi r25,lo8(0)
- 431 0246 0E94 0000 		call PWM_duty_cycle_A_set
- 432 024a 00C0      		rjmp .L25
- 433               	.L16:
-GAS LISTING /tmp/ccmypDSg.s 			page 12
+ 405 021e 9105      		cpc r25,__zero_reg__
+ 406 0220 00F4      		brsh .L19
+ 407 0222 80E1      		ldi r24,lo8(16)
+ 408 0224 90E0      		ldi r25,hi8(16)
+ 409               	.L19:
+ 129:isr.c         ****     speed = speed - 16;
+ 410               		.stabn	68,0,129,.LM39-.LFBB2
+ 411               	.LM39:
+ 412 0226 4097      		sbiw r24,16
+ 413 0228 9093 0000 		sts (speed)+1,r25
+ 414 022c 8093 0000 		sts speed,r24
+ 415 0230 00C0      		rjmp .L33
+ 416               	.L15:
+ 133:isr.c         ****     if(data == 'a')
+ 417               		.stabn	68,0,133,.LM40-.LFBB2
+ 418               	.LM40:
+ 419 0232 8136      		cpi r24,lo8(97)
+ 420 0234 01F4      		brne .L16
+ 135:isr.c         ****         count = 0;
+ 421               		.stabn	68,0,135,.LM41-.LFBB2
+ 422               	.LM41:
+ 423 0236 1092 0000 		sts count,__zero_reg__
+ 136:isr.c         ****         retning = 0;
+ 424               		.stabn	68,0,136,.LM42-.LFBB2
+ 425               	.LM42:
+ 426 023a 1092 0000 		sts retning,__zero_reg__
+ 137:isr.c         ****         PWM_duty_cycle_A_set(0);
+ 427               		.stabn	68,0,137,.LM43-.LFBB2
+ 428               	.LM43:
+ 429 023e 80E0      		ldi r24,lo8(0)
+ 430 0240 90E0      		ldi r25,hi8(0)
+ 431 0242 0E94 0000 		call PWM_duty_cycle_A_set
+ 138:isr.c         **** 	    PWM_duty_cycle_B_set(0);
+ 432               		.stabn	68,0,138,.LM44-.LFBB2
+ 433               	.LM44:
+ 434 0246 80E0      		ldi r24,lo8(0)
+ 435 0248 90E0      		ldi r25,hi8(0)
+ 436 024a 0E94 0000 		call PWM_duty_cycle_B_set
+ 437 024e 00C0      		rjmp .L29
+ 438               	.L16:
+ 141:isr.c         ****     if(data == 'd')
+ 439               		.stabn	68,0,141,.LM45-.LFBB2
+ 440               	.LM45:
+ 441 0250 8436      		cpi r24,lo8(100)
+ 442 0252 01F4      		brne .L18
+ 143:isr.c         ****         count = 0;
+ 443               		.stabn	68,0,143,.LM46-.LFBB2
+ 444               	.LM46:
+ 445 0254 1092 0000 		sts count,__zero_reg__
+ 144:isr.c         ****         retning = 1;
+ 446               		.stabn	68,0,144,.LM47-.LFBB2
+ 447               	.LM47:
+ 448 0258 81E0      		ldi r24,lo8(1)
+ 449 025a 8093 0000 		sts retning,r24
+ 145:isr.c         ****         PWM_duty_cycle_A_set(0);
+ 450               		.stabn	68,0,145,.LM48-.LFBB2
+ 451               	.LM48:
+GAS LISTING /tmp/ccJOFRKh.s 			page 13
 
 
- 116:isr.c         **** 	if(data == 's')
- 434               		.stabn	68,0,116,.LM48-.LFBB1
- 435               	.LM48:
- 436 024c 8337      		cpi r24,lo8(115)
- 437 024e 01F0      		breq .L34
- 128:isr.c         **** 	if(data == 'q')
- 438               		.stabn	68,0,128,.LM49-.LFBB1
- 439               	.LM49:
- 440 0250 8137      		cpi r24,lo8(113)
- 441 0252 01F0      		breq .L35
- 140:isr.c         **** 	if(data == 'e')
- 442               		.stabn	68,0,140,.LM50-.LFBB1
- 443               	.LM50:
- 444 0254 8536      		cpi r24,lo8(101)
- 445 0256 01F0      		breq .+2
- 446 0258 00C0      		rjmp .L25
- 145:isr.c         ****         count = 0;
- 447               		.stabn	68,0,145,.LM51-.LFBB1
- 448               	.LM51:
- 449 025a 1092 0000 		sts count,__zero_reg__
- 147:isr.c         ****         if(retning)
- 450               		.stabn	68,0,147,.LM52-.LFBB1
- 451               	.LM52:
- 452 025e 8091 0000 		lds r24,retning
- 453 0262 8823      		tst r24
- 454 0264 01F4      		brne .L36
- 150:isr.c         ****             PWM_duty_cycle_B_set(count);
- 455               		.stabn	68,0,150,.LM53-.LFBB1
- 456               	.LM53:
+ 452 025e 80E0      		ldi r24,lo8(0)
+ 453 0260 90E0      		ldi r25,hi8(0)
+ 454 0262 0E94 0000 		call PWM_duty_cycle_A_set
+ 146:isr.c         **** 	    PWM_duty_cycle_B_set(0);
+ 455               		.stabn	68,0,146,.LM49-.LFBB2
+ 456               	.LM49:
  457 0266 80E0      		ldi r24,lo8(0)
  458 0268 90E0      		ldi r25,hi8(0)
  459 026a 0E94 0000 		call PWM_duty_cycle_B_set
- 460 026e 00C0      		rjmp .L25
- 461               	.L34:
- 118:isr.c         ****         if(count<=1)
- 462               		.stabn	68,0,118,.LM54-.LFBB1
- 463               	.LM54:
- 464 0270 8091 0000 		lds r24,count
- 465 0274 8230      		cpi r24,lo8(2)
- 466 0276 00F0      		brlo .L37
- 467               	.L21:
- 121:isr.c         ****         count--;
- 468               		.stabn	68,0,121,.LM55-.LFBB1
- 469               	.LM55:
- 470 0278 982F      		mov r25,r24
- 471 027a 9150      		subi r25,lo8(-(-1))
- 472 027c 9093 0000 		sts count,r25
- 123:isr.c         ****         if(retning)        
- 473               		.stabn	68,0,123,.LM56-.LFBB1
- 474               	.LM56:
- 475 0280 8091 0000 		lds r24,retning
- 476 0284 8823      		tst r24
- 477 0286 01F4      		brne .L30
- 478               	.L22:
- 126:isr.c         ****             PWM_duty_cycle_B_set(count);
- 479               		.stabn	68,0,126,.LM57-.LFBB1
- 480               	.LM57:
-GAS LISTING /tmp/ccmypDSg.s 			page 13
+ 460 026e 00C0      		rjmp .L29
+ 461               	.L18:
+ 149:isr.c         **** 	if(data == 'w')
+ 462               		.stabn	68,0,149,.LM50-.LFBB2
+ 463               	.LM50:
+ 464 0270 8737      		cpi r24,lo8(119)
+ 465 0272 01F4      		brne .L20
+ 151:isr.c         ****         if(count>=254)
+ 466               		.stabn	68,0,151,.LM51-.LFBB2
+ 467               	.LM51:
+ 468 0274 8091 0000 		lds r24,count
+ 469 0278 8E3F      		cpi r24,lo8(-2)
+ 470 027a 00F0      		brlo .L23
+ 471 027c 8EEF      		ldi r24,lo8(-2)
+ 472               	.L23:
+ 154:isr.c         ****         count++;
+ 473               		.stabn	68,0,154,.LM52-.LFBB2
+ 474               	.LM52:
+ 475 027e 982F      		mov r25,r24
+ 476 0280 9F5F      		subi r25,lo8(-(1))
+ 477 0282 9093 0000 		sts count,r25
+ 156:isr.c         ****         if(retning)
+ 478               		.stabn	68,0,156,.LM53-.LFBB2
+ 479               	.LM53:
+ 480 0286 8091 0000 		lds r24,retning
+ 481 028a 8823      		tst r24
+ 482 028c 01F0      		breq .L26
+ 483               	.L34:
+ 169:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 484               		.stabn	68,0,169,.LM54-.LFBB2
+ 485               	.LM54:
+ 486 028e 892F      		mov r24,r25
+ 487 0290 90E0      		ldi r25,lo8(0)
+ 488 0292 0E94 0000 		call PWM_duty_cycle_A_set
+ 489 0296 00C0      		rjmp .L29
+ 490               	.L20:
+ 161:isr.c         **** 	if(data == 's')
+ 491               		.stabn	68,0,161,.LM55-.LFBB2
+ 492               	.LM55:
+ 493 0298 8337      		cpi r24,lo8(115)
+ 494 029a 01F0      		breq .L37
+ 173:isr.c         **** 	if(data == 'q')
+ 495               		.stabn	68,0,173,.LM56-.LFBB2
+ 496               	.LM56:
+ 497 029c 8137      		cpi r24,lo8(113)
+ 498 029e 01F0      		breq .L38
+ 185:isr.c         **** 	if(data == 'e')
+ 499               		.stabn	68,0,185,.LM57-.LFBB2
+GAS LISTING /tmp/ccJOFRKh.s 			page 14
 
 
- 481 0288 892F      		mov r24,r25
- 482 028a 90E0      		ldi r25,lo8(0)
- 483 028c 0E94 0000 		call PWM_duty_cycle_B_set
- 484 0290 00C0      		rjmp .L25
- 485               	.L35:
- 133:isr.c         ****         count = 255;
- 486               		.stabn	68,0,133,.LM58-.LFBB1
- 487               	.LM58:
- 488 0292 8FEF      		ldi r24,lo8(-1)
- 489 0294 8093 0000 		sts count,r24
- 135:isr.c         ****         if(retning)
- 490               		.stabn	68,0,135,.LM59-.LFBB1
- 491               	.LM59:
- 492 0298 8091 0000 		lds r24,retning
- 493 029c 8823      		tst r24
- 494 029e 01F0      		breq .L24
- 136:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 495               		.stabn	68,0,136,.LM60-.LFBB1
- 496               	.LM60:
- 497 02a0 8FEF      		ldi r24,lo8(255)
- 498 02a2 90E0      		ldi r25,hi8(255)
- 499 02a4 0E94 0000 		call PWM_duty_cycle_A_set
- 500 02a8 00C0      		rjmp .L25
- 501               	.L36:
- 148:isr.c         **** 		    PWM_duty_cycle_A_set(count);
- 502               		.stabn	68,0,148,.LM61-.LFBB1
- 503               	.LM61:
- 504 02aa 80E0      		ldi r24,lo8(0)
- 505 02ac 90E0      		ldi r25,hi8(0)
- 506 02ae 0E94 0000 		call PWM_duty_cycle_A_set
- 507 02b2 00C0      		rjmp .L25
- 508               	.L24:
- 138:isr.c         ****             PWM_duty_cycle_B_set(count);
- 509               		.stabn	68,0,138,.LM62-.LFBB1
- 510               	.LM62:
- 511 02b4 8FEF      		ldi r24,lo8(255)
- 512 02b6 90E0      		ldi r25,hi8(255)
- 513 02b8 0E94 0000 		call PWM_duty_cycle_B_set
- 514 02bc 00C0      		rjmp .L25
- 515               	.L37:
- 516 02be 81E0      		ldi r24,lo8(1)
- 517 02c0 00C0      		rjmp .L21
- 518               		.size	__vector_20, .-__vector_20
- 519               		.stabs	"data:r(0,2)",64,0,26,24
- 520               		.stabs	"tempchar:(0,16)=ar(0,17)=r(0,17);0;0177777;;0;4;(0,2)",128,0,27,1
- 521               		.stabn	192,0,0,.LFBB1-.LFBB1
- 522               		.stabn	224,0,0,.Lscope1-.LFBB1
- 523               	.Lscope1:
- 524               		.stabs	"",36,0,0,.Lscope1-.LFBB1
- 525               		.stabd	78,0,0
- 526               	.global	count
- 527               	.global	count
- 528               		.section .bss
- 529               		.type	count, @object
- 530               		.size	count, 1
- 531               	count:
- 532 0000 00        		.skip 1,0
-GAS LISTING /tmp/ccmypDSg.s 			page 14
+ 500               	.LM57:
+ 501 02a0 8536      		cpi r24,lo8(101)
+ 502 02a2 01F0      		breq .+2
+ 503 02a4 00C0      		rjmp .L29
+ 190:isr.c         ****         count = 0;
+ 504               		.stabn	68,0,190,.LM58-.LFBB2
+ 505               	.LM58:
+ 506 02a6 1092 0000 		sts count,__zero_reg__
+ 192:isr.c         ****         if(retning)
+ 507               		.stabn	68,0,192,.LM59-.LFBB2
+ 508               	.LM59:
+ 509 02aa 8091 0000 		lds r24,retning
+ 510 02ae 8823      		tst r24
+ 511 02b0 01F4      		brne .L39
+ 195:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 512               		.stabn	68,0,195,.LM60-.LFBB2
+ 513               	.LM60:
+ 514 02b2 80E0      		ldi r24,lo8(0)
+ 515 02b4 90E0      		ldi r25,hi8(0)
+ 516 02b6 0E94 0000 		call PWM_duty_cycle_B_set
+ 517 02ba 00C0      		rjmp .L29
+ 518               	.L37:
+ 163:isr.c         ****         if(count<=1)
+ 519               		.stabn	68,0,163,.LM61-.LFBB2
+ 520               	.LM61:
+ 521 02bc 8091 0000 		lds r24,count
+ 522 02c0 8230      		cpi r24,lo8(2)
+ 523 02c2 00F0      		brlo .L40
+ 524               	.L25:
+ 166:isr.c         ****         count--;
+ 525               		.stabn	68,0,166,.LM62-.LFBB2
+ 526               	.LM62:
+ 527 02c4 982F      		mov r25,r24
+ 528 02c6 9150      		subi r25,lo8(-(-1))
+ 529 02c8 9093 0000 		sts count,r25
+ 168:isr.c         ****         if(retning)        
+ 530               		.stabn	68,0,168,.LM63-.LFBB2
+ 531               	.LM63:
+ 532 02cc 8091 0000 		lds r24,retning
+ 533 02d0 8823      		tst r24
+ 534 02d2 01F4      		brne .L34
+ 535               	.L26:
+ 171:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 536               		.stabn	68,0,171,.LM64-.LFBB2
+ 537               	.LM64:
+ 538 02d4 892F      		mov r24,r25
+ 539 02d6 90E0      		ldi r25,lo8(0)
+ 540 02d8 0E94 0000 		call PWM_duty_cycle_B_set
+ 541 02dc 00C0      		rjmp .L29
+ 542               	.L38:
+ 178:isr.c         ****         count = 255;
+ 543               		.stabn	68,0,178,.LM65-.LFBB2
+ 544               	.LM65:
+ 545 02de 8FEF      		ldi r24,lo8(-1)
+ 546 02e0 8093 0000 		sts count,r24
+ 180:isr.c         ****         if(retning)
+ 547               		.stabn	68,0,180,.LM66-.LFBB2
+GAS LISTING /tmp/ccJOFRKh.s 			page 15
 
 
- 533               	.global	retning
- 534               	.global	retning
- 535               		.type	retning, @object
- 536               		.size	retning, 1
- 537               	retning:
- 538 0001 00        		.skip 1,0
- 539               	.global	speed
- 540               	.global	speed
- 541               		.type	speed, @object
- 542               		.size	speed, 2
- 543               	speed:
- 544 0002 0000      		.skip 2,0
- 545               		.stabs	"count:G(0,2)",32,0,15,0
- 546               		.stabs	"retning:G(0,2)",32,0,16,0
- 547               		.stabs	"speed:G(0,4)",32,0,17,0
- 548               		.text
- 549               		.stabs	"",100,0,0,.Letext0
- 550               	.Letext0:
-GAS LISTING /tmp/ccmypDSg.s 			page 15
+ 548               	.LM66:
+ 549 02e4 8091 0000 		lds r24,retning
+ 550 02e8 8823      		tst r24
+ 551 02ea 01F0      		breq .L28
+ 181:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 552               		.stabn	68,0,181,.LM67-.LFBB2
+ 553               	.LM67:
+ 554 02ec 8FEF      		ldi r24,lo8(255)
+ 555 02ee 90E0      		ldi r25,hi8(255)
+ 556 02f0 0E94 0000 		call PWM_duty_cycle_A_set
+ 557 02f4 00C0      		rjmp .L29
+ 558               	.L39:
+ 193:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+ 559               		.stabn	68,0,193,.LM68-.LFBB2
+ 560               	.LM68:
+ 561 02f6 80E0      		ldi r24,lo8(0)
+ 562 02f8 90E0      		ldi r25,hi8(0)
+ 563 02fa 0E94 0000 		call PWM_duty_cycle_A_set
+ 564 02fe 00C0      		rjmp .L29
+ 565               	.L28:
+ 183:isr.c         ****             PWM_duty_cycle_B_set(count);
+ 566               		.stabn	68,0,183,.LM69-.LFBB2
+ 567               	.LM69:
+ 568 0300 8FEF      		ldi r24,lo8(255)
+ 569 0302 90E0      		ldi r25,hi8(255)
+ 570 0304 0E94 0000 		call PWM_duty_cycle_B_set
+ 571 0308 00C0      		rjmp .L29
+ 572               	.L40:
+ 573 030a 81E0      		ldi r24,lo8(1)
+ 574 030c 00C0      		rjmp .L25
+ 575               		.size	__vector_20, .-__vector_20
+ 576               		.stabs	"data:r(0,2)",64,0,71,24
+ 577               		.stabs	"tempchar:(0,16)=ar(0,17)=r(0,17);0;0177777;;0;4;(0,2)",128,0,72,1
+ 578               		.stabn	192,0,0,.LFBB2-.LFBB2
+ 579               		.stabn	224,0,0,.Lscope2-.LFBB2
+ 580               	.Lscope2:
+ 581               		.stabs	"",36,0,0,.Lscope2-.LFBB2
+ 582               		.stabd	78,0,0
+ 583               		.stabs	"__vector_24:F(0,15)",36,0,44,__vector_24
+ 584               	.global	__vector_24
+ 585               		.type	__vector_24, @function
+ 586               	__vector_24:
+ 587               		.stabd	46,0,0
+  44:isr.c         **** {
+ 588               		.stabn	68,0,44,.LM70-.LFBB3
+ 589               	.LM70:
+ 590               	.LFBB3:
+ 591 030e 1F92      		push __zero_reg__
+ 592 0310 0F92      		push r0
+ 593 0312 0FB6      		in r0,__SREG__
+ 594 0314 0F92      		push r0
+ 595 0316 1124      		clr __zero_reg__
+ 596 0318 2F93      		push r18
+ 597 031a 3F93      		push r19
+ 598 031c 4F93      		push r20
+ 599 031e 5F93      		push r21
+ 600 0320 6F93      		push r22
+GAS LISTING /tmp/ccJOFRKh.s 			page 16
+
+
+ 601 0322 7F93      		push r23
+ 602 0324 8F93      		push r24
+ 603 0326 9F93      		push r25
+ 604 0328 AF93      		push r26
+ 605 032a BF93      		push r27
+ 606 032c EF93      		push r30
+ 607 032e FF93      		push r31
+ 608               	/* prologue: Signal */
+ 609               	/* frame size = 0 */
+  48:isr.c         **** 	channel = ADMUX & 0x07;
+ 610               		.stabn	68,0,48,.LM71-.LFBB3
+ 611               	.LM71:
+ 612 0330 5091 7C00 		lds r21,124
+  50:isr.c         ****     adlow=ADCL;
+ 613               		.stabn	68,0,50,.LM72-.LFBB3
+ 614               	.LM72:
+ 615 0334 2091 7800 		lds r18,120
+ 616 0338 30E0      		ldi r19,lo8(0)
+ 617 033a 3093 0000 		sts (adlow)+1,r19
+ 618 033e 2093 0000 		sts adlow,r18
+  51:isr.c         ****     adhigh=ADCH;
+ 619               		.stabn	68,0,51,.LM73-.LFBB3
+ 620               	.LM73:
+ 621 0342 4091 7900 		lds r20,121
+ 622 0346 4093 0000 		sts adhigh,r20
+ 623 034a 1092 0000 		sts adhigh+1,__zero_reg__
+  52:isr.c         **** 	ADCconv = (unsigned int)((adhigh<<8)|(adlow & 0xFF));	
+ 624               		.stabn	68,0,52,.LM74-.LFBB3
+ 625               	.LM74:
+ 626 034e 942F      		mov r25,r20
+ 627 0350 80E0      		ldi r24,lo8(0)
+ 628 0352 822B      		or r24,r18
+ 629 0354 932B      		or r25,r19
+ 630 0356 9093 0000 		sts (ADCconv)+1,r25
+ 631 035a 8093 0000 		sts ADCconv,r24
+  61:isr.c         **** 	if(channel == 0)
+ 632               		.stabn	68,0,61,.LM75-.LFBB3
+ 633               	.LM75:
+ 634 035e 5770      		andi r21,lo8(7)
+ 635 0360 01F4      		brne .L43
+  62:isr.c         **** 		presscontroller(ADCconv);
+ 636               		.stabn	68,0,62,.LM76-.LFBB3
+ 637               	.LM76:
+ 638 0362 0E94 0000 		call presscontroller
+ 639               	.L43:
+ 640               	/* epilogue start */
+  66:isr.c         **** }
+ 641               		.stabn	68,0,66,.LM77-.LFBB3
+ 642               	.LM77:
+ 643 0366 FF91      		pop r31
+ 644 0368 EF91      		pop r30
+ 645 036a BF91      		pop r27
+ 646 036c AF91      		pop r26
+ 647 036e 9F91      		pop r25
+ 648 0370 8F91      		pop r24
+ 649 0372 7F91      		pop r23
+ 650 0374 6F91      		pop r22
+GAS LISTING /tmp/ccJOFRKh.s 			page 17
+
+
+ 651 0376 5F91      		pop r21
+ 652 0378 4F91      		pop r20
+ 653 037a 3F91      		pop r19
+ 654 037c 2F91      		pop r18
+ 655 037e 0F90      		pop r0
+ 656 0380 0FBE      		out __SREG__,r0
+ 657 0382 0F90      		pop r0
+ 658 0384 1F90      		pop __zero_reg__
+ 659 0386 1895      		reti
+ 660               		.size	__vector_24, .-__vector_24
+ 661               	.Lscope3:
+ 662               		.stabs	"",36,0,0,.Lscope3-.LFBB3
+ 663               		.stabd	78,0,0
+ 664               	.global	count
+ 665               	.global	count
+ 666               		.section .bss
+ 667               		.type	count, @object
+ 668               		.size	count, 1
+ 669               	count:
+ 670 0000 00        		.skip 1,0
+ 671               	.global	retning
+ 672               	.global	retning
+ 673               		.type	retning, @object
+ 674               		.size	retning, 1
+ 675               	retning:
+ 676 0001 00        		.skip 1,0
+ 677               	.global	speed
+ 678               	.global	speed
+ 679               		.type	speed, @object
+ 680               		.size	speed, 2
+ 681               	speed:
+ 682 0002 0000      		.skip 2,0
+ 683               	.global	adlow
+ 684               	.global	adlow
+ 685               		.type	adlow, @object
+ 686               		.size	adlow, 2
+ 687               	adlow:
+ 688 0004 0000      		.skip 2,0
+ 689               	.global	adhigh
+ 690               	.global	adhigh
+ 691               		.type	adhigh, @object
+ 692               		.size	adhigh, 2
+ 693               	adhigh:
+ 694 0006 0000      		.skip 2,0
+ 695               	.global	channel
+ 696               	.global	channel
+ 697               		.type	channel, @object
+ 698               		.size	channel, 1
+ 699               	channel:
+ 700 0008 00        		.skip 1,0
+ 701               		.stabs	"count:G(0,2)",32,0,17,0
+ 702               		.stabs	"retning:G(0,2)",32,0,18,0
+ 703               		.stabs	"speed:G(0,4)",32,0,19,0
+ 704               		.stabs	"adlow:G(0,4)",32,0,26,0
+ 705               		.stabs	"adhigh:G(0,4)",32,0,27,0
+ 706               		.stabs	"channel:G(0,2)",32,0,29,0
+ 707               		.text
+GAS LISTING /tmp/ccJOFRKh.s 			page 18
+
+
+ 708               		.stabs	"",100,0,0,.Letext0
+ 709               	.Letext0:
+GAS LISTING /tmp/ccJOFRKh.s 			page 19
 
 
 DEFINED SYMBOLS
-                            *ABS*:00000000 isr.c
-     /tmp/ccmypDSg.s:2      *ABS*:0000003f __SREG__
-     /tmp/ccmypDSg.s:3      *ABS*:0000003e __SP_H__
-     /tmp/ccmypDSg.s:4      *ABS*:0000003d __SP_L__
-     /tmp/ccmypDSg.s:5      *ABS*:00000034 __CCP__
-     /tmp/ccmypDSg.s:6      *ABS*:00000000 __tmp_reg__
-     /tmp/ccmypDSg.s:7      *ABS*:00000001 __zero_reg__
-     /tmp/ccmypDSg.s:89     .text:00000000 __vector_20
-     /tmp/ccmypDSg.s:531    .bss:00000000 count
-     /tmp/ccmypDSg.s:543    .bss:00000002 speed
-     /tmp/ccmypDSg.s:537    .bss:00000001 retning
+                            *ABS*:0000000000000000 isr.c
+     /tmp/ccJOFRKh.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccJOFRKh.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccJOFRKh.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccJOFRKh.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccJOFRKh.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccJOFRKh.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccJOFRKh.s:83     .text:0000000000000000 __vector_18
+     /tmp/ccJOFRKh.s:699    .bss:0000000000000008 channel
+     /tmp/ccJOFRKh.s:146    .text:000000000000004c __vector_20
+     /tmp/ccJOFRKh.s:669    .bss:0000000000000000 count
+     /tmp/ccJOFRKh.s:681    .bss:0000000000000002 speed
+     /tmp/ccJOFRKh.s:675    .bss:0000000000000001 retning
+     /tmp/ccJOFRKh.s:586    .text:000000000000030e __vector_24
+     /tmp/ccJOFRKh.s:687    .bss:0000000000000004 adlow
+     /tmp/ccJOFRKh.s:693    .bss:0000000000000006 adhigh
 
 UNDEFINED SYMBOLS
 __do_copy_data
@@ -828,3 +1057,5 @@ p
 PWM_duty_cycle_A16_set
 PWM_duty_cycle_A_set
 PWM_duty_cycle_B_set
+ADCconv
+presscontroller

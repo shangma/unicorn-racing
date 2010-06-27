@@ -84,7 +84,7 @@ PROJECTNAME=hydrtest
 # (list all files to compile, e.g. 'a.c b.cpp as.S'):
 # Use .cc, .cpp or .C suffix for C++ files, use .S 
 # (NOT .s !!!) for assembly source code files.
-PRJSRC=main.c isr.c
+PRJSRC=main.c isr.c functions.c
 
 # additional includes (e.g. -I/path/to/mydir)
 #INC=-I/path/to/include
@@ -229,7 +229,7 @@ hex: $(HEXTRG)
 
 writeflash: hex
 	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID)   \
-	 -p $(PROGRAMMER_MCU) -P $(AVRDUDE_PORT) -e        \
+	 -p $(PROGRAMMER_MCU) -P usb -B 1      \
 	 -U flash:w:$(HEXROMTRG)
 
 install: writeflash
