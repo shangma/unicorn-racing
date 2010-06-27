@@ -1,3 +1,5 @@
+#include <config.h>
+#include <prototyper.h>
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
@@ -19,6 +21,49 @@ unsigned int speed = 0;
 extern int p;
 extern float i;
 extern int ref;
+extern unsigned int ADCconv;
+
+unsigned int adlow = 0;
+unsigned int adhigh = 0;
+
+char channel = 0;
+
+// Timer0 (8-bit) overflow interrupt
+ISR(TIMER0_OVF_vect)
+{	
+	ADMUX &= 0xf8;
+	ADMUX |= channel++;
+	ADCSRA|=(1<<ADSC);
+
+	if(channel>=ADCtotnum)
+		channel = 0;
+}
+
+// ADC convert complete
+ISR(ADC_vect)
+{
+	char tempchar[5];
+	char channel = 0;
+
+	channel = ADMUX & 0x07;
+
+    adlow=ADCL;
+    adhigh=ADCH;
+	ADCconv = (unsigned int)((adhigh<<8)|(adlow & 0xFF));	
+/*	
+	sendtekst("  ADC ");
+	itoa(channel, tempchar,10); 
+	sendtekst(tempchar);
+	sendtekst(":");
+	itoa(ADCconv, tempchar,10); 
+	sendtekst(tempchar);
+*/
+	if(channel == 0)
+		presscontroller(ADCconv);
+
+	//if(channel>=ADCtotnum-1)
+	//	sendtekst("\n\r");
+}
 
  //----- UART Interrupt --------------------------------------------------------
 ISR(USART0_RX_vect)
