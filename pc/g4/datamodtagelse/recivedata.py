@@ -3,7 +3,7 @@
 
 import serial
 
-ser=serial.Serial("/dev/ttyUSB0",115200)
+ser=serial.Serial("/dev/ttyUSB1",115200)
 
 sold = 0
 speed = 0
