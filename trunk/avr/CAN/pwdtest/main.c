@@ -16,9 +16,9 @@
 #define USART_BAUDRATE 230400
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
 
-int p = 0;
-float i = 0.0;
-int ref = 60;
+int kp = 50;
+float ki = 30.0;
+int ref = 0;
 unsigned int ADCconv = 0;
 float pressOld = 0; 
 
@@ -98,7 +98,7 @@ void pwm16Init(void)
 	TCCR1B |=(1<<WGM13);
 
 	//Top (10-bit)
-	ICR1H = 0x00;
+	ICR1H = 0x07;
 	ICR1L = 0xFF;
 
 	// Prescaler, 64
@@ -172,8 +172,8 @@ void adcStop(void)
 int main(void)
 {
     uartinit();
-    //pwm8Init();
-    //pwm16Init();
+    pwm8Init();
+    pwm16Init();
 	adcInit(0);
 	counter0Init();
 	

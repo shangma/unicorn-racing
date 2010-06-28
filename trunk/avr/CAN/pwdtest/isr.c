@@ -18,8 +18,8 @@ char count = 0;
 char retning = 0;
 unsigned int speed = 0;
 
-extern int p;
-extern float i;
+extern int kp;
+extern float ki;
 extern int ref;
 extern unsigned int ADCconv;
 
@@ -82,24 +82,29 @@ ISR(USART0_RX_vect)
     ref--;
     }
 
+    if(data == '<')
+    {
+    ref = 110;
+    }
+
     if(data == 'i')
     {
-    i = i+0.01;
+    ki = ki+0.1;
     }
 
     if(data == 'j')
     {
-    i = i-0.01;
+    ki = ki-0.1;
     }
 
     if(data == 'p')
     {
-    p++;
+    kp++;
     }
 
     if(data == 'l')
     {
-    p--;
+    kp--;
     }
 
     if(data == 'c')
@@ -194,11 +199,12 @@ ISR(USART0_RX_vect)
         else
             PWM_duty_cycle_B_set(count);
 	}	
-	
+/*	
 	itoa(count, tempchar,10); 
 	sendtekst(tempchar);
     sendtekst(";");
 	itoa(speed, tempchar,10); 
 	sendtekst(tempchar);
     sendtekst("\n\r");
+*/
 }

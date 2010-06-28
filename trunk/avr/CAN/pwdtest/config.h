@@ -8,3 +8,5 @@
 #define counter0prescale64 3
 #define counter0prescale256 4
 #define counter0prescale1024 5
+
+#define dutymax 2047

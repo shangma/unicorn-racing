@@ -10,7 +10,7 @@ rpmScale = 0.9408   # Faktor rpm fra ecu skal ganges med for at blive rigtig
 rpmDataPos = 54     # Byte nummer i strengen hvor rmp står
 rpmDataSize = 2     # Længden af rmp i byte
 
-tty=serial.Serial("/dev/ttyUSB1",19200,timeout=1)
+tty=serial.Serial("/dev/ttyUSB0",19200,timeout=1)
 datalogfile=open("testdatalog.txt","r")
 
 while 1:

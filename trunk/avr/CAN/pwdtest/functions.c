@@ -4,40 +4,48 @@
 #include <stdlib.h>
 #include <avr/interrupt.h>
 
+extern float pressOld; 
+extern int kp;
+extern float ki ;
+extern int ref;
+
+float intpressOld = 0;
+
 void presscontroller(unsigned int adc)
 {
 	    char tempchar[5];
 		int press = 0;
 		int out = 0;
 		int outP = 0;
-		float outI = 0;    
-
-		extern float pressOld; 
-		extern int p;
-		extern float i ;
-		extern int ref;
-	
+		float outI = 0;   
+        int err = 0; 
+        float intpress = 0;
+        	
 		press = 0.17*adc-18.0;
+
+        
 
 		if(press<=0)
 		    press = 0;
+        
+        err = (ref-press);
+        intpress = intpressOld + err * 0.011;
 
-		outP = (ref-press)*p;
+        /* Save int */
+		intpressOld = intpress;
 
-		outI = (((ref-press)*0.01+pressOld)*i);
+		out = (int)(err*kp + intpress * ki);
 
-		pressOld = pressOld + (ref-press)*(0.0036);
+        
 
-		out = (int)(outP + outI);
+		if(intpressOld>1000)
+		   intpressOld = 1000;
 
-		if(pressOld>5000)
-		   pressOld = 5000;
+		if(intpressOld<-1000)
+		    intpressOld = -1000;
 
-		if(pressOld<-5000)
-		    pressOld = -5000;
-
-		if(out>1023)
-		    out = 1023;
+		if(out>dutymax)
+		    out = dutymax;
 
 		if(out<=0)
 		    out = 0;
@@ -53,10 +61,13 @@ void presscontroller(unsigned int adc)
 		itoa(out, tempchar,10); 
 		sendtekst(tempchar);
 		sendtekst(";");
-		itoa(p, tempchar,10); 
+		itoa(kp, tempchar,10); 
 		sendtekst(tempchar);
 		sendtekst(";");
-		itoa((int)(i*100), tempchar,10); 
+		itoa((int)(ki*100), tempchar,10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+		itoa((int)(intpress), tempchar,10); 
 		sendtekst(tempchar);
 		sendtekst("\n\r");
 }
