@@ -3,3 +3,4 @@
 #define rpm_msgid 133
 #define gear_status_msgid 134
 #define error_msgid 135
+#define gear_knap 136

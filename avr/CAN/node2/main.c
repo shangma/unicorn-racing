@@ -5,12 +5,14 @@
 #include "led.h"
 #include "display.h"
 #include "can_func.h"
+#include "kobling.h"
 #include "../lib/can_defs.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
 //_____ D E C L A R A T I O N S ________________________________________________
 void init(void);
+void init_knapper(void);
 
 int main (void)
 {	
@@ -22,9 +24,10 @@ int main (void)
    int ratio,gearTmp;
 
 //  Init CAN, UART, I/O
-    init();
-
-    init_led();
+	init();
+	init_led();
+	init_knapper();
+	init_kobling_adc();
     sei();
 
     // --- Init variables
@@ -39,6 +42,9 @@ int main (void)
 
     fade_in(1000, 50);
     SEG_0;
+
+	while (1) {
+	}
 
     can_update_rx_msg(&error_msg, error_msgid, 8);
     can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
@@ -63,7 +69,7 @@ int main (void)
 
 		if (can_get_status(&gear_status_msg) == CAN_STATUS_COMPLETED) {  // check for gear_status_msg
 			canData = gear_status_response_buffer[0];                     
-			can_update_rx_msg(&gear_status_msg, gear_status_msgid, 8);      // update gear_status_msg to accept a new msg
+			can_update_rx_msg(&gear_status_msg, gear_status_msgid, 8);  // update gear_status_msg to accept a new msg
 			ratio = canData;
 			if (EcuError ==0) {
 				if(ratio>48 && ratio<53) {
@@ -100,4 +106,22 @@ void init(void)
 
     // IO Init
     DDRA = 0xFF;
+}
+
+void init_knapper(void)
+{
+	//  Gear knapper init
+	DDRD &=~ (1<<PD2);
+	DDRD &=~ (1<<PD3);  
+
+	// INT2
+	EICRA |=(1<<ISC20);
+	EICRA |=(1<<ISC21);
+
+	// INT3
+	EICRA |=(1<<ISC30);
+	EICRA |=(1<<ISC31);
+
+    	EIMSK |= (1<<INT2); 
+	EIMSK |= (1<<INT3);
 }

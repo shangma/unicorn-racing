@@ -2,6 +2,9 @@
 #include "can_lib.h"
 #include "can_func.h"
 
+U8 tx_gear_shift_buffer[8];
+st_cmd_t tx_gear_shift_msg;
+
 unsigned short int can_check( U8 msg_id)
 {
     unsigned short int i = 0;
