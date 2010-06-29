@@ -1,4 +1,4 @@
-GAS LISTING /tmp/ccrOaYtr.s 			page 1
+GAS LISTING /tmp/ccoBKnta.s 			page 1
 
 
    1               		.file	"main.c"
@@ -10,7 +10,7 @@ GAS LISTING /tmp/ccrOaYtr.s 			page 1
    7               	__zero_reg__ = 1
    8               		.global __do_copy_data
    9               		.global __do_clear_bss
-  10               		.stabs	"/home/morten/Documents/unicorn-racing/avr/CAN/pwdtest/",100,0,2,.Ltext0
+  10               		.stabs	"/home/css/Documents/unicorn-racing/avr/CAN/pwdtest/",100,0,2,.Ltext0
   11               		.stabs	"main.c",100,0,2,.Ltext0
   12               		.text
   13               	.Ltext0:
@@ -58,7 +58,7 @@ GAS LISTING /tmp/ccrOaYtr.s 			page 1
   55               		.stabs	"uint_fast16_t:t(4,22)=(4,4)",128,0,228,0
   56               		.stabs	"int_fast32_t:t(4,23)=(4,5)",128,0,233,0
   57               		.stabs	"uint_fast32_t:t(4,24)=(4,6)",128,0,238,0
-GAS LISTING /tmp/ccrOaYtr.s 			page 2
+GAS LISTING /tmp/ccoBKnta.s 			page 2
 
 
   58               		.stabs	"int_fast64_t:t(4,25)=(4,7)",128,0,246,0
@@ -83,1012 +83,90 @@ GAS LISTING /tmp/ccrOaYtr.s 			page 1
   77               		.stabs	"ldiv_t:t(6,3)=(6,4)=s8quot:(0,3),0,32;rem:(0,3),32,32;;",128,0,77,0
   78               		.stabs	"__compar_fn_t:t(6,5)=(6,6)=*(6,7)=f(0,1)",128,0,80,0
   79               		.stabn	162,0,0,0
-  80               		.stabs	"uartinit:F(0,15)",36,0,26,uartinit
-  81               	.global	uartinit
-  82               		.type	uartinit, @function
-  83               	uartinit:
+  80               		.stabs	"main:F(0,1)",36,0,14,main
+  81               	.global	main
+  82               		.type	main, @function
+  83               	main:
   84               		.stabd	46,0,0
-   0:main.c        **** /*************************************************
-   1:main.c        **** * Timer
-   2:main.c        **** *
-   3:main.c        **** * Counter0  (8-bit): Timer til ADC konvertering
-   4:main.c        **** * Counter1 (16-bit): Timer til Motor PWM
-   5:main.c        **** * Counter2  (8-bit): Timer til ventil PWM
-   6:main.c        **** *************************************************/
-   7:main.c        **** 
-   8:main.c        **** #include <config.h>
-   9:main.c        **** #include <avr/io.h>
-  10:main.c        **** #include <stdlib.h>
-  11:main.c        **** #include <avr/interrupt.h>
-  12:main.c        **** 
-  13:main.c        **** #define F_CPU 18432000
-  14:main.c        **** #include <util/delay.h>
-  15:main.c        **** #define USART_BAUDRATE 230400
-  16:main.c        **** #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
-  17:main.c        **** 
-  18:main.c        **** int kp = 50;
-  19:main.c        **** float ki = 30.0;
-  20:main.c        **** int ref = 0;
-  21:main.c        **** unsigned int ADCconv = 0;
-  22:main.c        **** float pressOld = 0; 
-  23:main.c        **** 
-  24:main.c        **** void uartinit(void)
-  25:main.c        **** {
-  85               		.stabn	68,0,26,.LM0-.LFBB1
+   0:main.c        **** /*********************************************
+   1:main.c        ****  * Unicorn main
+   2:main.c        ****  *********************************************/
+   3:main.c        **** 
+   4:main.c        **** #include <config.h>
+   5:main.c        **** #include <prototyper.h>
+   6:main.c        **** #include <extern.h>
+   7:main.c        **** #include <avr/io.h>
+   8:main.c        **** #include <stdlib.h>
+   9:main.c        **** #include <avr/interrupt.h>
+  10:main.c        **** #include <util/delay.h>
+  11:main.c        **** 
+  12:main.c        **** int main(void)
+  13:main.c        **** {
+  85               		.stabn	68,0,14,.LM0-.LFBB1
   86               	.LM0:
   87               	.LFBB1:
   88               	/* prologue: function */
-GAS LISTING /tmp/ccrOaYtr.s 			page 3
-
-
   89               	/* frame size = 0 */
-  26:main.c        **** 	//"Tænder" for TXen og RXen (send og modtag portene)
-  27:main.c        **** 	UCSR0B = (1<<RXEN0)|(1<<TXEN0); 
-  90               		.stabn	68,0,28,.LM1-.LFBB1
+  14:main.c        **** 	// Init
+  15:main.c        ****     uartinit();
+  90               		.stabn	68,0,16,.LM1-.LFBB1
   91               	.LM1:
-  92 0000 E1EC      		ldi r30,lo8(193)
-  93 0002 F0E0      		ldi r31,hi8(193)
-  94 0004 88E1      		ldi r24,lo8(24)
-  95 0006 8083      		st Z,r24
-  28:main.c        **** 	
-  29:main.c        **** 	// Opsætning af format: 8data, 1 stop bit
-  30:main.c        **** 	UCSR0C = (3<<UCSZ00);
-  96               		.stabn	68,0,31,.LM2-.LFBB1
-  97               	.LM2:
-  98 0008 86E0      		ldi r24,lo8(6)
-  99 000a 8093 C200 		sts 194,r24
-  31:main.c        **** 
-  32:main.c        **** 	// Opsætning af baud rate
-  33:main.c        **** 	UBRR0L = BAUD_PRESCALE;
- 100               		.stabn	68,0,34,.LM3-.LFBB1
- 101               	.LM3:
- 102 000e 84E0      		ldi r24,lo8(4)
- 103 0010 8093 C400 		sts 196,r24
-  34:main.c        **** 	UBRR0H = (BAUD_PRESCALE >> 8);
- 104               		.stabn	68,0,35,.LM4-.LFBB1
- 105               	.LM4:
- 106 0014 1092 C500 		sts 197,__zero_reg__
-  35:main.c        **** 	
-  36:main.c        **** 	// Opsætning af Rx Uart interrupt (Receive Complete Interrupt) til indkommen seriel data
-  37:main.c        **** 	UCSR0B|=(1<<RXCIE0);
- 107               		.stabn	68,0,38,.LM5-.LFBB1
- 108               	.LM5:
- 109 0018 8081      		ld r24,Z
- 110 001a 8068      		ori r24,lo8(-128)
- 111 001c 8083      		st Z,r24
- 112               	/* epilogue start */
-  38:main.c        **** }
- 113               		.stabn	68,0,39,.LM6-.LFBB1
- 114               	.LM6:
- 115 001e 0895      		ret
- 116               		.size	uartinit, .-uartinit
+  92 0000 0E94 0000 		call uartinit
+  16:main.c        ****     pwm8Init();
+  93               		.stabn	68,0,17,.LM2-.LFBB1
+  94               	.LM2:
+  95 0004 0E94 0000 		call pwm8Init
+  17:main.c        ****     pwm16Init();
+  96               		.stabn	68,0,18,.LM3-.LFBB1
+GAS LISTING /tmp/ccoBKnta.s 			page 3
+
+
+  97               	.LM3:
+  98 0008 0E94 0000 		call pwm16Init
+  18:main.c        **** 	adcInit(0);
+  99               		.stabn	68,0,19,.LM4-.LFBB1
+ 100               	.LM4:
+ 101 000c 80E0      		ldi r24,lo8(0)
+ 102 000e 90E0      		ldi r25,hi8(0)
+ 103 0010 0E94 0000 		call adcInit
+  19:main.c        **** 	counter0Init();	
+ 104               		.stabn	68,0,20,.LM5-.LFBB1
+ 105               	.LM5:
+ 106 0014 0E94 0000 		call counter0Init
+  20:main.c        ****     sei();
+ 107               		.stabn	68,0,21,.LM6-.LFBB1
+ 108               	.LM6:
+ 109               	/* #APP */
+ 110               	 ;  21 "main.c" 1
+ 111 0018 7894      		sei
+ 112               	 ;  0 "" 2
+ 113               	/* #NOAPP */
+ 114               	.L2:
+ 115 001a 00C0      		rjmp .L2
+ 116               		.size	main, .-main
  117               	.Lscope1:
  118               		.stabs	"",36,0,0,.Lscope1-.LFBB1
  119               		.stabd	78,0,0
- 120               		.stabs	"PWM_duty_cycle_A_set:F(0,15)",36,0,42,PWM_duty_cycle_A_set
- 121               	.global	PWM_duty_cycle_A_set
- 122               		.type	PWM_duty_cycle_A_set, @function
- 123               	PWM_duty_cycle_A_set:
- 124               		.stabd	46,0,0
-  39:main.c        **** 
-  40:main.c        **** void PWM_duty_cycle_A_set(unsigned int x)
-  41:main.c        **** {
- 125               		.stabn	68,0,42,.LM7-.LFBB2
- 126               	.LM7:
- 127               	.LFBB2:
- 128               	/* prologue: function */
- 129               	/* frame size = 0 */
-GAS LISTING /tmp/ccrOaYtr.s 			page 4
-
-
-  42:main.c        **** 	OCR2A = x; 
- 130               		.stabn	68,0,43,.LM8-.LFBB2
- 131               	.LM8:
- 132 0020 8093 B300 		sts 179,r24
- 133               	/* epilogue start */
-  43:main.c        **** }
- 134               		.stabn	68,0,44,.LM9-.LFBB2
- 135               	.LM9:
- 136 0024 0895      		ret
- 137               		.size	PWM_duty_cycle_A_set, .-PWM_duty_cycle_A_set
- 138               	.Lscope2:
- 139               		.stabs	"",36,0,0,.Lscope2-.LFBB2
- 140               		.stabd	78,0,0
- 141               		.stabs	"PWM_duty_cycle_B_set:F(0,15)",36,0,47,PWM_duty_cycle_B_set
- 142               	.global	PWM_duty_cycle_B_set
- 143               		.type	PWM_duty_cycle_B_set, @function
- 144               	PWM_duty_cycle_B_set:
- 145               		.stabd	46,0,0
-  44:main.c        **** 
-  45:main.c        **** void PWM_duty_cycle_B_set(unsigned int x)
-  46:main.c        **** {
- 146               		.stabn	68,0,47,.LM10-.LFBB3
- 147               	.LM10:
- 148               	.LFBB3:
- 149               	/* prologue: function */
- 150               	/* frame size = 0 */
-  47:main.c        **** 	OCR2B = x; 
- 151               		.stabn	68,0,48,.LM11-.LFBB3
- 152               	.LM11:
- 153 0026 8093 B400 		sts 180,r24
- 154               	/* epilogue start */
-  48:main.c        **** }
- 155               		.stabn	68,0,49,.LM12-.LFBB3
- 156               	.LM12:
- 157 002a 0895      		ret
- 158               		.size	PWM_duty_cycle_B_set, .-PWM_duty_cycle_B_set
- 159               	.Lscope3:
- 160               		.stabs	"",36,0,0,.Lscope3-.LFBB3
- 161               		.stabd	78,0,0
- 162               		.stabs	"PWM_duty_cycle_A16_set:F(0,15)",36,0,52,PWM_duty_cycle_A16_set
- 163               	.global	PWM_duty_cycle_A16_set
- 164               		.type	PWM_duty_cycle_A16_set, @function
- 165               	PWM_duty_cycle_A16_set:
- 166               		.stabd	46,0,0
-  49:main.c        **** 
-  50:main.c        **** void PWM_duty_cycle_A16_set(unsigned int x)
-  51:main.c        **** {
- 167               		.stabn	68,0,52,.LM13-.LFBB4
- 168               	.LM13:
- 169               	.LFBB4:
- 170               	/* prologue: function */
- 171               	/* frame size = 0 */
-  52:main.c        **** 	OCR1AH = (0xFF) & (x>>8);
- 172               		.stabn	68,0,53,.LM14-.LFBB4
- 173               	.LM14:
- 174 002c 9093 8900 		sts 137,r25
-  53:main.c        **** 	OCR1AL = (0xFF) & (x); 
-GAS LISTING /tmp/ccrOaYtr.s 			page 5
-
-
- 175               		.stabn	68,0,54,.LM15-.LFBB4
- 176               	.LM15:
- 177 0030 8093 8800 		sts 136,r24
- 178               	/* epilogue start */
-  54:main.c        **** }
- 179               		.stabn	68,0,55,.LM16-.LFBB4
- 180               	.LM16:
- 181 0034 0895      		ret
- 182               		.size	PWM_duty_cycle_A16_set, .-PWM_duty_cycle_A16_set
- 183               	.Lscope4:
- 184               		.stabs	"",36,0,0,.Lscope4-.LFBB4
- 185               		.stabd	78,0,0
- 186               		.stabs	"pwm8Init:F(0,15)",36,0,58,pwm8Init
- 187               	.global	pwm8Init
- 188               		.type	pwm8Init, @function
- 189               	pwm8Init:
- 190               		.stabd	46,0,0
-  55:main.c        **** 
-  56:main.c        **** void pwm8Init(void)
-  57:main.c        **** {
- 191               		.stabn	68,0,58,.LM17-.LFBB5
- 192               	.LM17:
- 193               	.LFBB5:
- 194               	/* prologue: function */
- 195               	/* frame size = 0 */
-  58:main.c        **** 	//PWM, 8 bit counter (counter0)
-  59:main.c        **** 	// (OC2A) Output
-  60:main.c        ****     DDRD|= (1<<PD6);  
- 196               		.stabn	68,0,61,.LM18-.LFBB5
- 197               	.LM18:
- 198 0036 569A      		sbi 42-32,6
-  61:main.c        **** 	// (OC2B) Output
-  62:main.c        **** 	DDRD|= (1<<PD7);      
- 199               		.stabn	68,0,63,.LM19-.LFBB5
- 200               	.LM19:
- 201 0038 579A      		sbi 42-32,7
-  63:main.c        **** 
-  64:main.c        **** 	// Opsætning af compare match.
-  65:main.c        **** 	TCCR2A |=(1<<COM2A1);
- 202               		.stabn	68,0,66,.LM20-.LFBB5
- 203               	.LM20:
- 204 003a E0EB      		ldi r30,lo8(176)
- 205 003c F0E0      		ldi r31,hi8(176)
- 206 003e 8081      		ld r24,Z
- 207 0040 8068      		ori r24,lo8(-128)
- 208 0042 8083      		st Z,r24
-  66:main.c        **** 	TCCR2A &=~(1<<COM2A0);
- 209               		.stabn	68,0,67,.LM21-.LFBB5
- 210               	.LM21:
- 211 0044 8081      		ld r24,Z
- 212 0046 8F7B      		andi r24,lo8(-65)
- 213 0048 8083      		st Z,r24
-  67:main.c        **** 
-  68:main.c        **** 	TCCR2A |=(1<<COM2B1);
- 214               		.stabn	68,0,69,.LM22-.LFBB5
- 215               	.LM22:
- 216 004a 8081      		ld r24,Z
-GAS LISTING /tmp/ccrOaYtr.s 			page 6
-
-
- 217 004c 8062      		ori r24,lo8(32)
- 218 004e 8083      		st Z,r24
-  69:main.c        **** 	TCCR2A &=~(1<<COM2B0);
- 219               		.stabn	68,0,70,.LM23-.LFBB5
- 220               	.LM23:
- 221 0050 8081      		ld r24,Z
- 222 0052 8F7E      		andi r24,lo8(-17)
- 223 0054 8083      		st Z,r24
-  70:main.c        **** 
-  71:main.c        **** 	// FAST-PWM
-  72:main.c        **** 	TCCR2A |=(1<<WGM20);
- 224               		.stabn	68,0,73,.LM24-.LFBB5
- 225               	.LM24:
- 226 0056 8081      		ld r24,Z
- 227 0058 8160      		ori r24,lo8(1)
- 228 005a 8083      		st Z,r24
-  73:main.c        **** 	TCCR2A |=(1<<WGM21);
- 229               		.stabn	68,0,74,.LM25-.LFBB5
- 230               	.LM25:
- 231 005c 8081      		ld r24,Z
- 232 005e 8260      		ori r24,lo8(2)
- 233 0060 8083      		st Z,r24
-  74:main.c        **** 
-  75:main.c        **** 	// Prescaler, 1
-  76:main.c        ****     TCCR2B |=(1<<CS20);
- 234               		.stabn	68,0,77,.LM26-.LFBB5
- 235               	.LM26:
- 236 0062 E1EB      		ldi r30,lo8(177)
- 237 0064 F0E0      		ldi r31,hi8(177)
- 238 0066 8081      		ld r24,Z
- 239 0068 8160      		ori r24,lo8(1)
- 240 006a 8083      		st Z,r24
- 241               	.LBB20:
- 242               	.LBB21:
-  43:main.c        **** 	OCR2A = x; 
- 243               		.stabn	68,0,43,.LM27-.LFBB5
- 244               	.LM27:
- 245 006c 1092 B300 		sts 179,__zero_reg__
- 246               	.LBE21:
- 247               	.LBE20:
- 248               	.LBB22:
- 249               	.LBB23:
-  48:main.c        **** 	OCR2B = x; 
- 250               		.stabn	68,0,48,.LM28-.LFBB5
- 251               	.LM28:
- 252 0070 1092 B400 		sts 180,__zero_reg__
- 253               	/* epilogue start */
- 254               	.LBE23:
- 255               	.LBE22:
-  77:main.c        **** 
-  78:main.c        **** 	PWM_duty_cycle_A_set(0);
-  79:main.c        **** 	PWM_duty_cycle_B_set(0);
-  80:main.c        **** }
- 256               		.stabn	68,0,81,.LM29-.LFBB5
- 257               	.LM29:
- 258 0074 0895      		ret
- 259               		.size	pwm8Init, .-pwm8Init
-GAS LISTING /tmp/ccrOaYtr.s 			page 7
-
-
- 260               	.Lscope5:
- 261               		.stabs	"",36,0,0,.Lscope5-.LFBB5
- 262               		.stabd	78,0,0
- 263               		.stabs	"pwm16Init:F(0,15)",36,0,84,pwm16Init
- 264               	.global	pwm16Init
- 265               		.type	pwm16Init, @function
- 266               	pwm16Init:
- 267               		.stabd	46,0,0
-  81:main.c        **** 
-  82:main.c        **** void pwm16Init(void)
-  83:main.c        **** {
- 268               		.stabn	68,0,84,.LM30-.LFBB6
- 269               	.LM30:
- 270               	.LFBB6:
- 271               	/* prologue: function */
- 272               	/* frame size = 0 */
-  84:main.c        **** 	//PWM, 16 bit counter (counter1)
-  85:main.c        **** 	// (OC1A) Output
-  86:main.c        ****     DDRD|= (1<<PD4);  
- 273               		.stabn	68,0,87,.LM31-.LFBB6
- 274               	.LM31:
- 275 0076 549A      		sbi 42-32,4
-  87:main.c        ****     DDRD|= (1<<PD5);  
- 276               		.stabn	68,0,88,.LM32-.LFBB6
- 277               	.LM32:
- 278 0078 559A      		sbi 42-32,5
-  88:main.c        ****      
-  89:main.c        **** 	// Opsætning af compare match.
-  90:main.c        **** 	TCCR1A |=(1<<COM1A1);
- 279               		.stabn	68,0,91,.LM33-.LFBB6
- 280               	.LM33:
- 281 007a E0E8      		ldi r30,lo8(128)
- 282 007c F0E0      		ldi r31,hi8(128)
- 283 007e 8081      		ld r24,Z
- 284 0080 8068      		ori r24,lo8(-128)
- 285 0082 8083      		st Z,r24
-  91:main.c        **** 	TCCR1A |=(1<<COM1A0);
- 286               		.stabn	68,0,92,.LM34-.LFBB6
- 287               	.LM34:
- 288 0084 8081      		ld r24,Z
- 289 0086 8064      		ori r24,lo8(64)
- 290 0088 8083      		st Z,r24
-  92:main.c        **** 
-  93:main.c        **** 	// FAST-PWM TOP = ICRn
-  94:main.c        **** 	TCCR1A &=~(1<<WGM10);
- 291               		.stabn	68,0,95,.LM35-.LFBB6
- 292               	.LM35:
- 293 008a 8081      		ld r24,Z
- 294 008c 8E7F      		andi r24,lo8(-2)
- 295 008e 8083      		st Z,r24
-  95:main.c        **** 	TCCR1A |=(1<<WGM11);
- 296               		.stabn	68,0,96,.LM36-.LFBB6
- 297               	.LM36:
- 298 0090 8081      		ld r24,Z
- 299 0092 8260      		ori r24,lo8(2)
- 300 0094 8083      		st Z,r24
-  96:main.c        **** 	TCCR1B |=(1<<WGM12);
-GAS LISTING /tmp/ccrOaYtr.s 			page 8
-
-
- 301               		.stabn	68,0,97,.LM37-.LFBB6
- 302               	.LM37:
- 303 0096 E1E8      		ldi r30,lo8(129)
- 304 0098 F0E0      		ldi r31,hi8(129)
- 305 009a 8081      		ld r24,Z
- 306 009c 8860      		ori r24,lo8(8)
- 307 009e 8083      		st Z,r24
-  97:main.c        **** 	TCCR1B |=(1<<WGM13);
- 308               		.stabn	68,0,98,.LM38-.LFBB6
- 309               	.LM38:
- 310 00a0 8081      		ld r24,Z
- 311 00a2 8061      		ori r24,lo8(16)
- 312 00a4 8083      		st Z,r24
-  98:main.c        **** 
-  99:main.c        **** 	//Top (10-bit)
- 100:main.c        **** 	ICR1H = 0x07;
- 313               		.stabn	68,0,101,.LM39-.LFBB6
- 314               	.LM39:
- 315 00a6 87E0      		ldi r24,lo8(7)
- 316 00a8 8093 8700 		sts 135,r24
- 101:main.c        **** 	ICR1L = 0xFF;
- 317               		.stabn	68,0,102,.LM40-.LFBB6
- 318               	.LM40:
- 319 00ac 8FEF      		ldi r24,lo8(-1)
- 320 00ae 8093 8600 		sts 134,r24
- 102:main.c        **** 
- 103:main.c        **** 	// Prescaler, 64
- 104:main.c        ****     TCCR1B &=~(1<<CS10);
- 321               		.stabn	68,0,105,.LM41-.LFBB6
- 322               	.LM41:
- 323 00b2 8081      		ld r24,Z
- 324 00b4 8E7F      		andi r24,lo8(-2)
- 325 00b6 8083      		st Z,r24
- 105:main.c        **** 	TCCR1B |=(1<<CS11); 
- 326               		.stabn	68,0,106,.LM42-.LFBB6
- 327               	.LM42:
- 328 00b8 8081      		ld r24,Z
- 329 00ba 8260      		ori r24,lo8(2)
- 330 00bc 8083      		st Z,r24
- 106:main.c        **** 	TCCR1B &=~(1<<CS12); 
- 331               		.stabn	68,0,107,.LM43-.LFBB6
- 332               	.LM43:
- 333 00be 8081      		ld r24,Z
- 334 00c0 8B7F      		andi r24,lo8(-5)
- 335 00c2 8083      		st Z,r24
- 336               	.LBB28:
- 337               	.LBB29:
-  53:main.c        **** 	OCR1AH = (0xFF) & (x>>8);
- 338               		.stabn	68,0,53,.LM44-.LFBB6
- 339               	.LM44:
- 340 00c4 1092 8900 		sts 137,__zero_reg__
-  54:main.c        **** 	OCR1AL = (0xFF) & (x); 
- 341               		.stabn	68,0,54,.LM45-.LFBB6
- 342               	.LM45:
- 343 00c8 1092 8800 		sts 136,__zero_reg__
- 344               	/* epilogue start */
- 345               	.LBE29:
-GAS LISTING /tmp/ccrOaYtr.s 			page 9
-
-
- 346               	.LBE28:
- 107:main.c        **** 
- 108:main.c        **** 	// Compare match værdi
- 109:main.c        **** 	PWM_duty_cycle_A16_set(0);
- 110:main.c        **** }
- 347               		.stabn	68,0,111,.LM46-.LFBB6
- 348               	.LM46:
- 349 00cc 0895      		ret
- 350               		.size	pwm16Init, .-pwm16Init
- 351               	.Lscope6:
- 352               		.stabs	"",36,0,0,.Lscope6-.LFBB6
- 353               		.stabd	78,0,0
- 354               		.stabs	"counter0Init:F(0,15)",36,0,114,counter0Init
- 355               	.global	counter0Init
- 356               		.type	counter0Init, @function
- 357               	counter0Init:
- 358               		.stabd	46,0,0
- 111:main.c        **** 
- 112:main.c        **** void counter0Init(void)
- 113:main.c        **** {
- 359               		.stabn	68,0,114,.LM47-.LFBB7
- 360               	.LM47:
- 361               	.LFBB7:
- 362               	/* prologue: function */
- 363               	/* frame size = 0 */
- 114:main.c        **** 	//TCCR0B |=(1<<CS00);
- 115:main.c        **** 	//TCCR0B &=~(1<<CS01);
- 116:main.c        **** 	//TCCR0B |=(1<<CS02);
- 117:main.c        **** 
- 118:main.c        **** 	TCCR0B |= counter0prescale256;
- 364               		.stabn	68,0,119,.LM48-.LFBB7
- 365               	.LM48:
- 366 00ce 85B5      		in r24,69-32
- 367 00d0 8460      		ori r24,lo8(4)
- 368 00d2 85BD      		out 69-32,r24
- 119:main.c        **** 
- 120:main.c        **** 	TIMSK0 |=(1<<TOIE0);
- 369               		.stabn	68,0,121,.LM49-.LFBB7
- 370               	.LM49:
- 371 00d4 EEE6      		ldi r30,lo8(110)
- 372 00d6 F0E0      		ldi r31,hi8(110)
- 373 00d8 8081      		ld r24,Z
- 374 00da 8160      		ori r24,lo8(1)
- 375 00dc 8083      		st Z,r24
- 376               	/* epilogue start */
- 121:main.c        **** }
- 377               		.stabn	68,0,122,.LM50-.LFBB7
- 378               	.LM50:
- 379 00de 0895      		ret
- 380               		.size	counter0Init, .-counter0Init
- 381               	.Lscope7:
- 382               		.stabs	"",36,0,0,.Lscope7-.LFBB7
- 383               		.stabd	78,0,0
- 384               		.stabs	"sendtekst:F(0,15)",36,0,125,sendtekst
- 385               		.stabs	"tekstarray:P(0,16)=*(0,2)",64,0,124,30
- 386               	.global	sendtekst
- 387               		.type	sendtekst, @function
-GAS LISTING /tmp/ccrOaYtr.s 			page 10
-
-
- 388               	sendtekst:
- 389               		.stabd	46,0,0
- 122:main.c        **** 
- 123:main.c        **** void sendtekst(char *tekstarray)
- 124:main.c        **** {
- 390               		.stabn	68,0,125,.LM51-.LFBB8
- 391               	.LM51:
- 392               	.LFBB8:
- 393               	/* prologue: function */
- 394               	/* frame size = 0 */
- 395 00e0 FC01      		movw r30,r24
- 125:main.c        **** 	// Tæller
- 126:main.c        **** 	short int i;
- 127:main.c        **** 
- 128:main.c        **** 	// Sender en byte af gangen
- 129:main.c        **** 	for (i = 0; tekstarray[i] != '\0'; i++)
- 396               		.stabn	68,0,130,.LM52-.LFBB8
- 397               	.LM52:
- 398 00e2 9081      		ld r25,Z
- 399 00e4 9923      		tst r25
- 400 00e6 01F0      		breq .L18
- 401               	.L21:
- 130:main.c        **** 	{	
- 131:main.c        **** 		while ((UCSR0A & (1 << UDRE0)) == 0) {};	// Venter indtil UDR0 er klar til ny data
- 402               		.stabn	68,0,132,.LM53-.LFBB8
- 403               	.LM53:
- 404 00e8 8091 C000 		lds r24,192
- 405 00ec 85FF      		sbrs r24,5
- 406 00ee 00C0      		rjmp .L21
- 132:main.c        **** 		UDR0 = tekstarray[i]; 						// Data lægges i buffer (UDR0) og sendes via TXen
- 407               		.stabn	68,0,133,.LM54-.LFBB8
- 408               	.LM54:
- 409 00f0 9093 C600 		sts 198,r25
- 130:main.c        **** 	{	
- 410               		.stabn	68,0,130,.LM55-.LFBB8
- 411               	.LM55:
- 412 00f4 9181      		ldd r25,Z+1
- 413 00f6 3196      		adiw r30,1
- 414 00f8 9923      		tst r25
- 415 00fa 01F4      		brne .L21
- 416               	.L18:
- 417 00fc 0895      		ret
- 418               		.size	sendtekst, .-sendtekst
- 419               	.Lscope8:
- 420               		.stabs	"",36,0,0,.Lscope8-.LFBB8
- 421               		.stabd	78,0,0
- 422               		.stabs	"adcInit:F(0,15)",36,0,138,adcInit
- 423               	.global	adcInit
- 424               		.type	adcInit, @function
- 425               	adcInit:
- 426               		.stabd	46,0,0
- 133:main.c        **** 	}
- 134:main.c        **** }
- 135:main.c        **** 
- 136:main.c        **** void adcInit(unsigned int channel)
- 137:main.c        **** {
- 427               		.stabn	68,0,138,.LM56-.LFBB9
-GAS LISTING /tmp/ccrOaYtr.s 			page 11
-
-
- 428               	.LM56:
- 429               	.LFBB9:
- 430               	/* prologue: function */
- 431               	/* frame size = 0 */
- 138:main.c        **** 	// ADC channel
- 139:main.c        **** 	ADMUX=(channel & 0x0f);
- 432               		.stabn	68,0,140,.LM57-.LFBB9
- 433               	.LM57:
- 434 00fe 8F70      		andi r24,lo8(15)
- 435 0100 ECE7      		ldi r30,lo8(124)
- 436 0102 F0E0      		ldi r31,hi8(124)
- 437 0104 8083      		st Z,r24
- 140:main.c        **** 
- 141:main.c        **** 	// Vref config
- 142:main.c        **** 	ADMUX |=(1<<REFS0); 
- 438               		.stabn	68,0,143,.LM58-.LFBB9
- 439               	.LM58:
- 440 0106 8081      		ld r24,Z
- 441 0108 8064      		ori r24,lo8(64)
- 442 010a 8083      		st Z,r24
- 143:main.c        **** 	ADMUX &=~(1<<REFS1);
- 443               		.stabn	68,0,144,.LM59-.LFBB9
- 444               	.LM59:
- 445 010c 8081      		ld r24,Z
- 446 010e 8F77      		andi r24,lo8(127)
- 447 0110 8083      		st Z,r24
- 144:main.c        **** 
- 145:main.c        **** 	// ADC ENABLE
- 146:main.c        **** 	ADCSRA |=(1<<ADEN); 
- 448               		.stabn	68,0,147,.LM60-.LFBB9
- 449               	.LM60:
- 450 0112 EAE7      		ldi r30,lo8(122)
- 451 0114 F0E0      		ldi r31,hi8(122)
- 452 0116 8081      		ld r24,Z
- 453 0118 8068      		ori r24,lo8(-128)
- 454 011a 8083      		st Z,r24
- 147:main.c        **** 
- 148:main.c        **** 	// ADC frequency prescaler
- 149:main.c        **** 	ADCSRA |=(1<<ADPS0);
- 455               		.stabn	68,0,150,.LM61-.LFBB9
- 456               	.LM61:
- 457 011c 8081      		ld r24,Z
- 458 011e 8160      		ori r24,lo8(1)
- 459 0120 8083      		st Z,r24
- 150:main.c        **** 	ADCSRA &=~(1<<ADPS1);
- 460               		.stabn	68,0,151,.LM62-.LFBB9
- 461               	.LM62:
- 462 0122 8081      		ld r24,Z
- 463 0124 8D7F      		andi r24,lo8(-3)
- 464 0126 8083      		st Z,r24
- 151:main.c        **** 	ADCSRA |=(1<<ADPS2);
- 465               		.stabn	68,0,152,.LM63-.LFBB9
- 466               	.LM63:
- 467 0128 8081      		ld r24,Z
- 468 012a 8460      		ori r24,lo8(4)
- 469 012c 8083      		st Z,r24
- 152:main.c        **** 
-GAS LISTING /tmp/ccrOaYtr.s 			page 12
-
-
- 153:main.c        **** 	// ADC Tigger mode
- 154:main.c        **** 	/*
- 155:main.c        **** 	ADCSRA |=(1<<ADATE); 
- 156:main.c        **** 
- 157:main.c        **** 	// ADC trigger source
- 158:main.c        **** 	ADCSRB &=~(1<<ADTS0); 
- 159:main.c        **** 	ADCSRB &=~(1<<ADTS1);
- 160:main.c        **** 	ADCSRB |=(1<<ADTS2);
- 161:main.c        **** 	*/
- 162:main.c        **** 	// ADC interrupt enable
- 163:main.c        **** 	ADCSRA |=(1<<ADIE);
- 470               		.stabn	68,0,164,.LM64-.LFBB9
- 471               	.LM64:
- 472 012e 8081      		ld r24,Z
- 473 0130 8860      		ori r24,lo8(8)
- 474 0132 8083      		st Z,r24
- 475               	/* epilogue start */
- 164:main.c        **** }
- 476               		.stabn	68,0,165,.LM65-.LFBB9
- 477               	.LM65:
- 478 0134 0895      		ret
- 479               		.size	adcInit, .-adcInit
- 480               	.Lscope9:
- 481               		.stabs	"",36,0,0,.Lscope9-.LFBB9
- 482               		.stabd	78,0,0
- 483               		.stabs	"adcStop:F(0,15)",36,0,168,adcStop
- 484               	.global	adcStop
- 485               		.type	adcStop, @function
- 486               	adcStop:
- 487               		.stabd	46,0,0
- 165:main.c        **** 
- 166:main.c        **** void adcStop(void)
- 167:main.c        **** {
- 488               		.stabn	68,0,168,.LM66-.LFBB10
- 489               	.LM66:
- 490               	.LFBB10:
- 491               	/* prologue: function */
- 492               	/* frame size = 0 */
- 168:main.c        **** 	ADCSRA &=~(1<<ADEN); // ADC prescaler disable
- 493               		.stabn	68,0,169,.LM67-.LFBB10
- 494               	.LM67:
- 495 0136 EAE7      		ldi r30,lo8(122)
- 496 0138 F0E0      		ldi r31,hi8(122)
- 497 013a 8081      		ld r24,Z
- 498 013c 8F77      		andi r24,lo8(127)
- 499 013e 8083      		st Z,r24
- 500               	/* epilogue start */
- 169:main.c        **** }
- 501               		.stabn	68,0,170,.LM68-.LFBB10
- 502               	.LM68:
- 503 0140 0895      		ret
- 504               		.size	adcStop, .-adcStop
- 505               	.Lscope10:
- 506               		.stabs	"",36,0,0,.Lscope10-.LFBB10
- 507               		.stabd	78,0,0
- 508               		.stabs	"main:F(0,1)",36,0,173,main
- 509               	.global	main
-GAS LISTING /tmp/ccrOaYtr.s 			page 13
-
-
- 510               		.type	main, @function
- 511               	main:
- 512               		.stabd	46,0,0
- 170:main.c        **** 
- 171:main.c        **** int main(void)
- 172:main.c        **** {
- 513               		.stabn	68,0,173,.LM69-.LFBB11
- 514               	.LM69:
- 515               	.LFBB11:
- 516               	/* prologue: function */
- 517               	/* frame size = 0 */
- 518               	.LBB46:
- 519               	.LBB47:
-  28:main.c        **** 	UCSR0B = (1<<RXEN0)|(1<<TXEN0); 
- 520               		.stabn	68,0,28,.LM70-.LFBB11
- 521               	.LM70:
- 522 0142 88E1      		ldi r24,lo8(24)
- 523 0144 8093 C100 		sts 193,r24
-  31:main.c        **** 	UCSR0C = (3<<UCSZ00);
- 524               		.stabn	68,0,31,.LM71-.LFBB11
- 525               	.LM71:
- 526 0148 86E0      		ldi r24,lo8(6)
- 527 014a 8093 C200 		sts 194,r24
-  34:main.c        **** 	UBRR0L = BAUD_PRESCALE;
- 528               		.stabn	68,0,34,.LM72-.LFBB11
- 529               	.LM72:
- 530 014e 84E0      		ldi r24,lo8(4)
- 531 0150 8093 C400 		sts 196,r24
-  35:main.c        **** 	UBRR0H = (BAUD_PRESCALE >> 8);
- 532               		.stabn	68,0,35,.LM73-.LFBB11
- 533               	.LM73:
- 534 0154 1092 C500 		sts 197,__zero_reg__
-  38:main.c        **** 	UCSR0B|=(1<<RXCIE0);
- 535               		.stabn	68,0,38,.LM74-.LFBB11
- 536               	.LM74:
- 537 0158 8091 C100 		lds r24,193
- 538 015c 8068      		ori r24,lo8(-128)
- 539 015e 8093 C100 		sts 193,r24
- 540               	.LBE47:
- 541               	.LBE46:
- 542               	.LBB48:
- 543               	.LBB49:
-  61:main.c        ****     DDRD|= (1<<PD6);  
- 544               		.stabn	68,0,61,.LM75-.LFBB11
- 545               	.LM75:
- 546 0162 569A      		sbi 42-32,6
-  63:main.c        **** 	DDRD|= (1<<PD7);      
- 547               		.stabn	68,0,63,.LM76-.LFBB11
- 548               	.LM76:
- 549 0164 579A      		sbi 42-32,7
-  66:main.c        **** 	TCCR2A |=(1<<COM2A1);
- 550               		.stabn	68,0,66,.LM77-.LFBB11
- 551               	.LM77:
- 552 0166 8091 B000 		lds r24,176
- 553 016a 8068      		ori r24,lo8(-128)
- 554 016c 8093 B000 		sts 176,r24
-  67:main.c        **** 	TCCR2A &=~(1<<COM2A0);
-GAS LISTING /tmp/ccrOaYtr.s 			page 14
-
-
- 555               		.stabn	68,0,67,.LM78-.LFBB11
- 556               	.LM78:
- 557 0170 8091 B000 		lds r24,176
- 558 0174 8F7B      		andi r24,lo8(-65)
- 559 0176 8093 B000 		sts 176,r24
-  69:main.c        **** 	TCCR2A |=(1<<COM2B1);
- 560               		.stabn	68,0,69,.LM79-.LFBB11
- 561               	.LM79:
- 562 017a 8091 B000 		lds r24,176
- 563 017e 8062      		ori r24,lo8(32)
- 564 0180 8093 B000 		sts 176,r24
-  70:main.c        **** 	TCCR2A &=~(1<<COM2B0);
- 565               		.stabn	68,0,70,.LM80-.LFBB11
- 566               	.LM80:
- 567 0184 8091 B000 		lds r24,176
- 568 0188 8F7E      		andi r24,lo8(-17)
- 569 018a 8093 B000 		sts 176,r24
-  73:main.c        **** 	TCCR2A |=(1<<WGM20);
- 570               		.stabn	68,0,73,.LM81-.LFBB11
- 571               	.LM81:
- 572 018e 8091 B000 		lds r24,176
- 573 0192 8160      		ori r24,lo8(1)
- 574 0194 8093 B000 		sts 176,r24
-  74:main.c        **** 	TCCR2A |=(1<<WGM21);
- 575               		.stabn	68,0,74,.LM82-.LFBB11
- 576               	.LM82:
- 577 0198 8091 B000 		lds r24,176
- 578 019c 8260      		ori r24,lo8(2)
- 579 019e 8093 B000 		sts 176,r24
-  77:main.c        ****     TCCR2B |=(1<<CS20);
- 580               		.stabn	68,0,77,.LM83-.LFBB11
- 581               	.LM83:
- 582 01a2 8091 B100 		lds r24,177
- 583 01a6 8160      		ori r24,lo8(1)
- 584 01a8 8093 B100 		sts 177,r24
- 585               	.LBB50:
- 586               	.LBB51:
-  43:main.c        **** 	OCR2A = x; 
- 587               		.stabn	68,0,43,.LM84-.LFBB11
- 588               	.LM84:
- 589 01ac 1092 B300 		sts 179,__zero_reg__
- 590               	.LBE51:
- 591               	.LBE50:
- 592               	.LBB52:
- 593               	.LBB53:
-  48:main.c        **** 	OCR2B = x; 
- 594               		.stabn	68,0,48,.LM85-.LFBB11
- 595               	.LM85:
- 596 01b0 1092 B400 		sts 180,__zero_reg__
- 597               	.LBE53:
- 598               	.LBE52:
- 599               	.LBE49:
- 600               	.LBE48:
- 601               	.LBB54:
- 602               	.LBB55:
-  87:main.c        ****     DDRD|= (1<<PD4);  
- 603               		.stabn	68,0,87,.LM86-.LFBB11
-GAS LISTING /tmp/ccrOaYtr.s 			page 15
-
-
- 604               	.LM86:
- 605 01b4 549A      		sbi 42-32,4
-  88:main.c        ****     DDRD|= (1<<PD5);  
- 606               		.stabn	68,0,88,.LM87-.LFBB11
- 607               	.LM87:
- 608 01b6 559A      		sbi 42-32,5
-  91:main.c        **** 	TCCR1A |=(1<<COM1A1);
- 609               		.stabn	68,0,91,.LM88-.LFBB11
- 610               	.LM88:
- 611 01b8 8091 8000 		lds r24,128
- 612 01bc 8068      		ori r24,lo8(-128)
- 613 01be 8093 8000 		sts 128,r24
-  92:main.c        **** 	TCCR1A |=(1<<COM1A0);
- 614               		.stabn	68,0,92,.LM89-.LFBB11
- 615               	.LM89:
- 616 01c2 8091 8000 		lds r24,128
- 617 01c6 8064      		ori r24,lo8(64)
- 618 01c8 8093 8000 		sts 128,r24
-  95:main.c        **** 	TCCR1A &=~(1<<WGM10);
- 619               		.stabn	68,0,95,.LM90-.LFBB11
- 620               	.LM90:
- 621 01cc 8091 8000 		lds r24,128
- 622 01d0 8E7F      		andi r24,lo8(-2)
- 623 01d2 8093 8000 		sts 128,r24
-  96:main.c        **** 	TCCR1A |=(1<<WGM11);
- 624               		.stabn	68,0,96,.LM91-.LFBB11
- 625               	.LM91:
- 626 01d6 8091 8000 		lds r24,128
- 627 01da 8260      		ori r24,lo8(2)
- 628 01dc 8093 8000 		sts 128,r24
-  97:main.c        **** 	TCCR1B |=(1<<WGM12);
- 629               		.stabn	68,0,97,.LM92-.LFBB11
- 630               	.LM92:
- 631 01e0 8091 8100 		lds r24,129
- 632 01e4 8860      		ori r24,lo8(8)
- 633 01e6 8093 8100 		sts 129,r24
-  98:main.c        **** 	TCCR1B |=(1<<WGM13);
- 634               		.stabn	68,0,98,.LM93-.LFBB11
- 635               	.LM93:
- 636 01ea 8091 8100 		lds r24,129
- 637 01ee 8061      		ori r24,lo8(16)
- 638 01f0 8093 8100 		sts 129,r24
- 101:main.c        **** 	ICR1H = 0x07;
- 639               		.stabn	68,0,101,.LM94-.LFBB11
- 640               	.LM94:
- 641 01f4 87E0      		ldi r24,lo8(7)
- 642 01f6 8093 8700 		sts 135,r24
- 102:main.c        **** 	ICR1L = 0xFF;
- 643               		.stabn	68,0,102,.LM95-.LFBB11
- 644               	.LM95:
- 645 01fa 8FEF      		ldi r24,lo8(-1)
- 646 01fc 8093 8600 		sts 134,r24
- 105:main.c        ****     TCCR1B &=~(1<<CS10);
- 647               		.stabn	68,0,105,.LM96-.LFBB11
- 648               	.LM96:
- 649 0200 8091 8100 		lds r24,129
- 650 0204 8E7F      		andi r24,lo8(-2)
-GAS LISTING /tmp/ccrOaYtr.s 			page 16
-
-
- 651 0206 8093 8100 		sts 129,r24
- 106:main.c        **** 	TCCR1B |=(1<<CS11); 
- 652               		.stabn	68,0,106,.LM97-.LFBB11
- 653               	.LM97:
- 654 020a 8091 8100 		lds r24,129
- 655 020e 8260      		ori r24,lo8(2)
- 656 0210 8093 8100 		sts 129,r24
- 107:main.c        **** 	TCCR1B &=~(1<<CS12); 
- 657               		.stabn	68,0,107,.LM98-.LFBB11
- 658               	.LM98:
- 659 0214 8091 8100 		lds r24,129
- 660 0218 8B7F      		andi r24,lo8(-5)
- 661 021a 8093 8100 		sts 129,r24
- 662               	.LBB56:
- 663               	.LBB57:
-  53:main.c        **** 	OCR1AH = (0xFF) & (x>>8);
- 664               		.stabn	68,0,53,.LM99-.LFBB11
- 665               	.LM99:
- 666 021e 1092 8900 		sts 137,__zero_reg__
-  54:main.c        **** 	OCR1AL = (0xFF) & (x); 
- 667               		.stabn	68,0,54,.LM100-.LFBB11
- 668               	.LM100:
- 669 0222 1092 8800 		sts 136,__zero_reg__
- 670               	.LBE57:
- 671               	.LBE56:
- 672               	.LBE55:
- 673               	.LBE54:
- 674               	.LBB58:
- 675               	.LBB59:
- 140:main.c        **** 	ADMUX=(channel & 0x0f);
- 676               		.stabn	68,0,140,.LM101-.LFBB11
- 677               	.LM101:
- 678 0226 1092 7C00 		sts 124,__zero_reg__
- 143:main.c        **** 	ADMUX |=(1<<REFS0); 
- 679               		.stabn	68,0,143,.LM102-.LFBB11
- 680               	.LM102:
- 681 022a 8091 7C00 		lds r24,124
- 682 022e 8064      		ori r24,lo8(64)
- 683 0230 8093 7C00 		sts 124,r24
- 144:main.c        **** 	ADMUX &=~(1<<REFS1);
- 684               		.stabn	68,0,144,.LM103-.LFBB11
- 685               	.LM103:
- 686 0234 8091 7C00 		lds r24,124
- 687 0238 8F77      		andi r24,lo8(127)
- 688 023a 8093 7C00 		sts 124,r24
- 147:main.c        **** 	ADCSRA |=(1<<ADEN); 
- 689               		.stabn	68,0,147,.LM104-.LFBB11
- 690               	.LM104:
- 691 023e 8091 7A00 		lds r24,122
- 692 0242 8068      		ori r24,lo8(-128)
- 693 0244 8093 7A00 		sts 122,r24
- 150:main.c        **** 	ADCSRA |=(1<<ADPS0);
- 694               		.stabn	68,0,150,.LM105-.LFBB11
- 695               	.LM105:
- 696 0248 8091 7A00 		lds r24,122
- 697 024c 8160      		ori r24,lo8(1)
- 698 024e 8093 7A00 		sts 122,r24
-GAS LISTING /tmp/ccrOaYtr.s 			page 17
-
-
- 151:main.c        **** 	ADCSRA &=~(1<<ADPS1);
- 699               		.stabn	68,0,151,.LM106-.LFBB11
- 700               	.LM106:
- 701 0252 8091 7A00 		lds r24,122
- 702 0256 8D7F      		andi r24,lo8(-3)
- 703 0258 8093 7A00 		sts 122,r24
- 152:main.c        **** 	ADCSRA |=(1<<ADPS2);
- 704               		.stabn	68,0,152,.LM107-.LFBB11
- 705               	.LM107:
- 706 025c 8091 7A00 		lds r24,122
- 707 0260 8460      		ori r24,lo8(4)
- 708 0262 8093 7A00 		sts 122,r24
- 164:main.c        **** 	ADCSRA |=(1<<ADIE);
- 709               		.stabn	68,0,164,.LM108-.LFBB11
- 710               	.LM108:
- 711 0266 8091 7A00 		lds r24,122
- 712 026a 8860      		ori r24,lo8(8)
- 713 026c 8093 7A00 		sts 122,r24
- 714               	.LBE59:
- 715               	.LBE58:
- 716               	.LBB60:
- 717               	.LBB61:
- 119:main.c        **** 	TCCR0B |= counter0prescale256;
- 718               		.stabn	68,0,119,.LM109-.LFBB11
- 719               	.LM109:
- 720 0270 85B5      		in r24,69-32
- 721 0272 8460      		ori r24,lo8(4)
- 722 0274 85BD      		out 69-32,r24
- 121:main.c        **** 	TIMSK0 |=(1<<TOIE0);
- 723               		.stabn	68,0,121,.LM110-.LFBB11
- 724               	.LM110:
- 725 0276 8091 6E00 		lds r24,110
- 726 027a 8160      		ori r24,lo8(1)
- 727 027c 8093 6E00 		sts 110,r24
- 728               	.LBE61:
- 729               	.LBE60:
- 173:main.c        ****     uartinit();
- 174:main.c        ****     pwm8Init();
- 175:main.c        ****     pwm16Init();
- 176:main.c        **** 	adcInit(0);
- 177:main.c        **** 	counter0Init();
- 178:main.c        **** 	
- 179:main.c        ****     sei();
- 730               		.stabn	68,0,180,.LM111-.LFBB11
- 731               	.LM111:
- 732               	/* #APP */
- 733               	 ;  180 "main.c" 1
- 734 0280 7894      		sei
- 735               	 ;  0 "" 2
- 736               	/* #NOAPP */
- 737               	.L28:
- 738 0282 00C0      		rjmp .L28
- 739               		.size	main, .-main
- 740               	.Lscope11:
- 741               		.stabs	"",36,0,0,.Lscope11-.LFBB11
- 742               		.stabd	78,0,0
- 743               	.global	kp
-GAS LISTING /tmp/ccrOaYtr.s 			page 18
-
-
- 744               		.data
- 745               		.type	kp, @object
- 746               		.size	kp, 2
- 747               	kp:
- 748 0000 3200      		.word	50
- 749               	.global	ki
- 750               		.type	ki, @object
- 751               		.size	ki, 4
- 752               	ki:
- 753 0002 00        		.byte	0
- 754 0003 00        		.byte	0
- 755 0004 F0        		.byte	-16
- 756 0005 41        		.byte	65
- 757               	.global	ref
- 758               	.global	ref
- 759               		.section .bss
- 760               		.type	ref, @object
- 761               		.size	ref, 2
- 762               	ref:
- 763 0000 0000      		.skip 2,0
- 764               	.global	ADCconv
- 765               	.global	ADCconv
- 766               		.type	ADCconv, @object
- 767               		.size	ADCconv, 2
- 768               	ADCconv:
- 769 0002 0000      		.skip 2,0
- 770               	.global	pressOld
- 771               	.global	pressOld
- 772               		.type	pressOld, @object
- 773               		.size	pressOld, 4
- 774               	pressOld:
- 775 0004 0000 0000 		.skip 4,0
- 776               		.stabs	"kp:G(0,1)",32,0,19,0
- 777               		.stabs	"ki:G(0,12)",32,0,20,0
- 778               		.stabs	"ref:G(0,1)",32,0,21,0
- 779               		.stabs	"ADCconv:G(0,4)",32,0,22,0
- 780               		.stabs	"pressOld:G(0,12)",32,0,23,0
- 781               		.text
- 782               		.stabs	"",100,0,0,.Letext0
- 783               	.Letext0:
-GAS LISTING /tmp/ccrOaYtr.s 			page 19
+ 120               		.stabs	"",100,0,0,.Letext0
+ 121               	.Letext0:
+GAS LISTING /tmp/ccoBKnta.s 			page 4
 
 
 DEFINED SYMBOLS
-                            *ABS*:00000000 main.c
-     /tmp/ccrOaYtr.s:2      *ABS*:0000003f __SREG__
-     /tmp/ccrOaYtr.s:3      *ABS*:0000003e __SP_H__
-     /tmp/ccrOaYtr.s:4      *ABS*:0000003d __SP_L__
-     /tmp/ccrOaYtr.s:5      *ABS*:00000034 __CCP__
-     /tmp/ccrOaYtr.s:6      *ABS*:00000000 __tmp_reg__
-     /tmp/ccrOaYtr.s:7      *ABS*:00000001 __zero_reg__
-     /tmp/ccrOaYtr.s:83     .text:00000000 uartinit
-     /tmp/ccrOaYtr.s:123    .text:00000020 PWM_duty_cycle_A_set
-     /tmp/ccrOaYtr.s:144    .text:00000026 PWM_duty_cycle_B_set
-     /tmp/ccrOaYtr.s:165    .text:0000002c PWM_duty_cycle_A16_set
-     /tmp/ccrOaYtr.s:189    .text:00000036 pwm8Init
-     /tmp/ccrOaYtr.s:266    .text:00000076 pwm16Init
-     /tmp/ccrOaYtr.s:357    .text:000000ce counter0Init
-     /tmp/ccrOaYtr.s:388    .text:000000e0 sendtekst
-     /tmp/ccrOaYtr.s:425    .text:000000fe adcInit
-     /tmp/ccrOaYtr.s:486    .text:00000136 adcStop
-     /tmp/ccrOaYtr.s:511    .text:00000142 main
-     /tmp/ccrOaYtr.s:747    .data:00000000 kp
-     /tmp/ccrOaYtr.s:752    .data:00000002 ki
-     /tmp/ccrOaYtr.s:762    .bss:00000000 ref
-     /tmp/ccrOaYtr.s:768    .bss:00000002 ADCconv
-     /tmp/ccrOaYtr.s:774    .bss:00000004 pressOld
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccoBKnta.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccoBKnta.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccoBKnta.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccoBKnta.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccoBKnta.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccoBKnta.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccoBKnta.s:83     .text:0000000000000000 main
 
 UNDEFINED SYMBOLS
 __do_copy_data
 __do_clear_bss
+uartinit
+pwm8Init
+pwm16Init
+adcInit
+counter0Init
