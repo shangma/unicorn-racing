@@ -9,6 +9,9 @@ st_cmd_t gear_status_msg;
 U8 error_response_buffer[8];
 st_cmd_t error_msg;
 
+extern U8 tx_gear_shift_buffer[8];
+extern st_cmd_t tx_gear_shift_msg;
+
 /* function to check for new msg with msg_id */
 unsigned short int can_check( U8 msg_id);
 
