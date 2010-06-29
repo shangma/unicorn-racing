@@ -1,73 +1,41 @@
+/*********************************************
+ * Functions
+ *********************************************/
+
 #include <config.h>
 #include <prototyper.h>
+#include <extern.h>
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
 
-extern float pressOld; 
-extern int kp;
-extern float ki ;
-extern int ref;
-
-float intpressOld = 0;
-
-void presscontroller(unsigned int adc)
+void PWM_duty_cycle_A_set(unsigned int x)
 {
-	    char tempchar[5];
-		int press = 0;
-		int out = 0;
-		int outP = 0;
-		float outI = 0;   
-        int err = 0; 
-        float intpress = 0;
-        	
-		press = 0.17*adc-18.0;
+	OCR2A = x; 
+}
 
-        
+void PWM_duty_cycle_B_set(unsigned int x)
+{
+	OCR2B = x; 
+}
 
-		if(press<=0)
-		    press = 0;
-        
-        err = (ref-press);
-        intpress = intpressOld + err * 0.011;
+void PWM_duty_cycle_A16_set(unsigned int x)
+{
+	OCR1AH = (0xFF) & (x>>8);
+	OCR1AL = (0xFF) & (x); 
+}
 
-        /* Save int */
-		intpressOld = intpress;
+void adcStop(void)
+{
+	ADCSRA &=~(1<<ADEN); // ADC prescaler disable
+}
 
-		out = (int)(err*kp + intpress * ki);
-
-        
-
-		if(intpressOld>1000)
-		   intpressOld = 1000;
-
-		if(intpressOld<-1000)
-		    intpressOld = -1000;
-
-		if(out>dutymax)
-		    out = dutymax;
-
-		if(out<=0)
-		    out = 0;
-
-		PWM_duty_cycle_A16_set(out);
-
-		itoa(ref, tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(press, tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(out, tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(kp, tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa((int)(ki*100), tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa((int)(intpress), tempchar,10); 
-		sendtekst(tempchar);
-		sendtekst("\n\r");
+void sendtekst(char *tekstarray)
+{
+	short int i;
+	for (i = 0; tekstarray[i] != '\0'; i++)
+	{	
+		while ((UCSR0A & (1 << UDRE0)) == 0) {};
+		UDR0 = tekstarray[i];
+	}
 }
