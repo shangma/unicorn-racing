@@ -1,6 +1,6 @@
 pump_volume=0.24;
 pump_rpm=1500;
-pump_pressure=150;
+pump_pressure=0.2;
 
 r_rod=2.5;
 r_piston=4;
