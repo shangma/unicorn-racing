@@ -18,6 +18,18 @@ static const char ecu_data[10] = {0x12,0x34,0x56,0x78,0x17,0x08,0,0,0,0};
 /* Indeholder data fra ECU'en */
 U8 EcuData[228]; 
 
+/* Motor oil temp */
+#define MOTOR_OIL_TEMP_START 20
+#define MOTOR_OIL_TEMP_LENGTH 2
+#define MOTOR_OIL_TEMP_GAIN 1
+#define MOTOR_OIL_TEMP_OFFSET 0
+
+/* Water temp */
+#define Water_TEMP_START 46
+#define Water_TEMP_LENGTH 2
+#define Water_TEMP_GAIN -0.0390625
+#define Water_TEMP_OFFSET 120
+
 /* RPM */
 #define RPMSTART 54
 #define RPMLENGTH 2
