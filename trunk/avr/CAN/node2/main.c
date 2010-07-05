@@ -26,8 +26,8 @@ int main (void)
 //  Init CAN, UART, I/O
 	init();
 	init_led();
-	init_knapper();
-	init_kobling_adc();
+//	init_knapper();
+//	init_kobling_adc();
     sei();
 
     // --- Init variables
@@ -42,9 +42,6 @@ int main (void)
 
     fade_in(1000, 50);
     SEG_0;
-
-	while (1) {
-	}
 
     can_update_rx_msg(&error_msg, error_msgid, 8);
     can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
