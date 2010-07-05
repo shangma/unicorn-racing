@@ -29,21 +29,21 @@ ISR(TIMER0_COMP_vect)
 
 ISR(ADC_vect)
 {
-	SEG_9;
+/*	SEG_9;
 	adlow=ADCL;
         adhigh=ADCH;
 	ADCconv = (unsigned int)((adhigh<<8)|(adlow & 0xFF));
-	disp_rpm(ADCconv/60);
+	disp_rpm(ADCconv/60);*/
 }
 
 ISR(INT2_vect)
 {
-	SEG_7;
+/*	SEG_7;*/
 }
 
 ISR(INT3_vect)
 {
-	SEG_8;
+/*	SEG_8;*/
 }
 /*ISR(CANIT)
 {
