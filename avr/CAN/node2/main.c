@@ -40,7 +40,7 @@ int main (void)
     gear_status_msg.pt_data = &gear_status_response_buffer[0];
     gear_status_msg.status = 0;
 
-    fade_in(1000, 50);
+    fade_in(2000, 50);
     SEG_0;
 
     can_update_rx_msg(&error_msg, error_msgid, 8);
