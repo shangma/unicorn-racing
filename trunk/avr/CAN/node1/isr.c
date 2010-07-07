@@ -14,7 +14,7 @@ ISR(TIMER0_COMP_vect)
 {
 	int i;
 	testvar++;
-	if (testvar == 3) {
+	if (testvar == 4) {
 		if (RecIndex != 114 && EcuErrorTmp < 5) { // Test for fejl
 			EcuErrorTmp++;
 			if (EcuErrorTmp == 5) {
@@ -29,7 +29,7 @@ ISR(TIMER0_COMP_vect)
 		for (i=0;i<=9;i++) {		// Send data req streng
 			USART0_Transmit(ecu_data[i]); 
 		}
-	}	
+	}
 }
 
 /* Funktion til at læse data fra ECU */

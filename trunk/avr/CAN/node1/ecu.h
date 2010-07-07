@@ -35,8 +35,27 @@ U8 EcuData[228];
 #define RPMLENGTH 2
 #define RPMGAIN 0.9408
 #define RPMOFFSET 0
+
 /* Road speed */
 #define SPEEDSTART 62
 #define SPEEDLENGTH 2
 #define SPEEDGAIN 0.01
 #define SPEEDOFFSET 0
+
+/* potmeter */
+#define POTSTART 50
+#define POTLENGTH 2
+#define POTGAIN 0.0510
+#define POTOFFSET -31.4
+
+/* Map */
+#define MAPSTART 64
+#define MAPLENGTH 2
+#define MAPGAIN 1.0/800/5*3000
+#define MAPOFFSET 0
+
+/* Lambda */
+#define LAMBDASTART 68
+#define LAMBDALENGTH 1
+#define LAMBDAGAIN -14.7*0.6/3840
+#define LAMBDAOFFSET 0.7*14.7

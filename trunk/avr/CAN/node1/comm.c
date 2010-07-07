@@ -20,5 +20,10 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[49]);	
 	USART1_Transmit((U8)EcuData[66]);	// Batt V
 	USART1_Transmit((U8)EcuData[67]);		
-
+	USART1_Transmit((U8)EcuData[POTSTART]);	// Pot 
+	USART1_Transmit((U8)EcuData[POTSTART+POTLENGTH-1]);		
+	USART1_Transmit((U8)EcuData[MAPSTART]);	// Map 
+	USART1_Transmit((U8)EcuData[MAPSTART+MAPLENGTH-1]);		
+	USART1_Transmit((U8)EcuData[LAMBDASTART]);	// Lambda 
+	USART1_Transmit((U8)EcuData[LAMBDASTART+LAMBDALENGTH-1]);		
 }
