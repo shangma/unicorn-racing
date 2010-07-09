@@ -107,6 +107,7 @@ int main (void)
 	int rpm=0;
 	int speed=0;
 	int ratio = 0;
+	int water_temp = 0;
 
 	IoInit();
 
@@ -135,18 +136,25 @@ int main (void)
 	can_send(rpm_msgid, 8, 1);
 	sei();
 	while(1) {	
-		tmp2 = EcuData[54]<<8;
+		tmp2 = EcuData[54]<<8;			/* RPM */
 		tmp2 += EcuData[55];
 		rpm = (int)(tmp2*0.9408);
 		can_send(rpm_msgid, rpm/650 , 1);
 
-		tmp2 = EcuData[SPEEDSTART]<<8;
+		tmp2 = EcuData[SPEEDSTART]<<8;		/* Gear ratio */
 		tmp2 += EcuData[SPEEDSTART+1];
 		speed = (int)(tmp2*SPEEDGAIN);
 		ratio = (speed*(1/SPEEDGAIN))/(rpm>>6);
 		can_send(gear_status_msgid, ratio , 1);
-		can_send(error_msgid, (U8)EcuCommError, 1);
-		send_status();
+
+		tmp2 = EcuData[WATER_TEMP_START]<<8;	/* Water temp */
+		tmp2 += EcuData[WATER_TEMP_START+WATER_TEMP_LENGTH-1];
+		water_temp = tmp2*WATER_TEMP_GAIN+WATER_TEMP_OFFSET;
+		can_send(water_temp_msgid, water_temp, 1);
+
+		can_send(error_msgid, (U8)EcuCommError, 1); /* ECU error */
+
+		send_status();				/* Send data */
 		_delay_ms(50);
 	}
 }

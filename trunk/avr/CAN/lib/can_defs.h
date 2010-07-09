@@ -4,3 +4,4 @@
 #define gear_status_msgid 134
 #define error_msgid 135
 #define gear_knap 136
+#define water_temp_msgid 137 

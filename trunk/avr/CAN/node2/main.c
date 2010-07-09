@@ -37,6 +37,9 @@ int main (void)
     rpm_msg.pt_data = &rpm_response_buffer[0];
     rpm_msg.status = 0;
 
+    water_temp_msg.pt_data = &water_temp_response_buffer[0];
+    water_temp_msg.status = 0;
+
     gear_status_msg.pt_data = &gear_status_response_buffer[0];
     gear_status_msg.status = 0;
 
@@ -45,9 +48,11 @@ int main (void)
 
     can_update_rx_msg(&error_msg, error_msgid, 8);
     can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+    can_update_rx_msg(&water_temp_msg, water_temp_msgid, 8);
     can_update_rx_msg(&gear_status_msg, gear_status_msgid, 1);   
 	while (1) {
-		if (can_get_status(&error_msg) == CAN_STATUS_COMPLETED) {  // check for error_msg
+		// check for error_msg
+		if (can_get_status(&error_msg) == CAN_STATUS_COMPLETED) { 
 			EcuError = error_response_buffer[0];                     
 			can_update_rx_msg(&error_msg, error_msgid, 8);      // update error_msg to accept a new msg
 		}
@@ -56,15 +61,25 @@ int main (void)
 		} else {
 			SEG_0;
 		}
-
-		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {  // check for rpm_msg
+		
+		// check for rpm_msg
+		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {  
 			canData = rpm_response_buffer[0];                     
 			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
 			if (EcuError ==0)
 				disp_rpm(canData);
 		}
 
-		if (can_get_status(&gear_status_msg) == CAN_STATUS_COMPLETED) {  // check for gear_status_msg
+		// check for water_temp_msg
+		if (can_get_status(&water_temp_msg) == CAN_STATUS_COMPLETED) {  
+			canData = water_temp_response_buffer[0];                     
+			can_update_rx_msg(&water_temp_msg, water_temp_msgid, 8);// upddate water_temp_msg to accept a new msg
+			if (EcuError ==0)
+				disp_water_temp(canData);
+		}
+				
+		// check for gear_status_msg
+		if (can_get_status(&gear_status_msg) == CAN_STATUS_COMPLETED) {
 			canData = gear_status_response_buffer[0];                     
 			can_update_rx_msg(&gear_status_msg, gear_status_msgid, 8);  // update gear_status_msg to accept a new msg
 			ratio = canData;
