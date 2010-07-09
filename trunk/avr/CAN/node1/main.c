@@ -19,6 +19,7 @@
 #include "ecu.h"
 #include "comm.h"
 #include "error.h"
+#include "adc.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
@@ -108,6 +109,7 @@ int main (void)
 	int speed=0;
 	int ratio = 0;
 	int water_temp = 0;
+	int water2_temp = 0;
 
 	IoInit();
 
