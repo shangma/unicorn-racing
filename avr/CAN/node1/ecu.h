@@ -24,11 +24,11 @@ U8 EcuData[228];
 #define MOTOR_OIL_TEMP_GAIN 1
 #define MOTOR_OIL_TEMP_OFFSET 0
 
-/* Water temp */
-#define Water_TEMP_START 46
-#define Water_TEMP_LENGTH 2
-#define Water_TEMP_GAIN -0.0390625
-#define Water_TEMP_OFFSET 120
+/* WATER temp */
+#define WATER_TEMP_START 46
+#define WATER_TEMP_LENGTH 2
+#define WATER_TEMP_GAIN -0.0390625
+#define WATER_TEMP_OFFSET 120
 
 /* RPM */
 #define RPMSTART 54

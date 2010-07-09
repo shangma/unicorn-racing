@@ -12,7 +12,6 @@ volatile extern char LED_REG2;
 //+----------------------------------------------+------------+-------------+
 
 /* rpm leds */
-
 #define LED1_ON LED_REG1 |= 0x1
 #define LED1_OFF LED_REG1 &= 0xE
 #define LED1_TOGGLE LED_REG1 ^= 0x1
@@ -92,6 +91,17 @@ volatile extern char LED_REG2;
 #define SEG_8 PORTC = 0b01111111
 #define SEG_9 PORTC = 0b01011011
 #define SEG_E PORTC = 0b01110110
+
+/* status leds */
+#define STATUS_LED_GREEN 32
+#define STATUS_LED_GREEN_ON PORTA |= 32
+#define STATUS_LED_GREEN_OFF PORTA &=~ 32
+#define STATUS_LED_YELLOW 64
+#define STATUS_LED_YELLOW_ON PORTA |= 64
+#define STATUS_LED_YELLOW_OFF PORTA &=~ 64
+#define STATUS_LED_RED 128
+#define STATUS_LED_RED_ON PORTA |= 128
+#define STATUS_LED_RED_OFF PORTA &=~ 128
 
 /*  init alle porte til at styre display led'er og slå timer til at styre styrken til.
     Interrupt skal være slået til for at dioderne kan lyse. */

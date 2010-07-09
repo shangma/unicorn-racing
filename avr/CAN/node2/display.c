@@ -1,4 +1,6 @@
+#include "config.h"
 #include "led.h"
+
 
 void disp_rpm(U8 leds) 
 {
@@ -11,3 +13,21 @@ void disp_rpm(U8 leds)
                         LED_REG2 = (1<<(leds-8))-1;
                     }
 }
+
+void disp_water_temp(U8 temp)
+{
+	if (temp <= 40) {
+		STATUS_LED_RED_ON;
+		STATUS_LED_YELLOW_OFF;
+		STATUS_LED_GREEN_OFF;
+	} else if ((temp > 40) & (temp <= 60)) {
+		STATUS_LED_YELLOW_ON;
+		STATUS_LED_RED_OFF;
+		STATUS_LED_GREEN_OFF;
+	} else if (temp > 60) {
+		STATUS_LED_GREEN_ON;
+		STATUS_LED_YELLOW_OFF;
+		STATUS_LED_RED_OFF;
+	}
+}
+
