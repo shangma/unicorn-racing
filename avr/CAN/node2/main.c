@@ -75,7 +75,7 @@ int main (void)
 			canData = water_temp_response_buffer[0];                     
 			can_update_rx_msg(&water_temp_msg, water_temp_msgid, 8);// upddate water_temp_msg to accept a new msg
 			if (EcuError ==0)
-				disp_water_temp(canData);
+				disp_water_temp(canData); //Ændre til oil press
 		}
 				
 		// check for gear_status_msg

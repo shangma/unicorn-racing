@@ -3,6 +3,7 @@
 #include "comm.h"
 #include "ecu.h"
 #include "error.h"
+#include "adc.h"
 
 void send_status( void )
 {
@@ -25,5 +26,6 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[MAPSTART]);	// Map 
 	USART1_Transmit((U8)EcuData[MAPSTART+MAPLENGTH-1]);		
 	USART1_Transmit((U8)EcuData[LAMBDASTART]);	// Lambda 
-	USART1_Transmit((U8)EcuData[LAMBDASTART+LAMBDALENGTH-1]);		
+	USART1_Transmit((U8)EcuData[LAMBDASTART+LAMBDALENGTH-1]);
+	USART1_Transmit(PINA & 128);		
 }
