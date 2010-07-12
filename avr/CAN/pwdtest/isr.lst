@@ -1,4 +1,4 @@
-GAS LISTING /tmp/cczY6cNe.s 			page 1
+GAS LISTING /tmp/cc3SUlHc.s 			page 1
 
 
    1               		.file	"isr.c"
@@ -58,7 +58,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
   55               		.stabs	"uint_fast16_t:t(4,22)=(4,4)",128,0,228,0
   56               		.stabs	"int_fast32_t:t(4,23)=(4,5)",128,0,233,0
   57               		.stabs	"uint_fast32_t:t(4,24)=(4,6)",128,0,238,0
-GAS LISTING /tmp/cczY6cNe.s 			page 2
+GAS LISTING /tmp/cc3SUlHc.s 			page 2
 
 
   58               		.stabs	"int_fast64_t:t(4,25)=(4,7)",128,0,246,0
@@ -118,7 +118,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
   27:isr.c         **** 	// Read ADC channel
   28:isr.c         **** 	channel = ADMUX & 0x07;
   29:isr.c         **** 
-GAS LISTING /tmp/cczY6cNe.s 			page 3
+GAS LISTING /tmp/cc3SUlHc.s 			page 3
 
 
   30:isr.c         **** 	// Read ADC convertion
@@ -147,7 +147,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
   53:isr.c         **** 	//}
   54:isr.c         **** }
   55:isr.c         **** 
-  56:isr.c         ****  //----- UART Interrupt --------------------------------------------------------
+  56:isr.c         ****  // UART interrupt
   57:isr.c         **** ISR(USART0_RX_vect)
   58:isr.c         **** {
   59:isr.c         **** 	char data;
@@ -178,7 +178,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
   84:isr.c         ****     {
   85:isr.c         ****     KoblingPosRef = KoblingPosRef-10;
   86:isr.c         ****     }
-GAS LISTING /tmp/cczY6cNe.s 			page 4
+GAS LISTING /tmp/cc3SUlHc.s 			page 4
 
 
   87:isr.c         **** 
@@ -238,7 +238,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  141:isr.c         ****         if(retning)
  142:isr.c         **** 		    PWM_duty_cycle_A_set(count);
  143:isr.c         ****         else
-GAS LISTING /tmp/cczY6cNe.s 			page 5
+GAS LISTING /tmp/cc3SUlHc.s 			page 5
 
 
  144:isr.c         ****             PWM_duty_cycle_B_set(count);
@@ -281,7 +281,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  181:isr.c         **** 	}	
  182:isr.c         **** }
  183:isr.c         **** 
- 184:isr.c         **** // Timer0 (8-bit) overflow interrupt
+ 184:isr.c         **** // Timer0 (8-bit) overflow interrupt, ADC convert trigger
  185:isr.c         **** ISR(TIMER0_OVF_vect)
  186:isr.c         **** {	
   85               		.stabn	68,0,187,.LM0-.LFBB1
@@ -298,7 +298,7 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
   96               	/* frame size = 0 */
  187:isr.c         **** 	// Change ADC channel
  188:isr.c         **** 	ADMUX &= 0xf8;
-GAS LISTING /tmp/cczY6cNe.s 			page 6
+GAS LISTING /tmp/cc3SUlHc.s 			page 6
 
 
   97               		.stabn	68,0,189,.LM1-.LFBB1
@@ -354,18 +354,19 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  140               	.LC1:
  141 0002 0A0D 00   		.string	"\n\r"
  142               		.text
- 143               		.stabs	"debugging:F(0,15)",36,0,199,debugging
+ 143               		.stabs	"debugging:F(0,15)",36,0,200,debugging
  144               	.global	debugging
  145               		.type	debugging, @function
  146               	debugging:
-GAS LISTING /tmp/cczY6cNe.s 			page 7
+GAS LISTING /tmp/cc3SUlHc.s 			page 7
 
 
  147               		.stabd	46,0,0
  196:isr.c         **** 
- 197:isr.c         **** void debugging(void)
- 198:isr.c         **** {
- 148               		.stabn	68,0,199,.LM7-.LFBB2
+ 197:isr.c         **** // Debugging
+ 198:isr.c         **** void debugging(void)
+ 199:isr.c         **** {
+ 148               		.stabn	68,0,200,.LM7-.LFBB2
  149               	.LM7:
  150               	.LFBB2:
  151 004c EF92      		push r14
@@ -374,8 +375,8 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  154 0052 1F93      		push r17
  155               	/* prologue: function */
  156               	/* frame size = 0 */
- 199:isr.c         **** 		itoa(pressRef, tempchar,10); 					// 1 Press Ref
- 157               		.stabn	68,0,200,.LM8-.LFBB2
+ 200:isr.c         **** 		itoa(pressRef, tempchar,10); 					// 1 Press Ref
+ 157               		.stabn	68,0,201,.LM8-.LFBB2
  158               	.LM8:
  159 0054 00E0      		ldi r16,lo8(tempchar)
  160 0056 10E0      		ldi r17,hi8(tempchar)
@@ -385,13 +386,13 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  164 0062 4AE0      		ldi r20,lo8(10)
  165 0064 50E0      		ldi r21,hi8(10)
  166 0066 0E94 0000 		call itoa
- 200:isr.c         **** 		sendtekst(tempchar);
- 167               		.stabn	68,0,201,.LM9-.LFBB2
+ 201:isr.c         **** 		sendtekst(tempchar);
+ 167               		.stabn	68,0,202,.LM9-.LFBB2
  168               	.LM9:
  169 006a C801      		movw r24,r16
  170 006c 0E94 0000 		call sendtekst
- 201:isr.c         **** 		sendtekst(";");
- 171               		.stabn	68,0,202,.LM10-.LFBB2
+ 202:isr.c         **** 		sendtekst(";");
+ 171               		.stabn	68,0,203,.LM10-.LFBB2
  172               	.LM10:
  173 0070 80E0      		ldi r24,lo8(.LC0)
  174 0072 E82E      		mov r14,r24
@@ -399,9 +400,9 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  176 0076 F82E      		mov r15,r24
  177 0078 C701      		movw r24,r14
  178 007a 0E94 0000 		call sendtekst
- 202:isr.c         **** 
- 203:isr.c         **** 		itoa((int)(0.17*ADCconv-18.0), tempchar,10); 	// 2 Press Meas
- 179               		.stabn	68,0,204,.LM11-.LFBB2
+ 203:isr.c         **** 
+ 204:isr.c         **** 		itoa((int)(0.17*ADCconv-18.0), tempchar,10); 	// 2 Press Meas
+ 179               		.stabn	68,0,205,.LM11-.LFBB2
  180               	.LM11:
  181 007e 6091 0000 		lds r22,ADCconv
  182 0082 7091 0000 		lds r23,(ADCconv)+1
@@ -417,10 +418,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  192 009c 30E0      		ldi r19,hi8(0x41900000)
  193 009e 40E9      		ldi r20,hlo8(0x41900000)
  194 00a0 51E4      		ldi r21,hhi8(0x41900000)
+GAS LISTING /tmp/cc3SUlHc.s 			page 8
+
+
  195 00a2 0E94 0000 		call __subsf3
-GAS LISTING /tmp/cczY6cNe.s 			page 8
-
-
  196 00a6 0E94 0000 		call __fixsfsi
  197 00aa DC01      		movw r26,r24
  198 00ac CB01      		movw r24,r22
@@ -428,19 +429,19 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  200 00b0 4AE0      		ldi r20,lo8(10)
  201 00b2 50E0      		ldi r21,hi8(10)
  202 00b4 0E94 0000 		call itoa
- 204:isr.c         **** 		sendtekst(tempchar);
- 203               		.stabn	68,0,205,.LM12-.LFBB2
+ 205:isr.c         **** 		sendtekst(tempchar);
+ 203               		.stabn	68,0,206,.LM12-.LFBB2
  204               	.LM12:
  205 00b8 C801      		movw r24,r16
  206 00ba 0E94 0000 		call sendtekst
- 205:isr.c         **** 		sendtekst(";");
- 207               		.stabn	68,0,206,.LM13-.LFBB2
+ 206:isr.c         **** 		sendtekst(";");
+ 207               		.stabn	68,0,207,.LM13-.LFBB2
  208               	.LM13:
  209 00be C701      		movw r24,r14
  210 00c0 0E94 0000 		call sendtekst
- 206:isr.c         **** 
- 207:isr.c         **** 		itoa(count, tempchar,10); 						// 3 Mux Out 
- 211               		.stabn	68,0,208,.LM14-.LFBB2
+ 207:isr.c         **** 
+ 208:isr.c         **** 		itoa(count, tempchar,10); 						// 3 Mux Out 
+ 211               		.stabn	68,0,209,.LM14-.LFBB2
  212               	.LM14:
  213 00c4 8091 0000 		lds r24,count
  214 00c8 90E0      		ldi r25,lo8(0)
@@ -448,19 +449,19 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  216 00cc 4AE0      		ldi r20,lo8(10)
  217 00ce 50E0      		ldi r21,hi8(10)
  218 00d0 0E94 0000 		call itoa
- 208:isr.c         **** 		sendtekst(tempchar);
- 219               		.stabn	68,0,209,.LM15-.LFBB2
+ 209:isr.c         **** 		sendtekst(tempchar);
+ 219               		.stabn	68,0,210,.LM15-.LFBB2
  220               	.LM15:
  221 00d4 C801      		movw r24,r16
  222 00d6 0E94 0000 		call sendtekst
- 209:isr.c         **** 		sendtekst(";");
- 223               		.stabn	68,0,210,.LM16-.LFBB2
+ 210:isr.c         **** 		sendtekst(";");
+ 223               		.stabn	68,0,211,.LM16-.LFBB2
  224               	.LM16:
  225 00da C701      		movw r24,r14
  226 00dc 0E94 0000 		call sendtekst
- 210:isr.c         **** 
- 211:isr.c         **** 		itoa(KoblingPosRef, tempchar,10);				// 4 Kobling Pos Ref
- 227               		.stabn	68,0,212,.LM17-.LFBB2
+ 211:isr.c         **** 
+ 212:isr.c         **** 		itoa(KoblingPosRef, tempchar,10);				// 4 Kobling Pos Ref
+ 227               		.stabn	68,0,213,.LM17-.LFBB2
  228               	.LM17:
  229 00e0 8091 0000 		lds r24,KoblingPosRef
  230 00e4 9091 0000 		lds r25,(KoblingPosRef)+1
@@ -468,22 +469,22 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  232 00ea 4AE0      		ldi r20,lo8(10)
  233 00ec 50E0      		ldi r21,hi8(10)
  234 00ee 0E94 0000 		call itoa
- 212:isr.c         **** 		sendtekst(tempchar);
- 235               		.stabn	68,0,213,.LM18-.LFBB2
+ 213:isr.c         **** 		sendtekst(tempchar);
+ 235               		.stabn	68,0,214,.LM18-.LFBB2
  236               	.LM18:
  237 00f2 C801      		movw r24,r16
  238 00f4 0E94 0000 		call sendtekst
- 213:isr.c         **** 		sendtekst(";");
- 239               		.stabn	68,0,214,.LM19-.LFBB2
+ 214:isr.c         **** 		sendtekst(";");
+ 239               		.stabn	68,0,215,.LM19-.LFBB2
  240               	.LM19:
  241 00f8 C701      		movw r24,r14
+GAS LISTING /tmp/cc3SUlHc.s 			page 9
+
+
  242 00fa 0E94 0000 		call sendtekst
-GAS LISTING /tmp/cczY6cNe.s 			page 9
-
-
- 214:isr.c         **** 
- 215:isr.c         **** 		itoa(KoblingPos, tempchar,10);					// 5 Kobling Pos Meas
- 243               		.stabn	68,0,216,.LM20-.LFBB2
+ 215:isr.c         **** 
+ 216:isr.c         **** 		itoa(KoblingPos, tempchar,10);					// 5 Kobling Pos Meas
+ 243               		.stabn	68,0,217,.LM20-.LFBB2
  244               	.LM20:
  245 00fe 8091 0000 		lds r24,KoblingPos
  246 0102 9091 0000 		lds r25,(KoblingPos)+1
@@ -491,19 +492,19 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  248 0108 4AE0      		ldi r20,lo8(10)
  249 010a 50E0      		ldi r21,hi8(10)
  250 010c 0E94 0000 		call itoa
- 216:isr.c         **** 		sendtekst(tempchar);
- 251               		.stabn	68,0,217,.LM21-.LFBB2
+ 217:isr.c         **** 		sendtekst(tempchar);
+ 251               		.stabn	68,0,218,.LM21-.LFBB2
  252               	.LM21:
  253 0110 C801      		movw r24,r16
  254 0112 0E94 0000 		call sendtekst
- 217:isr.c         **** 		sendtekst(";");
- 255               		.stabn	68,0,218,.LM22-.LFBB2
+ 218:isr.c         **** 		sendtekst(";");
+ 255               		.stabn	68,0,219,.LM22-.LFBB2
  256               	.LM22:
  257 0116 C701      		movw r24,r14
  258 0118 0E94 0000 		call sendtekst
- 218:isr.c         **** 
- 219:isr.c         **** 		itoa(KoblingPosKP*10, tempchar,10);				// 6 Kobling Controller Kp
- 259               		.stabn	68,0,220,.LM23-.LFBB2
+ 219:isr.c         **** 
+ 220:isr.c         **** 		itoa(KoblingPosKP*10, tempchar,10);				// 6 Kobling Controller Kp
+ 259               		.stabn	68,0,221,.LM23-.LFBB2
  260               	.LM23:
  261 011c 6091 0000 		lds r22,KoblingPosKP
  262 0120 7091 0000 		lds r23,(KoblingPosKP)+1
@@ -521,26 +522,26 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  274 0142 4AE0      		ldi r20,lo8(10)
  275 0144 50E0      		ldi r21,hi8(10)
  276 0146 0E94 0000 		call itoa
- 220:isr.c         **** 		sendtekst(tempchar);
- 277               		.stabn	68,0,221,.LM24-.LFBB2
+ 221:isr.c         **** 		sendtekst(tempchar);
+ 277               		.stabn	68,0,222,.LM24-.LFBB2
  278               	.LM24:
  279 014a C801      		movw r24,r16
  280 014c 0E94 0000 		call sendtekst
- 221:isr.c         **** 	
- 222:isr.c         **** 		sendtekst("\n\r");
- 281               		.stabn	68,0,223,.LM25-.LFBB2
+ 222:isr.c         **** 	
+ 223:isr.c         **** 		sendtekst("\n\r");
+ 281               		.stabn	68,0,224,.LM25-.LFBB2
  282               	.LM25:
  283 0150 80E0      		ldi r24,lo8(.LC1)
  284 0152 90E0      		ldi r25,hi8(.LC1)
  285 0154 0E94 0000 		call sendtekst
  286               	/* epilogue start */
- 223:isr.c         **** }
- 287               		.stabn	68,0,224,.LM26-.LFBB2
+ 224:isr.c         **** }
+ 287               		.stabn	68,0,225,.LM26-.LFBB2
  288               	.LM26:
+GAS LISTING /tmp/cc3SUlHc.s 			page 10
+
+
  289 0158 1F91      		pop r17
-GAS LISTING /tmp/cczY6cNe.s 			page 10
-
-
  290 015a 0F91      		pop r16
  291 015c FF90      		pop r15
  292 015e EF90      		pop r14
@@ -597,10 +598,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  338 0190 8333      		cpi r24,lo8(51)
  339 0192 01F4      		brne .L12
   76:isr.c         **** 	    KoblingPosRef = 10;
+GAS LISTING /tmp/cc3SUlHc.s 			page 11
+
+
  340               		.stabn	68,0,76,.LM32-.LFBB3
-GAS LISTING /tmp/cczY6cNe.s 			page 11
-
-
  341               	.LM32:
  342 0194 8AE0      		ldi r24,lo8(10)
  343 0196 90E0      		ldi r25,hi8(10)
@@ -657,10 +658,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  389               	.LM37:
  390 01e2 8091 0000 		lds r24,KoblingPosRef
  391 01e6 9091 0000 		lds r25,(KoblingPosRef)+1
+GAS LISTING /tmp/cc3SUlHc.s 			page 12
+
+
  392 01ea 0A96      		adiw r24,10
-GAS LISTING /tmp/cczY6cNe.s 			page 12
-
-
  393 01ec 9093 0000 		sts (KoblingPosRef)+1,r25
  394 01f0 8093 0000 		sts KoblingPosRef,r24
  395 01f4 00C0      		rjmp .L33
@@ -717,10 +718,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  439 0240 01F4      		brne .L15
  101:isr.c         ****     pressRef = 110;
  440               		.stabn	68,0,101,.LM45-.LFBB3
+GAS LISTING /tmp/cc3SUlHc.s 			page 13
+
+
  441               	.LM45:
-GAS LISTING /tmp/cczY6cNe.s 			page 13
-
-
  442 0242 8EE6      		ldi r24,lo8(110)
  443 0244 90E0      		ldi r25,hi8(110)
  444 0246 9093 0000 		sts (pressRef)+1,r25
@@ -777,10 +778,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  489 02a4 2DEC      		ldi r18,lo8(0x3dcccccd)
  490 02a6 3CEC      		ldi r19,hi8(0x3dcccccd)
  491 02a8 4CEC      		ldi r20,hlo8(0x3dcccccd)
+GAS LISTING /tmp/cc3SUlHc.s 			page 14
+
+
  492 02aa 5DE3      		ldi r21,hhi8(0x3dcccccd)
-GAS LISTING /tmp/cczY6cNe.s 			page 14
-
-
  493 02ac 0E94 0000 		call __subsf3
  494 02b0 6093 0000 		sts KoblingPosKP,r22
  495 02b4 7093 0000 		sts (KoblingPosKP)+1,r23
@@ -837,10 +838,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  537 02f2 0E94 0000 		call PWM_duty_cycle_A_set
  132:isr.c         **** 	    PWM_duty_cycle_B_set(0);
  538               		.stabn	68,0,132,.LM61-.LFBB3
+GAS LISTING /tmp/cc3SUlHc.s 			page 15
+
+
  539               	.LM61:
-GAS LISTING /tmp/cczY6cNe.s 			page 15
-
-
  540 02f6 80E0      		ldi r24,lo8(0)
  541 02f8 90E0      		ldi r25,hi8(0)
  542 02fa 0E94 0000 		call PWM_duty_cycle_B_set
@@ -897,10 +898,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  585 0332 01F0      		breq .+2
  586 0334 00C0      		rjmp .L33
  176:isr.c         ****         count = 0;
+GAS LISTING /tmp/cc3SUlHc.s 			page 16
+
+
  587               		.stabn	68,0,176,.LM70-.LFBB3
-GAS LISTING /tmp/cczY6cNe.s 			page 16
-
-
  588               	.LM70:
  589 0336 1092 0000 		sts count,__zero_reg__
  178:isr.c         ****         if(retning)
@@ -957,10 +958,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  633 0378 8823      		tst r24
  634 037a 01F0      		breq .L29
  167:isr.c         **** 		    PWM_duty_cycle_A_set(count);
+GAS LISTING /tmp/cc3SUlHc.s 			page 17
+
+
  635               		.stabn	68,0,167,.LM79-.LFBB3
-GAS LISTING /tmp/cczY6cNe.s 			page 17
-
-
  636               	.LM79:
  637 037c 8FEF      		ldi r24,lo8(255)
  638 037e 90E0      		ldi r25,hi8(255)
@@ -1017,10 +1018,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  686 03b8 AF93      		push r26
  687 03ba BF93      		push r27
  688 03bc EF93      		push r30
+GAS LISTING /tmp/cc3SUlHc.s 			page 18
+
+
  689 03be FF93      		push r31
-GAS LISTING /tmp/cczY6cNe.s 			page 18
-
-
  690               	/* prologue: Signal */
  691               	/* frame size = 0 */
   29:isr.c         **** 	channel = ADMUX & 0x07;
@@ -1077,10 +1078,10 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  736 0402 0F90      		pop r0
  737 0404 0FBE      		out __SREG__,r0
  738 0406 0F90      		pop r0
+GAS LISTING /tmp/cc3SUlHc.s 			page 19
+
+
  739 0408 1F90      		pop __zero_reg__
-GAS LISTING /tmp/cczY6cNe.s 			page 19
-
-
  740 040a 1895      		reti
  741               	.L45:
   40:isr.c         **** 		presscontroller(ADCconv);	
@@ -1137,33 +1138,33 @@ GAS LISTING /tmp/cczY6cNe.s 			page 1
  790               		.stabs	"setChannel:G(0,2)",32,0,14,0
  791               		.stabs	"count:G(0,2)",32,0,17,0
  792               		.stabs	"retning:G(0,2)",32,0,18,0
+GAS LISTING /tmp/cc3SUlHc.s 			page 20
+
+
  793               		.stabs	"tempchar:G(0,16)=ar(0,17)=r(0,17);0;0177777;;0;4;(0,2)",32,0,19,0
-GAS LISTING /tmp/cczY6cNe.s 			page 20
-
-
  794               		.text
  795               		.stabs	"",100,0,0,.Letext0
  796               	.Letext0:
-GAS LISTING /tmp/cczY6cNe.s 			page 21
+GAS LISTING /tmp/cc3SUlHc.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 isr.c
-     /tmp/cczY6cNe.s:2      *ABS*:000000000000003f __SREG__
-     /tmp/cczY6cNe.s:3      *ABS*:000000000000003e __SP_H__
-     /tmp/cczY6cNe.s:4      *ABS*:000000000000003d __SP_L__
-     /tmp/cczY6cNe.s:5      *ABS*:0000000000000034 __CCP__
-     /tmp/cczY6cNe.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cczY6cNe.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cczY6cNe.s:83     .text:0000000000000000 __vector_18
-     /tmp/cczY6cNe.s:774    .bss:0000000000000002 setChannel
-     /tmp/cczY6cNe.s:146    .text:000000000000004c debugging
+     /tmp/cc3SUlHc.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cc3SUlHc.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cc3SUlHc.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cc3SUlHc.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cc3SUlHc.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc3SUlHc.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc3SUlHc.s:83     .text:0000000000000000 __vector_18
+     /tmp/cc3SUlHc.s:774    .bss:0000000000000002 setChannel
+     /tmp/cc3SUlHc.s:146    .text:000000000000004c debugging
                             *COM*:0000000000000005 tempchar
-     /tmp/cczY6cNe.s:768    .bss:0000000000000000 ADCconv
-     /tmp/cczY6cNe.s:780    .bss:0000000000000003 count
-     /tmp/cczY6cNe.s:301    .text:0000000000000162 __vector_20
-     /tmp/cczY6cNe.s:786    .bss:0000000000000004 retning
-     /tmp/cczY6cNe.s:668    .text:000000000000039e __vector_24
+     /tmp/cc3SUlHc.s:768    .bss:0000000000000000 ADCconv
+     /tmp/cc3SUlHc.s:780    .bss:0000000000000003 count
+     /tmp/cc3SUlHc.s:301    .text:0000000000000162 __vector_20
+     /tmp/cc3SUlHc.s:786    .bss:0000000000000004 retning
+     /tmp/cc3SUlHc.s:668    .text:000000000000039e __vector_24
 
 UNDEFINED SYMBOLS
 __do_copy_data

@@ -31,3 +31,10 @@ void disp_water_temp(U8 temp)
 	}
 }
 
+void disp_gear_neutral(U8 gear_n)
+{
+	if(gear_n <= 100)
+		SEG_neutral;
+	else
+		SEG_OFF;
+}

@@ -93,7 +93,7 @@ void IoInit ()
 	rtc_init();         // Initialize RTC
 	can_init(0);
 	uart_init();
-
+	
 	// ADC
 	DDRF = 0x00;
 
@@ -163,6 +163,8 @@ int main (void)
 		tmp2 += EcuData[WATER_TEMP_START+WATER_TEMP_LENGTH-1];
 		water_temp = tmp2*WATER_TEMP_GAIN+WATER_TEMP_OFFSET;
 		can_send(water_temp_msgid, water_temp, 1);
+
+		can_send(gear_neutral_msgid, gearneutral, 1);
 
 		can_send(error_msgid, (U8)EcuCommError, 1); /* ECU error */
 

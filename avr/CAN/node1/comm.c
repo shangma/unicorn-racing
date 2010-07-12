@@ -5,6 +5,9 @@
 #include "error.h"
 #include "adc.h"
 
+unsigned short int gearneutral = 0;
+
+
 void send_status( void )
 {
 	unsigned int tmp=0;
@@ -20,8 +23,6 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[47]);
 	USART1_Transmit((U8)EcuData[48]);	// Luft temp
 	USART1_Transmit((U8)EcuData[49]);
-	tmp = convertanalog(7);	
-	USART1_Transmit((U8)(tmp>>2) & 0xff);	
 	USART1_Transmit((U8)EcuData[66]);	// Batt V
 	USART1_Transmit((U8)EcuData[67]);		
 	USART1_Transmit((U8)EcuData[POTSTART]);	// Pot 
@@ -29,5 +30,13 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[MAPSTART]);	// Map 
 	USART1_Transmit((U8)EcuData[MAPSTART+MAPLENGTH-1]);		
 	USART1_Transmit((U8)EcuData[LAMBDASTART]);	// Lambda 
-	USART1_Transmit((U8)PINC & 1);
+	gearneutral = convertanalog(3); // GEAR-neutral
+	USART1_Transmit((U8)(gearneutral>>2) & 0xff);
+	tmp = convertanalog(7); //Olie tryk (on/off)
+	USART1_Transmit((U8)(tmp>>2) & 0xff);	
+	tmp = convertanalog(1); // Vand temp efter koeler
+	USART1_Transmit((U8)(tmp>>2) & 0xff);	
+	tmp = convertanalog(5); // Olie temp
+	USART1_Transmit((U8)(tmp>>2) & 0xff);	
+
 }
