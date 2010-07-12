@@ -7,6 +7,7 @@
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include <string.h>
+#include <stdlib.h>
 #include <util/delay.h>
 #include "uart.h"
 #include "xitoa.h"
@@ -93,12 +94,15 @@ void IoInit ()
 	can_init(0);
 	uart_init();
 
-	PORTC |= 1<<PORTC1; // gear neutral pull-up
-	PORTA |= 1<<PORTA7; // oil press pull-up
+	DDRA = 0x00;
+
+	//PORTC |= 1<<PORTC1; // gear neutral pull-up
+	//PORTA |= 1<<PORTA7; // oil press pull-up
 }
 
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
+
 
 int main (void)
 {
@@ -140,6 +144,7 @@ int main (void)
 
 	can_send(rpm_msgid, 8, 1);
 	sei();
+
 	while(1) {	
 		tmp2 = EcuData[54]<<8;			/* RPM */
 		tmp2 += EcuData[55];
@@ -155,7 +160,7 @@ int main (void)
 		tmp2 = EcuData[WATER_TEMP_START]<<8;	/* Water temp */
 		tmp2 += EcuData[WATER_TEMP_START+WATER_TEMP_LENGTH-1];
 		water_temp = tmp2*WATER_TEMP_GAIN+WATER_TEMP_OFFSET;
-		can_send(water_temp_msgid, PINA & 128, 1); // Ændret til oil press
+		can_send(water_temp_msgid, water_temp, 1);
 
 		can_send(error_msgid, (U8)EcuCommError, 1); /* ECU error */
 
