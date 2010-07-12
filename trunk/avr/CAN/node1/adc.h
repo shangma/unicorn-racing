@@ -2,3 +2,5 @@
 #define OIL_TEMP_CHAN 5
 
 unsigned int convertanalog(unsigned channel);
+
+extern unsigned short int gearneutral;

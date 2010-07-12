@@ -80,6 +80,7 @@ volatile extern char LED_REG2;
 #define BLUE_OFF LED13_OFF; LED14_OFF; LED15_OFF; LED16_OFF
 
 /* 7-segment */
+#define SEG_OFF PORTC = 0b00000000
 #define SEG_0 PORTC = 0b00111111
 #define SEG_1 PORTC = 0b00001001
 #define SEG_2 PORTC = 0b01100111
@@ -91,6 +92,7 @@ volatile extern char LED_REG2;
 #define SEG_8 PORTC = 0b01111111
 #define SEG_9 PORTC = 0b01011011
 #define SEG_E PORTC = 0b01110110
+#define SEG_neutral PORTC = 0b01000000
 
 /* status leds */
 #define STATUS_LED_GREEN 64

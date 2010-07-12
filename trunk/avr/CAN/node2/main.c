@@ -43,6 +43,9 @@ int main (void)
     gear_status_msg.pt_data = &gear_status_response_buffer[0];
     gear_status_msg.status = 0;
 
+    gear_neutral_msg.pt_data = &gear_neutral_response_buffer[0];
+    gear_neutral_msg.status = 0;
+
     fade_in(2000, 50);
     SEG_0;
 
@@ -50,6 +53,7 @@ int main (void)
     can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
     can_update_rx_msg(&water_temp_msg, water_temp_msgid, 8);
     can_update_rx_msg(&gear_status_msg, gear_status_msgid, 1);   
+    can_update_rx_msg(&gear_neutral_msg, gear_neutral_msgid, 8); 
 	while (1) {
 		// check for error_msg
 		if (can_get_status(&error_msg) == CAN_STATUS_COMPLETED) { 
@@ -58,8 +62,6 @@ int main (void)
 		}
 		if (EcuError == 1) {
 			SEG_E;
-		} else {
-			SEG_0;
 		}
 		
 		// check for rpm_msg
@@ -76,6 +78,14 @@ int main (void)
 			can_update_rx_msg(&water_temp_msg, water_temp_msgid, 8);// upddate water_temp_msg to accept a new msg
 			if (EcuError ==0)
 				disp_water_temp(canData);
+		}
+
+		// check for gear neutral
+		if (can_get_status(&gear_neutral_msg) == CAN_STATUS_COMPLETED) {  
+			canData = gear_neutral_response_buffer[0];                     
+			can_update_rx_msg(&gear_neutral_msg, gear_neutral_msgid, 8);// upddate water_temp_msg to accept a new msg
+			if (EcuError ==0)
+				disp_gear_neutral(canData);
 		}
 				
 		// check for gear_status_msg

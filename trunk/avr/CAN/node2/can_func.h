@@ -12,6 +12,9 @@ st_cmd_t error_msg;
 U8 water_temp_response_buffer[8];
 st_cmd_t water_temp_msg;
 
+U8 gear_neutral_response_buffer[8];
+st_cmd_t gear_neutral_msg;
+
 extern U8 tx_gear_shift_buffer[8];
 extern st_cmd_t tx_gear_shift_msg;
 

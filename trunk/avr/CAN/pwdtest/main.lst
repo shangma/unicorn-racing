@@ -1,4 +1,4 @@
-GAS LISTING /tmp/ccoBKnta.s 			page 1
+GAS LISTING /tmp/ccUQY0jb.s 			page 1
 
 
    1               		.file	"main.c"
@@ -58,7 +58,7 @@ GAS LISTING /tmp/ccoBKnta.s 			page 1
   55               		.stabs	"uint_fast16_t:t(4,22)=(4,4)",128,0,228,0
   56               		.stabs	"int_fast32_t:t(4,23)=(4,5)",128,0,233,0
   57               		.stabs	"uint_fast32_t:t(4,24)=(4,6)",128,0,238,0
-GAS LISTING /tmp/ccoBKnta.s 			page 2
+GAS LISTING /tmp/ccUQY0jb.s 			page 2
 
 
   58               		.stabs	"int_fast64_t:t(4,25)=(4,7)",128,0,246,0
@@ -118,7 +118,7 @@ GAS LISTING /tmp/ccoBKnta.s 			page 1
   95 0004 0E94 0000 		call pwm8Init
   17:main.c        ****     pwm16Init();
   96               		.stabn	68,0,18,.LM3-.LFBB1
-GAS LISTING /tmp/ccoBKnta.s 			page 3
+GAS LISTING /tmp/ccUQY0jb.s 			page 3
 
 
   97               	.LM3:
@@ -149,18 +149,18 @@ GAS LISTING /tmp/ccoBKnta.s 			page 1
  119               		.stabd	78,0,0
  120               		.stabs	"",100,0,0,.Letext0
  121               	.Letext0:
-GAS LISTING /tmp/ccoBKnta.s 			page 4
+GAS LISTING /tmp/ccUQY0jb.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccoBKnta.s:2      *ABS*:000000000000003f __SREG__
-     /tmp/ccoBKnta.s:3      *ABS*:000000000000003e __SP_H__
-     /tmp/ccoBKnta.s:4      *ABS*:000000000000003d __SP_L__
-     /tmp/ccoBKnta.s:5      *ABS*:0000000000000034 __CCP__
-     /tmp/ccoBKnta.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccoBKnta.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccoBKnta.s:83     .text:0000000000000000 main
+     /tmp/ccUQY0jb.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccUQY0jb.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccUQY0jb.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccUQY0jb.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccUQY0jb.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccUQY0jb.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccUQY0jb.s:83     .text:0000000000000000 main
 
 UNDEFINED SYMBOLS
 __do_copy_data
