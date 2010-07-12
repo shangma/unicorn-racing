@@ -94,10 +94,12 @@ void IoInit ()
 	can_init(0);
 	uart_init();
 
-	DDRA = 0x00;
+	// ADC
+	DDRF = 0x00;
 
-	//PORTC |= 1<<PORTC1; // gear neutral pull-up
-	//PORTA |= 1<<PORTA7; // oil press pull-up
+	// ADC 3,7 pull-up
+	PORTF|= (1<<PF3);
+	PORTF|= (1<<PF7);
 }
 
 /*-----------------------------------------------------------------------*/
