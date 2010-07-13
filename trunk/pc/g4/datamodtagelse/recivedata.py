@@ -6,7 +6,7 @@ import math
 
 ser=serial.Serial("/dev/ttyUSB0",115200)
 
-f = open('/home/css/Desktop/UnicornLogData/logdata.txt','w+')
+f = open('/home/morten/Desktop/UnicornLogData/logdata.txt','w+')
 
 sold = 0
 speed = 0
