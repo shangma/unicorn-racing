@@ -4,3 +4,4 @@
 unsigned int convertanalog(unsigned channel);
 
 extern unsigned short int gearneutral;
+extern unsigned short int oilpress;

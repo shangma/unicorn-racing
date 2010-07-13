@@ -164,8 +164,10 @@ int main (void)
 		water_temp = tmp2*WATER_TEMP_GAIN+WATER_TEMP_OFFSET;
 		can_send(water_temp_msgid, water_temp, 1);
 
-		can_send(gear_neutral_msgid, gearneutral, 1);
+		can_send(gear_neutral_msgid, gearneutral, 1); /* Gear neutral */
 
+		can_send(oil_press_msgid, oilpress, 1);		/* Oil press */
+	
 		can_send(error_msgid, (U8)EcuCommError, 1); /* ECU error */
 
 		send_status();				/* Send data */

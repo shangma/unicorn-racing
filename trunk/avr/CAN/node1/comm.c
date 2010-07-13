@@ -6,6 +6,7 @@
 #include "adc.h"
 
 unsigned short int gearneutral = 0;
+unsigned short int oilpress = 0;
 
 
 void send_status( void )
@@ -32,11 +33,10 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[LAMBDASTART]);	// Lambda 
 	gearneutral = convertanalog(3); // GEAR-neutral
 	USART1_Transmit((U8)(gearneutral>>2) & 0xff);
-	tmp = convertanalog(7); //Olie tryk (on/off)
-	USART1_Transmit((U8)(tmp>>2) & 0xff);	
+	oilpress = convertanalog(7); //Olie tryk (on/off)
+	USART1_Transmit((U8)(oilpress>>2) & 0xff);	
 	tmp = convertanalog(1); // Vand temp efter koeler
 	USART1_Transmit((U8)(tmp>>2) & 0xff);	
 	tmp = convertanalog(5); // Olie temp
-	USART1_Transmit((U8)(tmp>>2) & 0xff);	
-
+	USART1_Transmit((U8)(tmp>>2) & 0xff);
 }
