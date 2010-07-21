@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 #### GENERATE CSV FILE FROM DATALOG
 ## JUST DRAG A "dataLog yy-mm-dd hhmm.txt" TO THIS FILES ICON
