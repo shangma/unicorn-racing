@@ -28,7 +28,7 @@ ser.baudrate = 230400
 
 # Der oprettes en socket server som tillader klienter at oprette forbindelse
 HOST = ''
-PORT = 9999
+PORT = 9998
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)

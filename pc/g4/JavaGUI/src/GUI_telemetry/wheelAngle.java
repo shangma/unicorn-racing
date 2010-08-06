@@ -35,7 +35,7 @@ public class wheelAngle extends JPanel{
         int w = getWidth();   // Panelets bredde
 
         g2.setColor(bgcolor);
-        g2.fill(new Rectangle(0, 0, w, h));
+        g2.fillRect(0, 0, w, h);
 
         // Rotering
         g2.rotate(Math.toRadians(angle),w/2-20,h/2-10);
@@ -43,9 +43,9 @@ public class wheelAngle extends JPanel{
         // Wheel
         g2.setPaint(darkRed); 
         g2.setStroke(wideStroke1);          
-        g2.draw(new Line2D.Double(w/2-h/2+10, h/2-10, h/2+w/2-50, h/2-10));
-        g2.draw(new Line2D.Double(w/2-20, h/2-10, w/2-20, h-40));
-        g2.draw(new Ellipse2D.Double(w/2-h/2+10, 20, h-60, h-60));
+        g2.drawLine(w/2-h/2+10, h/2-10, h/2+w/2-50, h/2-10);
+        g2.drawLine(w/2-20, h/2-10, w/2-20, h-40);
+        g2.drawOval(w/2-h/2+10, 20, h-60, h-60);
 
         g2.setTransform(original);
 

@@ -34,12 +34,12 @@ public class barData extends JPanel{
         h = getHeight();  // Panelets højde
         w = getWidth();   // Panelets bredde
         g2.setColor(bgColor);
-        g2.fill(new Rectangle(0, 0, w, h));
+        g2.fillRect(0, 0, w, h);
 
         // 3 x rectangles
-        RoundRectangle2D rectangle1 = new RoundRectangle2D.Double(xOffset, h/7, data1, h/6,10,10);
-        RoundRectangle2D rectangle2 = new RoundRectangle2D.Double(xOffset, 3*h/7, data2, h/6,10,10);
-        RoundRectangle2D rectangle3 = new RoundRectangle2D.Double(xOffset, 5*h/7, data3, h/6,10,10);
+        //RoundRectangle2D rectangle1 = new RoundRectangle2D.Double(xOffset, h/7, data1, h/6,10,10);
+        //RoundRectangle2D rectangle2 = new RoundRectangle2D.Double(xOffset, 3*h/7, data2, h/6,10,10);
+        //RoundRectangle2D rectangle3 = new RoundRectangle2D.Double(xOffset, 5*h/7, data3, h/6,10,10);
 
         // 3 x strings
         g2.setColor(txtColor);
@@ -48,6 +48,11 @@ public class barData extends JPanel{
         g2.drawString("Brake", 0, (43*h)/84 + 5);
         g2.drawString("Clutch", 0, (67*h)/84 + 5);
 
+        g2.setColor(barColor);  // Bar color
+        g2.fillRoundRect(xOffset, h/7, (int)data1, h/6,10,10);
+        g2.fillRoundRect(xOffset, 3*h/7, (int)data2, h/6,10,10);
+        g2.fillRoundRect(xOffset, 5*h/7, (int)data3, h/6,10,10);
+/*
         // Rectangle 1
         g2.setColor(barColor);  // Bar color
         g2.fill(rectangle1);
@@ -65,7 +70,7 @@ public class barData extends JPanel{
         g2.fill(rectangle3);
         g2.setColor(barColorEdge);  // Bar edge color
         g2.draw(rectangle3);
-
+*/
         // Marker (0% / 100%)
         g2.setColor(markerColor);
         g2.setStroke(markerStroke);
@@ -78,7 +83,10 @@ public class barData extends JPanel{
     }
     void setBarData(int data1, int data2, int data3)
     {
-        this.data1 = (data1*((w-20-xOffset)))/100;
+        if(data1<100)
+            this.data1 = (data1*((w-20-xOffset)))/100;
+        else
+            this.data1 = 100;
         this.data2 = (data2*((w-20-xOffset)))/100;
         this.data3 = (data3*((w-20-xOffset)))/100;
         this.repaint();

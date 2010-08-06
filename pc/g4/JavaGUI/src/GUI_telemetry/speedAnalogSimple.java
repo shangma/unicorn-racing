@@ -22,6 +22,8 @@ public class speedAnalogSimple extends JPanel{
     private int red = 0;
     private int green = 0;
 
+    private IIRFilter dataFilter1 = new IIRFilter(0.1);
+
     public void paintComponent(Graphics g)
     {
         Graphics2D g2 = (Graphics2D) g;
@@ -55,7 +57,7 @@ public class speedAnalogSimple extends JPanel{
         Color colorArc = new Color(red,green,0);
 
         g2.setPaint(colorArc);
-        g2.draw(new Arc2D.Double(x, y, h-20, h-20, 290, data,Arc2D.OPEN));
+        g2.draw(new Arc2D.Double(x, y, h-20, h-20, 290,data,Arc2D.OPEN));
 
         // Digital hastighed
         g2.setPaint(Color.WHITE);
@@ -66,7 +68,7 @@ public class speedAnalogSimple extends JPanel{
 
     public void setData(int data)
     {
-        this.data = (data*-2);
+        this.data =  dataFilter1.filterDataDouble((data*-2)/100);
         dataString = ("" + data);
         this.repaint();
     }

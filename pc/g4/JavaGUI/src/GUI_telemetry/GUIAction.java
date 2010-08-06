@@ -37,6 +37,10 @@ public class GUIAction implements ActionListener{
     int speed = 0;
     dataStore datastore = null;
 
+    // Button
+    JButton disconnectButton = new JButton("Disconnect");
+    JButton connectButton = new JButton("Connect");
+
     //UpdateThread til testing;
     updateThread upThread = null;
 
@@ -74,13 +78,13 @@ public class GUIAction implements ActionListener{
         controls.add(Box.createHorizontalGlue());
 
         // connectButton
-        JButton connectButton = new JButton("Connect");
+        //JButton connectButton = new JButton("Connect");
         connectButton.addActionListener(this);
         controls.add(connectButton);
         controls.add(Box.createRigidArea(new Dimension(10, 0))); // Afstand
 
         // disconnectButton       
-        JButton disconnectButton = new JButton("Disconnect");
+        //JButton disconnectButton = new JButton("Disconnect");
         disconnectButton.addActionListener(this);
         controls.add(disconnectButton);
         controls.add(Box.createRigidArea(new Dimension(15, 0))); // Afstand
@@ -127,11 +131,14 @@ public class GUIAction implements ActionListener{
 
         // Pedal positions
          barData pedalPos = new barData();
+
+         // Acc plot
+         accPlot accplot = new accPlot();
         
         // Graphs
-        GrafPlot graph1 = new GrafPlot(80,50,Color.gray,Color.darkGray,Color.black,true);
-        GrafPlot graph2 = new GrafPlot(80,50,Color.gray,Color.darkGray,Color.black,true);
-        GrafPlot graph3 = new GrafPlot(80,50,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph1 = new GrafPlot(20,50,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph2 = new GrafPlot(40,50,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph3 = new GrafPlot(40,120,Color.gray,Color.darkGray,Color.black,true);
 
         // txt headers, top
         // Grid 0,0
@@ -257,7 +264,7 @@ public class GUIAction implements ActionListener{
         c.weightx = 0.7;
         c.weighty = 0.03;
         c.fill = GridBagConstraints.BOTH;
-        graphic.add(new headerTxt("Oil temperature graph",Color.black,true), c);
+        graphic.add(new headerTxt("Water temperature graph",Color.black,true), c);
 
         // Grid 0,5
         c.gridx = 0;
@@ -265,7 +272,7 @@ public class GUIAction implements ActionListener{
         c.weightx = 0.3;
         c.weighty = 0.3;
         c.insets = new Insets(0,0,10,0);
-        graphic.add(new GUIdummy(), c);
+        graphic.add(accplot, c);
 
         // Grid 1,5
         c.gridx = 1;
@@ -301,7 +308,7 @@ public class GUIAction implements ActionListener{
         frame.add(controls, BorderLayout.PAGE_END);
 
         // DataStote
-        datastore = new dataStore(txtDataPanel,graph1,graph2,graph3,speed0,wheel0,speedSimple0,lambda0,pedalPos);
+        datastore = new dataStore(txtDataPanel,graph1,graph2,graph3,speed0,wheel0,speedSimple0,lambda0,pedalPos,accplot);
 
         // UpdateThread (test)
         //upThread =  new updateThread(datastore);
@@ -360,6 +367,7 @@ public class GUIAction implements ActionListener{
             }
 
             System.out.println("Connected to: " + ip + " on port: " + portint);
+            connectButton.setEnabled(false);
 
             socketInthread =  new socketIn(clientSocket,datastore);
             socketInthread.start();
@@ -374,13 +382,18 @@ public class GUIAction implements ActionListener{
                 try
                 {
                     clientSocket.close();
+                    System.out.println("Connection to: " + ip + " on port: " + portint + " closed");
                 }
                 catch(IOException e)
                 {
                     System.out.println("Could not disconnect from any server");
                 }
             }
-            System.out.println("Connection to: " + ip + " on port: " + portint + " closed");
+            else if(clientSocket==null)
+            {
+                System.out.println("Not connected to any server");
+            }
+            connectButton.setEnabled(true);
         }
     }
 }
