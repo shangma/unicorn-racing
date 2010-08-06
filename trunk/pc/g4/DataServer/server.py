@@ -103,7 +103,7 @@ class serial(Thread):
         print "Serial"
 
     def run(self):
-        while True:
+        #while True:
             # Der læses en byte ind fra serielporten
             #tmp = self.ser.read()
             #if 255 == ord(tmp):
@@ -127,21 +127,34 @@ class serial(Thread):
             #        self.cv.set()
             #    else:
             #        print "forkert type"
-            self.sender.serialData = "1,-45,3,4,15,1,7,10\n"
-            self.cv.set()
-            time.sleep(0.1)
-            self.sender.serialData = "25,-20,4,5,56,5,8,11\n"
-            self.cv.set()
-            time.sleep(0.1)
-            self.sender.serialData = "50,0,0,6,67,15,9,12\n"
-            self.cv.set()
-            time.sleep(0.1)
-            self.sender.serialData = "75,5,20,7,115,4,10,13\n"
-            self.cv.set()
-            time.sleep(0.1)
-            self.sender.serialData = "100,45,7,8,120,8,11,8\n"
-            self.cv.set()
-            time.sleep(0.1)
+            #self.sender.serialData = "1,-45,0,4,15,1,7,10\n"
+            #self.cv.set()
+            #time.sleep(0.1)
+            #self.sender.serialData = "25,-20,3,5,56,5,8,11\n"
+            #self.cv.set()
+            #time.sleep(0.1)
+            #self.sender.serialData = "50,0,7,6,67,55,9,12\n"
+            #self.cv.set()
+            #time.sleep(0.1)
+            #self.sender.serialData = "75,5,11,7,115,80,10,13\n"
+            #self.cv.set()
+            #time.sleep(0.1)
+            #self.sender.serialData = "100,45,0,8,120,120,11,8\n"
+            #self.cv.set()
+            #time.sleep(0.1)
             
             #else:
-            #    print "no valid data"        
+            #    print "no valid data"     
+
+        f = open('endurance.txt', 'r')
+
+        j = 0
+        for line in f:
+                if j>15000:
+                    print line,
+                    self.sender.serialData = line
+                    self.cv.set()
+                    time.sleep(0.1)
+                j = j +1
+
+        f.close()   

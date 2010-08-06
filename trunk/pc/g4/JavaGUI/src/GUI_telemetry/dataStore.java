@@ -11,14 +11,19 @@ public class dataStore {
     speedAnalogSimple RPM;
     lambda lambda0;
     barData pedalPos;
+    accPlot acc;
 
     // Data
     private String[] dataArray;
     int speedanalog = 0;
-
     int angle = 0;
 
-    public dataStore(txtData txtDataLabel, GrafPlot graph, GrafPlot graph2, GrafPlot graph3, speedAnalog Analog, wheelAngle wheel0 , speedAnalogSimple speedSimple0, lambda lambda0, barData pedalPos)
+    // Fir filter
+    IIRFilter dataFilter1 = null;
+    //IIRFilter dataFilter2 = null;
+    //IIRFilter dataFilter3 = null;
+
+    public dataStore(txtData txtDataLabel, GrafPlot graph, GrafPlot graph2, GrafPlot graph3, speedAnalog Analog, wheelAngle wheel0 , speedAnalogSimple speedSimple0, lambda lambda0, barData pedalPos, accPlot acc)
     {
         this.txtDataLabel = txtDataLabel;
         this.graph = graph;
@@ -29,6 +34,12 @@ public class dataStore {
         this.RPM = speedSimple0;
         this.lambda0 = lambda0;
         this.pedalPos = pedalPos;
+        this.acc = acc;
+
+        // Data Filter 
+        dataFilter1 = new IIRFilter(0.05);
+        //dataFilter2 = new IIRFilter(0.5);
+        //dataFilter3 = new IIRFilter(0.5);
     }
 
     public void setData(String dataString)
@@ -36,28 +47,29 @@ public class dataStore {
         dataArray = dataString.split(",");
 
         // Opdatering af data tekst
-        txtDataLabel.setData(1, Integer.parseInt(dataArray[0])); // Speed
-        txtDataLabel.setData(2, Integer.parseInt(dataArray[1])); // Steering
-        txtDataLabel.setData(3, Integer.parseInt(dataArray[2])); // Break
-        txtDataLabel.setData(4, Integer.parseInt(dataArray[3])); // Clutch
+        //txtDataLabel.setData(1, Integer.parseInt(dataArray[1])); // Speed
+        //txtDataLabel.setData(2, Integer.parseInt(dataArray[1])); // Steering
+        //txtDataLabel.setData(3, Integer.parseInt(dataArray[2])); // Break
+        //txtDataLabel.setData(4, Integer.parseInt(dataArray[3])); // Clutch
 
         // Opdatering af analog hastighed
-        Analog.setData(Integer.parseInt(dataArray[4]));
+  //      Analog.setData(Integer.parseInt(dataArray[1]));
 
         // Opdatering af analog RPM
-        RPM.setData(Integer.parseInt(dataArray[5]));
+        RPM.setData(Integer.parseInt(dataArray[0]));
 
         // Lambda
-        lambda0.setLambda(Integer.parseInt(dataArray[7]));
+        //lambda0.setLambda(Integer.parseInt(dataArray[7]));
 
         // Pedal postion
-        pedalPos.setBarData(Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[0]));
+        pedalPos.setBarData(Integer.parseInt(dataArray[5]),0,0);
 
         // Test
-        graph.updateData(Integer.parseInt(dataArray[5]));
-        graph2.updateData(Integer.parseInt(dataArray[6]));
-        graph3.updateData(Integer.parseInt(dataArray[0])/2);
-        wheel0.setAngle(Integer.parseInt(dataArray[1]));
+//       graph.updateData(Integer.parseInt(dataArray[5])/3);
+//       graph2.updateData(Integer.parseInt(dataArray[6]));
+        graph3.updateData(Integer.parseInt(dataArray[2]));
+//       wheel0.setAngle(Integer.parseInt(dataArray[1]));
+//        acc.setAcc(Integer.parseInt(dataArray[2]), Integer.parseInt(dataArray[2]));
 
 
         /*
