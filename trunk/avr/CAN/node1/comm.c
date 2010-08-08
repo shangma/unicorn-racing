@@ -29,8 +29,7 @@ void send_status( void )
 	USART1_Transmit((U8)EcuData[POTSTART]);	// Pot 
 	USART1_Transmit((U8)EcuData[POTSTART+POTLENGTH-1]);		
 	USART1_Transmit((U8)EcuData[MAPSTART]);	// Map 
-	USART1_Transmit((U8)EcuData[MAPSTART+MAPLENGTH-1]);		
-	USART1_Transmit((U8)EcuData[LAMBDASTART]);	// Lambda 
+	USART1_Transmit((U8)EcuData[MAPSTART+MAPLENGTH-1]);	
 	gearneutral = convertanalog(3); // GEAR-neutral
 	USART1_Transmit((U8)(gearneutral>>2) & 0xff);
 	oilpress = convertanalog(7); //Olie tryk (on/off)
@@ -39,4 +38,21 @@ void send_status( void )
 	USART1_Transmit((U8)(tmp>>2) & 0xff);	
 	tmp = convertanalog(5); // Olie temp
 	USART1_Transmit((U8)(tmp>>2) & 0xff);
+	USART1_Transmit((U8)EcuData[96]);	// gX (acc)
+	USART1_Transmit((U8)EcuData[97]);		
+	USART1_Transmit((U8)EcuData[98]);	// gy (acc)
+	USART1_Transmit((U8)EcuData[99]);		
+	USART1_Transmit((U8)EcuData[100]);	// gz (acc)
+	USART1_Transmit((U8)EcuData[101]);		
+	USART1_Transmit((U8)EcuData[68]);	// lambda
+	USART1_Transmit((U8)EcuData[69]);		
+	USART1_Transmit((U8)EcuData[78]);	// injectorTime
+	USART1_Transmit((U8)EcuData[79]);		
+	USART1_Transmit((U8)EcuData[82]);	// ignitionTime
+	USART1_Transmit((U8)EcuData[83]);		
+	USART1_Transmit((U8)EcuData[74]);	// engine load
+	USART1_Transmit((U8)EcuData[75]);		
+	USART1_Transmit((U8)EcuData[56]);	// trigger error
+	USART1_Transmit((U8)EcuData[57]);		
+
 }
