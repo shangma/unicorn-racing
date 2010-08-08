@@ -2,7 +2,6 @@ package GUI_telemetry;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 public class barData extends JPanel{
 

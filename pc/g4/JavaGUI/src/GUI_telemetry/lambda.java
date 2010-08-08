@@ -78,8 +78,8 @@ public class lambda extends JPanel{
 
         // Rich / Lean
         g2.setFont(fontBig);
-        g2.drawString("Rich",(3*w/5),(7*h/10));
-        g2.drawString("Lean",(w/5),(7*h/10));
+        g2.drawString("Lean",(3*w/5),(7*h/10));
+        g2.drawString("Rich",(w/5),(7*h/10));
 
         // Marker
         g2.setColor(markerColor);
@@ -92,19 +92,14 @@ public class lambda extends JPanel{
 
     void setLambda(int lambda)
     {
-        this.lambda = lambda;
+        this.lambda = lambda/10;
 
         if(this.lambda < 5)
             this.lambda = 5;
         if(this.lambda > 15)
             this.lambda = 15;
 
-        if(this.lambda == 10)
-            lambdaString = "1.0";
-        if(this.lambda > 10)
-         lambdaString = "1." + (this.lambda-10);
-        if(this.lambda < 10)
-         lambdaString = "0." + (this.lambda);       
+        lambdaString = "" + (double)lambda/100;
 
         this.repaint();
     }

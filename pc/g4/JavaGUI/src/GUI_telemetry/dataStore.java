@@ -3,7 +3,7 @@ package GUI_telemetry;
 public class dataStore {
 
     txtData txtDataLabel;
-    GrafPlot graph;
+    GrafPlot graph1;
     GrafPlot graph2;
     GrafPlot graph3;
     wheelAngle wheel0;
@@ -15,8 +15,13 @@ public class dataStore {
 
     // Data
     private String[] dataArray;
-    int speedanalog = 0;
-    int angle = 0;
+
+    private int throttlepos = 0;
+    private int lambda = 0;
+    private int rpm = 0;
+    private int accX = 0;
+    private int accY = 0;
+    private int speed = 0;
 
     // Fir filter
     IIRFilter dataFilter1 = null;
@@ -26,7 +31,7 @@ public class dataStore {
     public dataStore(txtData txtDataLabel, GrafPlot graph, GrafPlot graph2, GrafPlot graph3, speedAnalog Analog, wheelAngle wheel0 , speedAnalogSimple speedSimple0, lambda lambda0, barData pedalPos, accPlot acc)
     {
         this.txtDataLabel = txtDataLabel;
-        this.graph = graph;
+        this.graph1 = graph;
         this.graph2 = graph2;
         this.graph3 = graph3;
         this.wheel0 = wheel0;
@@ -46,55 +51,56 @@ public class dataStore {
     {
         dataArray = dataString.split(",");
 
+        throttlepos = Integer.parseInt(dataArray[5]);
+        lambda = Integer.parseInt(dataArray[14]);
+        rpm = Integer.parseInt(dataArray[0]);
+        accX = Integer.parseInt(dataArray[12]);
+        accY = Integer.parseInt(dataArray[13]);
+        speed = Integer.parseInt(dataArray[1]);
+
         // Opdatering af data tekst
-        //txtDataLabel.setData(1, Integer.parseInt(dataArray[1])); // Speed
-        //txtDataLabel.setData(2, Integer.parseInt(dataArray[1])); // Steering
-        //txtDataLabel.setData(3, Integer.parseInt(dataArray[2])); // Break
-        //txtDataLabel.setData(4, Integer.parseInt(dataArray[3])); // Clutch
+        txtDataLabel.setData(3, Integer.parseInt(dataArray[0])); // RPM
+        txtDataLabel.setData(2, speed); // Speed
+        txtDataLabel.setData(5, Integer.parseInt(dataArray[2])); // Water temp out
+        txtDataLabel.setData(8, Integer.parseInt(dataArray[3])); // Manifoltemp
+        txtDataLabel.setData(18, Integer.parseInt(dataArray[4])); // batt voltage
+        txtDataLabel.setData(11, throttlepos); // Throttle-pos
+        txtDataLabel.setData(9, Integer.parseInt(dataArray[6])); // MAP
+        txtDataLabel.setData(15, Integer.parseInt(dataArray[7])); // Gear neutral
+        txtDataLabel.setData(7, Integer.parseInt(dataArray[8])); // Oil press
+        txtDataLabel.setData(4, Integer.parseInt(dataArray[9])); // Water temp in
+        txtDataLabel.setData(6, Integer.parseInt(dataArray[10])); // Oil temp
+        txtDataLabel.setData(1, Integer.parseInt(dataArray[11])); // Time
+        txtDataLabel.setData(16, Integer.parseInt(dataArray[12])); // accX
+        txtDataLabel.setData(17, Integer.parseInt(dataArray[13])); // accY
+        txtDataLabel.setData(10,lambda); // Lambda
+        txtDataLabel.setData(19, Integer.parseInt(dataArray[15])); // Injector
+        txtDataLabel.setData(20, Integer.parseInt(dataArray[16])); // Ignition
+        txtDataLabel.setData(21, Integer.parseInt(dataArray[17])); // eng load
+        txtDataLabel.setData(22, Integer.parseInt(dataArray[18])); // trigger error
 
         // Opdatering af analog hastighed
-  //      Analog.setData(Integer.parseInt(dataArray[1]));
+        Analog.setData(speed);
 
         // Opdatering af analog RPM
-        RPM.setData(Integer.parseInt(dataArray[0]));
+        RPM.setData(rpm);
+        graph1.updateData(rpm/100);
 
         // Lambda
-        //lambda0.setLambda(Integer.parseInt(dataArray[7]));
+        lambda0.setLambda(lambda);
+        graph3.updateData(lambda/10);
 
         // Pedal postion
-        pedalPos.setBarData(Integer.parseInt(dataArray[5]),0,0);
+        pedalPos.setBarData(throttlepos,0,0);
+        if(throttlepos>0)
+            graph2.updateData(throttlepos);
+        else
+            graph2.updateData(0);
 
-        // Test
-//       graph.updateData(Integer.parseInt(dataArray[5])/3);
-//       graph2.updateData(Integer.parseInt(dataArray[6]));
-        graph3.updateData(Integer.parseInt(dataArray[2]));
-//       wheel0.setAngle(Integer.parseInt(dataArray[1]));
-//        acc.setAcc(Integer.parseInt(dataArray[2]), Integer.parseInt(dataArray[2]));
+        // Acceleration
+        acc.setAcc(accX, accY);
 
-
-        /*
-        if(datanr == 5)
-        {
-            this.speedanalog = data;
-            angle = (int)((25 * Math.cos(8*speedanalog*3*(3.14/180))) +25);
-            graph.updateData(angle);
-            graph2.updateData(angle);
-            graph3.updateData(angle);
-            Analog.setData(speedanalog);
-            //Analog1.setData(speedanalog);
-            wheel0.setAngle(angle+30);
-            wheel1.setAngle(angle+30);
-            speedSimple0.setData(speedanalog);
-        }
-
-       switch(datanr)
-        {
-            case 1:  this.speed = data; txtDataLabel.setData(1, speed); break;
-            case 2:  this.steering = data; txtDataLabel.setData(2, steering); break;
-            case 3:  this.breake = data; txtDataLabel.setData(3, breake); break;
-            case 4:  this.clutch = data; txtDataLabel.setData(4, clutch); break;
-        }
-         */
-
+        // Test      
+        // wheel0.setAngle(Integer.parseInt(dataArray[1]));
     }
 }
