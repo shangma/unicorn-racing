@@ -53,7 +53,7 @@ public class accPlot extends JPanel{
         g2.setColor(Color.red);
         g2.fillOval(h/2 +x-7, h/2 +y-7, 14, 14);
     }
-    void setAcc(int x, int y)
+    void setAcc(int y, int x)
     {
         this.x = x*(h-4)/30;
         this.y = y*(h-4)/30;

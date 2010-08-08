@@ -2,11 +2,9 @@ package GUI_telemetry;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.*;
 import java.io.IOException;
 import javax.swing.*;
-
 import java.net.*;
 
 
@@ -25,7 +23,6 @@ public class GUIAction implements ActionListener{
     // Labels / textfields / buttons
     private JTextField hostTXT = new JTextField("localhost");
     private JTextField portTXT = new JTextField("9999");
-    private JLabel txtSpeed = new JLabel("Speed:");
 
     // Socket
     int portint = 9999;
@@ -34,15 +31,11 @@ public class GUIAction implements ActionListener{
     private socketIn socketInthread = null;
     
     // Data
-    int speed = 0;
     dataStore datastore = null;
 
     // Button
     JButton disconnectButton = new JButton("Disconnect");
     JButton connectButton = new JButton("Connect");
-
-    //UpdateThread til testing;
-    updateThread upThread = null;
 
     public GUIAction(){
 
@@ -59,14 +52,6 @@ public class GUIAction implements ActionListener{
         txtdata.setPreferredSize(new Dimension(200,0));
         txtdata.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         txtdata.add(Box.createHorizontalGlue());
-
-        // Data labels
-        JLabel data = new JLabel("Data:");
-        txtdata.add(data);
-        txtdata.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        // Speed
-        txtdata.add(txtSpeed);
         
         // --- Kontrol-knapperne ---
 
@@ -136,9 +121,9 @@ public class GUIAction implements ActionListener{
          accPlot accplot = new accPlot();
         
         // Graphs
-        GrafPlot graph1 = new GrafPlot(20,50,Color.gray,Color.darkGray,Color.black,true);
-        GrafPlot graph2 = new GrafPlot(40,50,Color.gray,Color.darkGray,Color.black,true);
-        GrafPlot graph3 = new GrafPlot(40,120,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph1 = new GrafPlot(20,130,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph2 = new GrafPlot(20,100,Color.gray,Color.darkGray,Color.black,true);
+        GrafPlot graph3 = new GrafPlot(20,15,Color.gray,Color.darkGray,Color.black,true);
 
         // txt headers, top
         // Grid 0,0
@@ -163,7 +148,7 @@ public class GUIAction implements ActionListener{
         c.weightx = 0.7;
         c.weighty = 0.03;
         c.fill = GridBagConstraints.BOTH;
-        graphic.add(new headerTxt("Speed graph",Color.black), c);
+        graphic.add(new headerTxt("RPM graph (x100)",Color.black), c);
 
         // Grid 0,1
         c.gridx = 0;
@@ -215,7 +200,7 @@ public class GUIAction implements ActionListener{
         c.weightx = 0.7;
         c.weighty = 0.03;
         c.fill = GridBagConstraints.BOTH;
-        graphic.add(new headerTxt("Manifold pressure graph",Color.black,true), c);
+        graphic.add(new headerTxt("Throttle pos graph (0-100%)",Color.black,true), c);
 
         // Grid 0,3
         c.gridx = 0;
@@ -264,7 +249,7 @@ public class GUIAction implements ActionListener{
         c.weightx = 0.7;
         c.weighty = 0.03;
         c.fill = GridBagConstraints.BOTH;
-        graphic.add(new headerTxt("Water temperature graph",Color.black,true), c);
+        graphic.add(new headerTxt("Lambda graph (x10)",Color.black,true), c);
 
         // Grid 0,5
         c.gridx = 0;
@@ -309,10 +294,6 @@ public class GUIAction implements ActionListener{
 
         // DataStote
         datastore = new dataStore(txtDataPanel,graph1,graph2,graph3,speed0,wheel0,speedSimple0,lambda0,pedalPos,accplot);
-
-        // UpdateThread (test)
-        //upThread =  new updateThread(datastore);
-        //upThread.start();
 
         frame.setVisible(true);
     }
