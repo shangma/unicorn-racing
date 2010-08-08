@@ -22,13 +22,13 @@ import serial
 ser = serial.Serial()
 ser.port = '/dev/ttyUSB0'
 #ser.port = 5
-ser.baudrate = 230400
-#ser.open()
+ser.baudrate = 115200
+ser.open()
 
 
 # Der oprettes en socket server som tillader klienter at oprette forbindelse
 HOST = ''
-PORT = 9998
+PORT = 9999
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)
