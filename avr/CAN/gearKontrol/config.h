@@ -47,3 +47,5 @@
 
 #define GEAROP 1
 #define GEARNED 2
+
+#define GEARFORCE 100
