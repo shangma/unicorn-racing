@@ -9,7 +9,7 @@
 // CPU clock
 #define F_CPU 18432000
 
-#define ADCtotnum 1
+#define ADCtotnum 2
 
 // Counter0 prescaler
 #define counter0prescale0 0
@@ -22,17 +22,28 @@
 // PWM 16 bit duty Max
 #define dutymax 2047
 
-// Koblings ADC pos, Min/Max
-#define GearPosMax 400
-#define GearPosMiddle 380
-#define GearPosMin 360
+// Gear ADC pos, Min/Max
+#define GearPosMax 600
+#define GearPosMiddle 576
+#define GearPosMin 562
+#define GearMiddleDeadZone 10
 
-// Motorretning
-#define AON PORTA|= (1<<PA5)
-#define AOFF PORTA&=~ (1<<PA5)
+#define AON PORTA|= (1<<PA7)
+#define AOFF PORTA&=~ (1<<PA7)
 
-#define BON PORTA|= (1<<PA7)
-#define BOFF PORTA&=~ (1<<PA7)
+#define BON PORTA|=(1<<PA4)
+#define BOFF PORTA&=~(1<<PA4)
 
-#define CC 0
+#define AENA PORTA|= (1<<PA6)
+#define ADIS PORTA&=~ (1<<PA6)
+
+#define BENA PORTA|=(1<<PA5)
+#define BDIS PORTA&=~(1<<PA5)
+
+#define CW 0
 #define CCW 1
+
+#define softwareTrig PORTC^=(1<<PORTC7)
+
+#define GEAROP 1
+#define GEARNED 2

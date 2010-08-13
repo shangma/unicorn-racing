@@ -35,22 +35,36 @@ void sendtekst(char *tekstarray)
 	}
 }
 
-void motorControl(unsigned short int ret, unsigned short int speed)
+void hbroEnable(unsigned short int enable)
 {
-	if((ret==CC) && (ADCconv<GearPosMax) && (speed>0))
+	if(enable == 1)
+	{
+		AENA; // Retning A Enable
+		BENA; // Retning B Enable
+	}
+	else
+	{
+		ADIS; // Retning A Disable
+		BDIS; // Retning B Disable
+	}
+}
+
+void motorControl(unsigned short int ret, unsigned short int speed, unsigned int pos)
+{
+	if((ret==CW) && (pos<GearPosMax) && (speed>0))
 	{
 		BOFF;
 		AON;		
 	}
-	else if((ret==CCW) && (ADCconv>GearPosMin) && (speed>0))
+	else if((ret==CCW) && (pos>GearPosMin) && (speed>0))
 	{
 		AOFF;
 		BON;
 	}
 	else
 	{
-		AOFF;
-		BOFF;
+		AON;
+		BON;
 	}
 
 	PWM_duty_cycle_A_set(speed);

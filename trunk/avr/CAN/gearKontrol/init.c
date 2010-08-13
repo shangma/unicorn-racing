@@ -12,19 +12,35 @@
 * Timer
 *
 * Counter0  (8-bit): Timer til ADC konvertering
-* Counter1 (16-bit): Timer til Motor PWM
-* Counter2  (8-bit): Timer til ventil PWM
+* Counter1 (16-bit): -
+* Counter2  (8-bit): Timer til gear motor PWM
 *************************************************/
 
 void ioinit(void)
 {
-	DDRA|= (1<<PA5);	// Retning A
-	DDRA|= (1<<PA7);	// Retning B
-	DDRA|= (1<<PA6);	// CS
-	DDRD|= (1<<PD7);  	// PWM
+	DDRA|= (1<<PA7);	// Retning A set
+	DDRA|= (1<<PA6);	// Retning A Enable
+	DDRA|= (1<<PA5);	// Retning B Enalbe
+	DDRA|= (1<<PA4);	// Retning B set
+	DDRD|= (1<<PD7);	// PWM til gearMotor
 
-	PORTA|= (1<<PA6);	// CS
-	//PORTD|= (1<<PD7);	// PWM	
+	DDRA &=~(1<<PA0);	// Position sense
+	DDRA &=~(1<<PA1);	// CS (Current Sense !)
+
+	// Hbro Disable
+	PORTA &=~ (1<<PA7);	
+	PORTA &=~ (1<<PA6);	
+	PORTA &=~ (1<<PA5);	
+	PORTA &=~ (1<<PA4);	
+
+	// PCINT (og led)
+	DDRC|= (1<<PC7);
+
+	// GearKontakter
+	DDRB&=~(1<<PB0);
+	DDRB&=~(1<<PB1);
+	PORTB |= (1<<PB0); // Pull-up
+	PORTB |= (1<<PB1); // Pull-up
 }
 
 void uartinit(void)
@@ -56,8 +72,8 @@ void pwm8Init(void)
 	TCCR2A |=(1<<WGM20);
 	TCCR2A |=(1<<WGM21);
 
-	// Prescaler, 1
-    TCCR2B |=(1<<CS20);
+	// Prescaler
+    TCCR2B |=(1<<CS20); // 2.2 kHz
 	TCCR2B |=(1<<CS21);
 
 	PWM_duty_cycle_A_set(0);
@@ -68,7 +84,7 @@ void pwm16Init(void)
 	//PWM, 16 bit counter (counter1)
 	// (OC1A) Output
     DDRD|= (1<<PD4);  
-    DDRD|= (1<<PD5);  
+    //DDRD|= (1<<PD5);  
      
 	// Opsætning af compare match.
 	TCCR1A |=(1<<COM1A1);
@@ -127,4 +143,13 @@ void adcInit(unsigned int channel)
 
 	// ADC interrupt enable
 	ADCSRA |=(1<<ADIE);
+}
+
+void pcintInit(void)
+{
+	// PCINT Enable
+	PCICR |=(1<<PCIE2); // PCINT 8-15 enable (port interrupt 1)
+
+	// PCMSKx styrer hvilke ben der trigger interrupt
+	PCMSK2 = 0b10000000; // Ingen fysiske ben vil trigger PCINT
 }

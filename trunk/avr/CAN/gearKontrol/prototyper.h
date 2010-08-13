@@ -11,6 +11,9 @@ void sendtekst(char*);
 
 void counter0Init(void);
 
+// Software interrupt
+void pcintInit(void);
+
 // PWM functions
 void pwm8Init(void);
 void pwm16Init(void);
@@ -24,7 +27,10 @@ void adcStop(void);
 
 // Controllers
 void gearPosController(unsigned int);
-void motorControl(unsigned short int ret, unsigned short int speed);
+void motorControl(unsigned short int ret, unsigned short int speed, unsigned int pos);
 
 // Debugging
 void debugging(void);
+
+// Hbro
+void hbroEnable(unsigned short int enable);
