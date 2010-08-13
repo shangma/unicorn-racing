@@ -46,69 +46,28 @@ ISR(ADC_vect)
 	if(channel == 0)
 	{
 		pos = ADCconv;
-/*
-		itoa(pos-GearPosMiddle, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(pos, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst(";");
-*/
 	}
-
+	// Channel 1 = Current ADC convert
 	if(channel == 1)
 	{
 		current = ADCconv;
-/*
-		itoa(current, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(maxTilNeutral, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(minTilNeutral, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(overCurrentCounter, tempchar,10);
-		sendtekst(tempchar);
-		sendtekst("\n\r");
-*/
-		// OverCurrent sensor (force)
-		if(current>GEARFORCE)
-		{
-			overCurrentCounter++;
-			if(overCurrentCounter>70)
-				overCurrentCounter = 70;
-		}
-		else if(current>150)
-		{
-			overCurrentCounter = 70;
-		}
-		if((current <= GEARFORCE) && (overCurrentCounter>0))
-			overCurrentCounter--;
-
-		if(overCurrentCounter>=70) // 70 = ~ 0.5 sec
-		{
-			hbroEnable(0);
-		}
-		if(overCurrentCounter<20)
-			hbroEnable(1);
 	}
 }
 
- // UART interrupt
+ // UART0 interrupt
 ISR(USART0_RX_vect)
 {
 	char data;
-	data = UDR0;	// Lægger data fra seriel bufffer i variabel 
+	data = UDR0;
 
 	if(data == 'a')
 		softwareTrig;
 }
 
-// Timer0 (8-bit) overflow interrupt, ADC convert trigger
+// Timer0 (8-bit) overflow interrupt
 ISR(TIMER0_OVF_vect)
 {	
+	//______________________ADC_______________________________________________
 	// Change ADC channel
 	ADMUX &= 0xf8;
 	ADMUX |= setChannel++;
@@ -118,8 +77,47 @@ ISR(TIMER0_OVF_vect)
 	if(setChannel>=ADCtotnum)
 		setChannel = 0;
 
+	//______________________OverCurrent sensor (force)________________________
+	
+	/*
+	Dette laves om sa PWM styres af controller for at holde konstant moment
+	Dog skal det stadig tjekkes om den sidder helt fast
+	Ved en graense skifter den retning, for at se om den kan komme fri der.
+	Hvis dette ikke hjaelper kommer den over en anden graense, som stopper den
+	helt. Dette kunne fx vaere ved 1 og 2 sek.
+	*/
+	if(current>GEARFORCE)
+	{
+		overCurrentCounter++;
+		if(overCurrentCounter>70)
+			overCurrentCounter = 70;
+	}
+	else if(current>150)
+	{
+		overCurrentCounter = 70;
+	}
+	if((current <= GEARFORCE) && (overCurrentCounter>0))
+		overCurrentCounter--;
+
+	if(overCurrentCounter>=70) // 70 = ~ 0.5 sec
+	{
+		hbroEnable(0);
+	}
+	if(overCurrentCounter<20)
+		hbroEnable(1);
+
+	//______________________Aktuator_Moment_Regulering________________________
+	/*
+	Regulator til regulering af motor pwm, sadan at en konstant kraft pa
+	gearet opretholdes.
+	*/
+
+	// Constant torque controller
+	//pwmValue = torqueController(current);
+
+	//______________________Retur_fra_min/max_________________________________
 	// Til Neutral fra max
-	if((maxTilNeutral == 1) && (pos>(GearPosMiddle+GearMiddleDeadZone)	))
+	if((maxTilNeutral == 1) && (pos>(GearPosMiddle+GearMiddleDeadZone)))
 	{
 		motorControl(CCW, pwmValue, pos);
 	}
@@ -142,14 +140,14 @@ ISR(TIMER0_OVF_vect)
 		maxTilNeutral = 0;
 	}
 
-	// Gear Pos max/min stop
-	if(pos > GearPosMax)
+	//______________________Stop_hvis_over_min/max,_set_retur_________________
+	if((pos > GearPosMax) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		AOFF;
 		maxTilNeutral = 1;
 		minTilNeutral = 0;
 	}
-	else if(pos < GearPosMin)
+	else if((pos < GearPosMin) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		BOFF;
 		minTilNeutral = 1;
@@ -159,20 +157,16 @@ ISR(TIMER0_OVF_vect)
 
 ISR(PCINT2_vect)
 {
-
-	itoa(gearRetning, tempchar,10);
-	sendtekst(tempchar);
-
+	// Gear op kontakt (tjekker at armen ikke er pa vej tilbage)
 	if((gearRetning == GEAROP) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		gearRetning = 0;
 		motorControl(CW, pwmValue, pos);
 	}
-
+	// Gear ned kontakt
 	if((gearRetning == GEARNED) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		gearRetning = 0;
 		motorControl(CCW, pwmValue, pos);
 	}
-
 }
