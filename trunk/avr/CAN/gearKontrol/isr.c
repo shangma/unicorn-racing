@@ -73,8 +73,8 @@ ISR(ADC_vect)
 		sendtekst(tempchar);
 		sendtekst("\n\r");
 */
-		// OverCurrent sensor
-		if(current>100)
+		// OverCurrent sensor (force)
+		if(current>GEARFORCE)
 		{
 			overCurrentCounter++;
 			if(overCurrentCounter>70)
@@ -84,7 +84,7 @@ ISR(ADC_vect)
 		{
 			overCurrentCounter = 70;
 		}
-		if((current <= 100) && (overCurrentCounter>0))
+		if((current <= GEARFORCE) && (overCurrentCounter>0))
 			overCurrentCounter--;
 
 		if(overCurrentCounter>=70) // 70 = ~ 0.5 sec

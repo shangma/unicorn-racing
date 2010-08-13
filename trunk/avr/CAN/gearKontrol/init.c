@@ -147,9 +147,9 @@ void adcInit(unsigned int channel)
 
 void pcintInit(void)
 {
-	// PCINT Enable
-	PCICR |=(1<<PCIE2); // PCINT 8-15 enable (port interrupt 1)
+	// PCINT2 Enable
+	PCICR |=(1<<PCIE2);
 
-	// PCMSKx styrer hvilke ben der trigger interrupt
-	PCMSK2 = 0b10000000; // Ingen fysiske ben vil trigger PCINT
+	// PCMSK2 pin trigger
+	PCMSK2 = 0b10000000;
 }
