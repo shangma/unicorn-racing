@@ -2,10 +2,5 @@
  * External variables header
  *********************************************/
 
-// PressController
-extern int gearPosRef;
-extern int Kp;
+extern volatile unsigned short int gearRetning;
 
-
-// ADC
-extern unsigned int ADCconv;

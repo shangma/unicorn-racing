@@ -8,7 +8,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
-
+/*
 int gearPosRef = 25;
 int Kp = 10;
 
@@ -68,4 +68,4 @@ void gearPosController(unsigned int adc)
 	sendtekst(tempchar);
 	sendtekst("\n\r");
 }
-
+*/
