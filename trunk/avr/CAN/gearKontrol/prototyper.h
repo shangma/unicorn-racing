@@ -8,6 +8,7 @@ void ioinit(void);
 // UART
 void uartinit(void);
 void sendtekst(char*);
+void uartTransmitQueue(unsigned short int toQueue, unsigned short int *uartQueueNumber,unsigned short int *uartNextSlot, unsigned short int *uartFifoBuff);
 
 void counter0Init(void);
 
@@ -26,8 +27,7 @@ void adcInit(unsigned int);
 void adcStop(void);
 
 // Controllers
-void gearPosController(unsigned int);
-void motorControl(unsigned short int ret, unsigned short int speed, unsigned int pos);
+unsigned int torqueController(unsigned int current);
 
 // Debugging
 void debugging(void);

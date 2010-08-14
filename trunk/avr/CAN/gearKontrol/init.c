@@ -48,15 +48,18 @@ void uartinit(void)
 	//Enable TXen og RXen
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0); 
 	
-	// Opsætning af format: 8data, 1 stop bit
+	// Format: 8data, 1 stop bit
 	UCSR0C = (3<<UCSZ00);
 
-	// Opsætning af baud rate
+	// Baud rate
 	UBRR0L = BAUD_PRESCALE;
 	UBRR0H = (BAUD_PRESCALE >> 8);
 	
-	// Opsætning af Rx Uart interrupt (Receive Complete Interrupt) til indkommen seriel data
+	// Rx Uart interrupt (Receive Complete Interrupt)
 	UCSR0B|=(1<<RXCIE0);
+
+	// Tx Uart interrupt (Transmit Complete Interrupt)
+	//UCSR0B|=(1<<TXCIE0);
 }
 
 void pwm8Init(void)
@@ -84,7 +87,6 @@ void pwm16Init(void)
 	//PWM, 16 bit counter (counter1)
 	// (OC1A) Output
     DDRD|= (1<<PD4);  
-    //DDRD|= (1<<PD5);  
      
 	// Opsætning af compare match.
 	TCCR1A |=(1<<COM1A1);

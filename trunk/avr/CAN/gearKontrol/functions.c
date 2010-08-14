@@ -34,7 +34,23 @@ void sendtekst(char *tekstarray)
 		UDR0 = tekstarray[i];
 	}
 }
+/*
+void uartTransmitQueue(unsigned short int toQueue, unsigned short int *uartQueueNumber,unsigned short int *uartQueueEnd, unsigned short int *uartFifoBuff)
+{
 
+	if(*uartQueueNumber<UARTQUEUESIZE) // Hvis queue ikke er fuld
+	{
+		if(*uartQueueNumber==0) // Hvis queue er helt tom
+			UDR0 = '0';
+
+		if(*uartQueueNumber!=0)
+		{
+			uartFifoBuff[*uartNextSlot++] = toQueue;
+		}
+		//update *uartNextSlot
+	}
+}
+*/
 void hbroEnable(unsigned short int enable)
 {
 	if(enable == 1)
