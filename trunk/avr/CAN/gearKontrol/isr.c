@@ -118,7 +118,11 @@ ISR(TIMER0_OVF_vect)
 		minTilNeutral = 1;
 		maxTilNeutral = 0;
 	}
-
+	if(gearStock>GEARSTOCKTIMEOUT2)
+	{
+		hbroEnable(0);
+		gearStock = 0; // For at undga int overflow
+	}
 	//______________________OverCurrent sensor (force)________________________
 	
 	if(current>GEARFORCEMAX)
@@ -136,10 +140,8 @@ ISR(TIMER0_OVF_vect)
 
 	if(overCurrentCounter>=GEARFORCEMAXTIMEOUT1) // 70 = ~ 0.5 sec
 	{
-		//hbroEnable(0);
+		hbroEnable(0);
 	}
-	if(overCurrentCounter<(GEARFORCEMAXTIMEOUT1/2))
-		hbroEnable(1);
 
 	//______________________Aktuator_Moment_Regulering________________________
 

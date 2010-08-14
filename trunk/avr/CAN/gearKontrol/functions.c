@@ -77,6 +77,11 @@ void motorControl(unsigned short int ret, unsigned short int speed, unsigned int
 		AOFF;
 		BON;
 	}
+	else if((ret!=0) && (speed<=0))
+	{
+		AOFF;
+		BOFF;
+	}
 	else
 	{
 		AON;
