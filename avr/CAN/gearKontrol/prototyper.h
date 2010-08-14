@@ -27,10 +27,11 @@ void adcInit(unsigned int);
 void adcStop(void);
 
 // Controllers
-unsigned int torqueController(unsigned int current);
+unsigned int torqueController(unsigned int);
 
 // Debugging
 void debugging(void);
 
 // Hbro
-void hbroEnable(unsigned short int enable);
+void hbroEnable(unsigned short int);
+void motorControl(unsigned short int, unsigned short int, unsigned int);

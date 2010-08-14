@@ -31,7 +31,7 @@ int main(void)
 			{
 				gearRetning = GEAROP;
 				softwareTrig;
-				_delay_ms(400); // Vent til gearskift er ca done
+				_delay_ms(300); // Vent til gearskift er ca done
 			}			
 		}	
 
@@ -43,9 +43,12 @@ int main(void)
 			{
 				gearRetning = GEARNED;
 				softwareTrig;
-				_delay_ms(400);
+				_delay_ms(300);
 			}			
-		}			
+		}
+
+		// Venter pa at begge kontakter er sluppet igen
+		while((PINB & 0b00000011) != 0b00000011){}
 	}
     return 0;
 }

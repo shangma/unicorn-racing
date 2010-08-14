@@ -52,11 +52,14 @@
 #define GEARNED 2
 
 // Force (current) safety limit
-#define GEARFORCEMAX 200
+#define GEARFORCEMAX 220
 #define GEARFORCEMAXTIMEOUT1 70
-#define GEARFORCECRITICALMAX 300
-#define GEARFORCEREF 100
+#define GEARFORCECRITICALMAX 250
+#define GEARFORCEREF 200
 
 // Gear Stock Timeout
 #define GEARSTOCKTIMEOUT1 200 //281 pr tick pr sec
 #define GEARSTOCKTIMEOUT2 600 
+
+// Current filter
+#define FILTERKONSTANT 0.5
