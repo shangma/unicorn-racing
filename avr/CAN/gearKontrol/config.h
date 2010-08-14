@@ -6,6 +6,9 @@
 #define USART_BAUDRATE 230400
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
 
+// UART Transmit queue
+#define UARTQUEUESIZE 7
+
 // CPU clock
 #define F_CPU 18432000
 
@@ -48,4 +51,12 @@
 #define GEAROP 1
 #define GEARNED 2
 
-#define GEARFORCE 100
+// Force (current) safety limit
+#define GEARFORCEMAX 200
+#define GEARFORCEMAXTIMEOUT1 70
+#define GEARFORCECRITICALMAX 300
+#define GEARFORCEREF 100
+
+// Gear Stock Timeout
+#define GEARSTOCKTIMEOUT1 200 //281 pr tick pr sec
+#define GEARSTOCKTIMEOUT2 600 

@@ -15,14 +15,22 @@ unsigned int pos = 0;
 unsigned int current = 0;
 unsigned int overCurrentCounter = 0;
 char setChannel = 0;
+char channel = 0;
 unsigned short int maxTilNeutral = 0; 
 unsigned short int minTilNeutral = 0;
 
 // PWM
-unsigned short int pwmValue = 140;
+unsigned short int pwmValue = 0;
 
 // Gear
 volatile unsigned short int gearRetning = 0;
+unsigned int gearStock = 0;
+
+// UART transmit fifoRingBufffer
+unsigned short int uartFifoBuff[UARTQUEUESIZE];
+unsigned short int uartQueueNumber = 0;
+unsigned short int uartQueueEnd = 0;
+unsigned short int uartQueueStart = 0;
 
 // Temp Var
 char tempchar[5];
@@ -32,7 +40,6 @@ ISR(ADC_vect)
 {
 	unsigned int adlow = 0;
 	unsigned int adhigh = 0;
-	char channel = 0;
 		
 	// Read ADC channel
 	channel = ADMUX & 0x07;
@@ -60,10 +67,27 @@ ISR(USART0_RX_vect)
 	char data;
 	data = UDR0;
 
+	unsigned short int testTransmitt = '+';
+
 	if(data == 'a')
 		softwareTrig;
-}
 
+	//if(data == 't')
+	//	uartTransmitQueue(testTransmitt,&uartQueueNumber,&uartQueueEnd,uartFifoBuff);
+}
+/*
+ISR(USART0_TX_vect)
+{
+	// Transmit Complete Interrupt, eksekveres nAr TXCn flaget saettes
+	// Dette flag cleares automatisk af int rutinen
+
+	if(test == 0)
+	{
+		UDR0 = uartFifoBuff[uartNextSlot];
+		test++;
+	}
+}
+*/
 // Timer0 (8-bit) overflow interrupt
 ISR(TIMER0_OVF_vect)
 {	
@@ -77,44 +101,62 @@ ISR(TIMER0_OVF_vect)
 	if(setChannel>=ADCtotnum)
 		setChannel = 0;
 
+	//______________________Gear_stock_moitor_________________________________
+
+	if((pos<(GearPosMiddle-GearMiddleDeadZone)) || (pos>(GearPosMiddle+GearMiddleDeadZone)))
+		gearStock++;
+	else
+		gearStock = 0;
+
+	if((gearStock>GEARSTOCKTIMEOUT1) && (pos>(GearPosMiddle+GearMiddleDeadZone)))
+	{
+		minTilNeutral = 0;
+		maxTilNeutral = 1;
+	}
+	if((gearStock>GEARSTOCKTIMEOUT1) && (pos<(GearPosMiddle-GearMiddleDeadZone)))
+	{		
+		minTilNeutral = 1;
+		maxTilNeutral = 0;
+	}
+
 	//______________________OverCurrent sensor (force)________________________
 	
-	/*
-	Dette laves om sa PWM styres af controller for at holde konstant moment
-	Dog skal det stadig tjekkes om den sidder helt fast
-	Ved en graense skifter den retning, for at se om den kan komme fri der.
-	Hvis dette ikke hjaelper kommer den over en anden graense, som stopper den
-	helt. Dette kunne fx vaere ved 1 og 2 sek.
-	*/
-	if(current>GEARFORCE)
+	if(current>GEARFORCEMAX)
 	{
 		overCurrentCounter++;
-		if(overCurrentCounter>70)
-			overCurrentCounter = 70;
+		if(overCurrentCounter>GEARFORCEMAXTIMEOUT1)
+			overCurrentCounter = GEARFORCEMAXTIMEOUT1;
 	}
-	else if(current>150)
+	else if(current>GEARFORCECRITICALMAX)
 	{
-		overCurrentCounter = 70;
+		overCurrentCounter = GEARFORCEMAXTIMEOUT1;
 	}
-	if((current <= GEARFORCE) && (overCurrentCounter>0))
+	if((current <= GEARFORCEMAX) && (overCurrentCounter>0))
 		overCurrentCounter--;
 
-	if(overCurrentCounter>=70) // 70 = ~ 0.5 sec
+	if(overCurrentCounter>=GEARFORCEMAXTIMEOUT1) // 70 = ~ 0.5 sec
 	{
-		hbroEnable(0);
+		//hbroEnable(0);
 	}
-	if(overCurrentCounter<20)
+	if(overCurrentCounter<(GEARFORCEMAXTIMEOUT1/2))
 		hbroEnable(1);
 
 	//______________________Aktuator_Moment_Regulering________________________
-	/*
-	Regulator til regulering af motor pwm, sadan at en konstant kraft pa
-	gearet opretholdes.
-	*/
 
 	// Constant torque controller
-	//pwmValue = torqueController(current);
-
+	if(channel==1)
+	{
+		pwmValue = torqueController(current);
+		itoa(current, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+		itoa(pwmValue, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+		itoa(gearStock, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst("\n\r");
+	}
 	//______________________Retur_fra_min/max_________________________________
 	// Til Neutral fra max
 	if((maxTilNeutral == 1) && (pos>(GearPosMiddle+GearMiddleDeadZone)))
