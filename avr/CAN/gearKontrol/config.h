@@ -22,14 +22,23 @@
 #define counter0prescale256 4
 #define counter0prescale1024 5
 
+// Ign Cut
+#define IgnCutOn PORTC|= (1<<PC3)
+#define IgnCutOff PORTC&=~ (1<<PC3)
+
+// LED
+
+#define LEDYellowOn PORTC|= (1<<PC2)
+#define LEDYellowOff PORTC&=~ (1<<PC2)
+
+#define LEDRed1On PORTC|= (1<<PC1)
+#define LEDRed1Off PORTC&=~ (1<<PC1)
+
+#define LEDRed2On PORTC|= (1<<PC0)
+#define LEDRed2Off PORTC&=~ (1<<PC0)
+
 // PWM 16 bit duty Max
 #define dutymax 2047
-
-// Gear ADC pos, Min/Max
-#define GearPosMax 600
-#define GearPosMiddle 576
-#define GearPosMin 562
-#define GearMiddleDeadZone 10
 
 #define AON PORTA|= (1<<PA7)
 #define AOFF PORTA&=~ (1<<PA7)
@@ -51,15 +60,30 @@
 #define GEAROP 1
 #define GEARNED 2
 
+// Gear ADC pos, Min/Max
+#define GEARPOSMIDDLE 710
+
+#define GEARPOSMAX GEARPOSMIDDLE+39
+#define GEARPOSMIN GEARPOSMIDDLE-42
+
+#define GEARPOSNEUTRALUP GEARPOSMIDDLE+14
+#define GEARPOSNEUTRALDOWN GEARPOSMIDDLE-14
+
+#define GearMiddleDeadZone 4
+
 // Force (current) safety limit
-#define GEARFORCEMAX 220
-#define GEARFORCEMAXTIMEOUT1 70
-#define GEARFORCECRITICALMAX 250
-#define GEARFORCEREF 200
+#define GEARFORCECRITICALMAX 270		// MAX current
+#define GEARFORCEMAXTIMEOUT1 80		// Timeout 1, go back
+#define GEARFORCEMAXTIMEOUT2 150		// Timeout 2, turn off
+
+// Force Ref
+#define GEARFORCEREF 230
 
 // Gear Stock Timeout
-#define GEARSTOCKTIMEOUT1 200 //281 pr tick pr sec
-#define GEARSTOCKTIMEOUT2 600 
+#define GEARSTOCKTIMEOUT1 140 //280 pr tick pr sec
+#define GEARSTOCKTIMEOUT2 800 
 
 // Current filter
-#define FILTERKONSTANT 0.5
+#define FILTERKONSTANT 0.9
+
+#define FILTERKONSTANTPOS 0.9 

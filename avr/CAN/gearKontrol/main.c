@@ -19,16 +19,29 @@ int main(void)
 	counter0Init();
 	pcintInit();
 	hbroEnable(1);
-	sei();	
-	
+	sei();
+
+	gearPosTargetUp = GEARPOSMAX;
+	gearPosTargetDown = GEARPOSMIN;
+
 	while (1)
 	{
+
+		gearPosTargetUp = GEARPOSMAX;
+		gearPosTargetDown = GEARPOSMIN;
+		gearRetning = 0;
+
 		if((PINB & 0x01) == 0x00) // Gear Kontakt GEAROP
 		{
 			_delay_ms(5);
 
 			if((PINB & 0x01) == 0x00) // Stadig trykket ? (væk med støj)
 			{
+				if((PINB & 0x04) == 0x00)
+					gearPosTargetUp = GEARPOSNEUTRALUP;
+				else
+					gearPosTargetUp = GEARPOSMAX;
+
 				gearRetning = GEAROP;
 				softwareTrig;
 				_delay_ms(300); // Vent til gearskift er ca done
@@ -41,8 +54,14 @@ int main(void)
 
 			if((PINB & 0x02) == 0x00) 
 			{
+				if((PINB & 0x04) == 0x00)
+					gearPosTargetDown = GEARPOSNEUTRALDOWN;
+				else
+					gearPosTargetDown = GEARPOSMIN;
+
 				gearRetning = GEARNED;
 				softwareTrig;
+
 				_delay_ms(300);
 			}			
 		}

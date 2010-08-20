@@ -36,11 +36,21 @@ void ioinit(void)
 	// PCINT (og led)
 	DDRC|= (1<<PC7);
 
+	//LED
+	DDRC|= (1<<PC0);
+	DDRC|= (1<<PC1);
+	DDRC|= (1<<PC2);
+
+	// Ign cut
+	DDRC|= (1<<PC3);
+
 	// GearKontakter
 	DDRB&=~(1<<PB0);
 	DDRB&=~(1<<PB1);
+	DDRB&=~(1<<PB2);
 	PORTB |= (1<<PB0); // Pull-up
 	PORTB |= (1<<PB1); // Pull-up
+	PORTB |= (1<<PB2); // Pull-up
 }
 
 void uartinit(void)
