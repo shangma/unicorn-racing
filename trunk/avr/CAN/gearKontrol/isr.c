@@ -12,6 +12,7 @@
 // ADC
 unsigned int ADCconv = 0;
 unsigned int pos = 0;
+unsigned int posOld = 0;
 unsigned int current = 0;
 unsigned int overCurrentCounter = 0;
 char setChannel = 0;
@@ -24,6 +25,8 @@ unsigned short int pwmValue = 0;
 
 // Gear
 volatile unsigned short int gearRetning = 0;
+volatile unsigned int gearPosTargetUp = GEARPOSMIDDLE;
+volatile unsigned int gearPosTargetDown = GEARPOSMIDDLE;
 unsigned int gearStock = 0;
 
 // UART transmit fifoRingBufffer
@@ -34,6 +37,7 @@ unsigned short int uartQueueStart = 0;
 
 // Temp Var
 char tempchar[5];
+unsigned int debug = 0;
 
 // ADC convert complete
 ISR(ADC_vect)
@@ -52,7 +56,9 @@ ISR(ADC_vect)
 	// Channel 0 = Pos ADC convert
 	if(channel == 0)
 	{
-		pos = ADCconv;
+		// Pos lav pass filter (for at undga at stoj oedelaegger skiftet)
+		pos = (int)((double)FILTERKONSTANTPOS*ADCconv+(double)(1-FILTERKONSTANTPOS)*posOld);
+		posOld = pos;
 	}
 	// Channel 1 = Current ADC convert
 	if(channel == 1)
@@ -101,46 +107,16 @@ ISR(TIMER0_OVF_vect)
 	if(setChannel>=ADCtotnum)
 		setChannel = 0;
 
-	//______________________Gear_stock_moitor_________________________________
-
-	if((pos<(GearPosMiddle-GearMiddleDeadZone)) || (pos>(GearPosMiddle+GearMiddleDeadZone)))
-		gearStock++;
+	//______________________Ign_Cut___________________________________________
+	if((pos>(GEARPOSMIDDLE+GearMiddleDeadZone)) || (pos<(GEARPOSMIDDLE-GearMiddleDeadZone)))
+	{
+		IgnCutOn;
+		LEDYellowOn;
+	}
 	else
-		gearStock = 0;
-
-	if((gearStock>GEARSTOCKTIMEOUT1) && (pos>(GearPosMiddle+GearMiddleDeadZone)))
 	{
-		minTilNeutral = 0;
-		maxTilNeutral = 1;
-	}
-	if((gearStock>GEARSTOCKTIMEOUT1) && (pos<(GearPosMiddle-GearMiddleDeadZone)))
-	{		
-		minTilNeutral = 1;
-		maxTilNeutral = 0;
-	}
-	if(gearStock>GEARSTOCKTIMEOUT2)
-	{
-		hbroEnable(0);
-		gearStock = 0; // For at undga int overflow
-	}
-	//______________________OverCurrent sensor (force)________________________
-	
-	if(current>GEARFORCEMAX)
-	{
-		overCurrentCounter++;
-		if(overCurrentCounter>GEARFORCEMAXTIMEOUT1)
-			overCurrentCounter = GEARFORCEMAXTIMEOUT1;
-	}
-	else if(current>GEARFORCECRITICALMAX)
-	{
-		overCurrentCounter = GEARFORCEMAXTIMEOUT1;
-	}
-	if((current <= GEARFORCEMAX) && (overCurrentCounter>0))
-		overCurrentCounter--;
-
-	if(overCurrentCounter>=GEARFORCEMAXTIMEOUT1) // 70 = ~ 0.5 sec
-	{
-		hbroEnable(0);
+		IgnCutOff;
+		LEDYellowOff;
 	}
 
 	//______________________Aktuator_Moment_Regulering________________________
@@ -149,23 +125,15 @@ ISR(TIMER0_OVF_vect)
 	if(channel==1)
 	{
 		pwmValue = torqueController(current);
-		itoa(current, tempchar, 10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(pwmValue, tempchar, 10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-		itoa(gearStock, tempchar, 10); 
-		sendtekst(tempchar);
-		sendtekst("\n\r");
 	}
+
 	//______________________Retur_fra_min/max_________________________________
 	// Til Neutral fra max
-	if((maxTilNeutral == 1) && (pos>(GearPosMiddle+GearMiddleDeadZone)))
+	if((maxTilNeutral == 1) && (pos>(GEARPOSMIDDLE+GearMiddleDeadZone)))
 	{
 		motorControl(CCW, pwmValue, pos);
 	}
-	else if((maxTilNeutral == 1) && (pos<=(GearPosMiddle+GearMiddleDeadZone)))
+	else if((maxTilNeutral == 1) && (pos<=(GEARPOSMIDDLE+GearMiddleDeadZone)))
 	{
 		motorControl(0,0,0);
 		minTilNeutral = 0;
@@ -173,11 +141,11 @@ ISR(TIMER0_OVF_vect)
 	}
 
 	// Til Neutral fra min
-	if((minTilNeutral == 1) && (pos<(GearPosMiddle-GearMiddleDeadZone)))
+	if((minTilNeutral == 1) && (pos<(GEARPOSMIDDLE-GearMiddleDeadZone)))
 	{
 		motorControl(CW, pwmValue, pos);
 	}
-	else if((minTilNeutral == 1) && (pos>=(GearPosMiddle-GearMiddleDeadZone)))
+	else if((minTilNeutral == 1) && (pos>=(GEARPOSMIDDLE-GearMiddleDeadZone)))
 	{
 		motorControl(0,0,0);
 		minTilNeutral = 0;
@@ -185,17 +153,115 @@ ISR(TIMER0_OVF_vect)
 	}
 
 	//______________________Stop_hvis_over_min/max,_set_retur_________________
-	if((pos > GearPosMax) && ((minTilNeutral+maxTilNeutral)==0))
+	if((pos > gearPosTargetUp) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		AOFF;
 		maxTilNeutral = 1;
 		minTilNeutral = 0;
 	}
-	else if((pos < GearPosMin) && ((minTilNeutral+maxTilNeutral)==0))
+	else if((pos < gearPosTargetDown) && ((minTilNeutral+maxTilNeutral)==0))
 	{
 		BOFF;
 		minTilNeutral = 1;
 		maxTilNeutral = 0;
+	}
+
+	//______________________Gear_stock_moitor_________________________________
+
+	if((pos<(GEARPOSMIDDLE-GearMiddleDeadZone-2)) || (pos>(GEARPOSMIDDLE+GearMiddleDeadZone+2)))
+		gearStock++;
+	else
+		gearStock = 0;
+
+	if((gearStock>GEARSTOCKTIMEOUT1) && (pos>(GEARPOSMIDDLE+GearMiddleDeadZone+2)))
+	{	
+		sendtekst("\n\r SimiStock ! \n\r");
+		minTilNeutral = 0;
+		maxTilNeutral = 1;
+	}
+	if((gearStock>GEARSTOCKTIMEOUT1) && (pos<(GEARPOSMIDDLE-GearMiddleDeadZone-2)))
+	{		
+		sendtekst("\n\r SimiStock ! \n\r");
+		minTilNeutral = 1;
+		maxTilNeutral = 0;
+	}
+	if(gearStock>GEARSTOCKTIMEOUT2)
+	{
+		cli();
+		hbroEnable(0);
+		LEDRed1On;
+		gearStock = 0; // For at undga int overflow
+	}
+
+	//______________________OverCurrent sensor (force)________________________
+	
+	if(current>GEARFORCECRITICALMAX)
+		overCurrentCounter++;
+
+	if((current <= GEARFORCECRITICALMAX) && (overCurrentCounter>0))
+		overCurrentCounter--;
+
+	if((overCurrentCounter>GEARFORCEMAXTIMEOUT1) && (pos>(GEARPOSMIDDLE+GearMiddleDeadZone)))
+	{	
+		sendtekst("\n\r SimiCurrent ! \n\r");
+		minTilNeutral = 0;
+		maxTilNeutral = 1;
+	}
+	if((overCurrentCounter>GEARFORCEMAXTIMEOUT1) && (pos<(GEARPOSMIDDLE-GearMiddleDeadZone)))
+	{		
+		sendtekst("\n\r SimiCurrent ! \n\r");
+		minTilNeutral = 1;
+		maxTilNeutral = 0;
+	}
+
+	if(overCurrentCounter>GEARFORCEMAXTIMEOUT2) // 70 = ~ 0.5 sec
+	{
+		hbroEnable(0);
+		LEDRed2On;
+	}
+
+	// Debugging
+	debug++;
+	if((debug % 20 == 0))
+	{
+
+
+
+		itoa(PINB, tempchar, 2); 
+		sendtekst(tempchar);
+		sendtekst(";");
+
+
+		itoa(pos, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+/*		itoa(current, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+		itoa(pwmValue, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");*/
+		itoa(gearPosTargetUp, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+
+		itoa(gearPosTargetDown, tempchar, 10); 
+		sendtekst(tempchar);
+		sendtekst(";");
+
+		itoa(gearRetning, tempchar, 10); 
+		sendtekst(tempchar);
+
+
+
+/*
+		itoa(gearStock, tempchar, 10); 
+		sendtekst(tempchar);
+
+*/
+		sendtekst("\n\r");
+
+		debug = 0;
 	}
 }
 
@@ -213,4 +279,6 @@ ISR(PCINT2_vect)
 		gearRetning = 0;
 		motorControl(CCW, pwmValue, pos);
 	}
+
+	gearRetning = 0;
 }
