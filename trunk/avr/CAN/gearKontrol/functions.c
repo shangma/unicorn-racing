@@ -67,12 +67,12 @@ void hbroEnable(unsigned short int enable)
 
 void motorControl(unsigned short int ret, unsigned short int speed, unsigned int pos)
 {
-	if((ret==CW) && (pos<GEARPOSMAX) && (speed>0))
+	if((ret==CW) && (speed>0))
 	{
 		BOFF;
 		AON;		
 	}
-	else if((ret==CCW) && (pos>GEARPOSMIN) && (speed>0))
+	else if((ret==CCW) && (speed>0))
 	{
 		AOFF;
 		BON;
