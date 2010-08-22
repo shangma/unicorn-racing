@@ -2,6 +2,14 @@
  * Config header
  *********************************************/
 
+/*
+
+OBS !! Op er ikke op i gear, men aktivering af gear armen ud af.
+Omvendt er ned ikke ned i gear, men aktivering ind
+
+*/
+
+
 // UART
 #define USART_BAUDRATE 230400
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
@@ -61,29 +69,31 @@
 #define GEARNED 2
 
 // Gear ADC pos, Min/Max
-#define GEARPOSMIDDLE 710
+#define GEARPOSMIDDLE 761
 
-#define GEARPOSMAX GEARPOSMIDDLE+39
-#define GEARPOSMIN GEARPOSMIDDLE-42
+#define GEARPOSMAX GEARPOSMIDDLE+42 // 38
+#define GEARPOSMIN GEARPOSMIDDLE-44 //-45
 
 #define GEARPOSNEUTRALUP GEARPOSMIDDLE+14
 #define GEARPOSNEUTRALDOWN GEARPOSMIDDLE-14
 
 #define GearMiddleDeadZone 4
 
+#define IGNCUT 2 // Middle + Deadzone + IGNCUT = Ignition cut off
+
 // Force (current) safety limit
-#define GEARFORCECRITICALMAX 270		// MAX current
+#define GEARFORCECRITICALMAX 320		// MAX current
 #define GEARFORCEMAXTIMEOUT1 80		// Timeout 1, go back
-#define GEARFORCEMAXTIMEOUT2 150		// Timeout 2, turn off
+#define GEARFORCEMAXTIMEOUT2 200		// Timeout 2, turn off
 
 // Force Ref
-#define GEARFORCEREF 230
+#define GEARFORCEREF 320
 
 // Gear Stock Timeout
-#define GEARSTOCKTIMEOUT1 140 //280 pr tick pr sec
-#define GEARSTOCKTIMEOUT2 800 
+#define GEARSTOCKTIMEOUT1 300 //280 pr tick pr sec
+#define GEARSTOCKTIMEOUT2 500 
 
 // Current filter
 #define FILTERKONSTANT 0.9
 
-#define FILTERKONSTANTPOS 0.9 
+#define FILTERKONSTANTPOS 0.9

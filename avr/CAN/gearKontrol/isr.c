@@ -8,6 +8,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 // ADC
 unsigned int ADCconv = 0;
@@ -73,10 +74,21 @@ ISR(USART0_RX_vect)
 	char data;
 	data = UDR0;
 
-	unsigned short int testTransmitt = '+';
+	if(data == 'w')
+	{
+		motorControl(CW, 150, 748);
+		_delay_ms(100);
+		AOFF;
+		BOFF;
+	}
 
-	if(data == 'a')
-		softwareTrig;
+	if(data == 's')
+	{
+		motorControl(CCW, 150, 748);
+		_delay_ms(100);
+		AOFF;
+		BOFF;
+	}
 
 	//if(data == 't')
 	//	uartTransmitQueue(testTransmitt,&uartQueueNumber,&uartQueueEnd,uartFifoBuff);
@@ -108,7 +120,7 @@ ISR(TIMER0_OVF_vect)
 		setChannel = 0;
 
 	//______________________Ign_Cut___________________________________________
-	if((pos>(GEARPOSMIDDLE+GearMiddleDeadZone)) || (pos<(GEARPOSMIDDLE-GearMiddleDeadZone)))
+	if((pos>(GEARPOSMIDDLE+GearMiddleDeadZone+IGNCUT)) || (pos<(GEARPOSMIDDLE-GearMiddleDeadZone-IGNCUT)))
 	{
 		IgnCutOn;
 		LEDYellowOn;
@@ -224,43 +236,15 @@ ISR(TIMER0_OVF_vect)
 	debug++;
 	if((debug % 20 == 0))
 	{
-
-
-
-		itoa(PINB, tempchar, 2); 
-		sendtekst(tempchar);
-		sendtekst(";");
-
-
 		itoa(pos, tempchar, 10); 
 		sendtekst(tempchar);
 		sendtekst(";");
-/*		itoa(current, tempchar, 10); 
+		itoa(current, tempchar, 10); 
 		sendtekst(tempchar);
 		sendtekst(";");
 		itoa(pwmValue, tempchar, 10); 
 		sendtekst(tempchar);
-		sendtekst(";");*/
-		itoa(gearPosTargetUp, tempchar, 10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-
-		itoa(gearPosTargetDown, tempchar, 10); 
-		sendtekst(tempchar);
-		sendtekst(";");
-
-		itoa(gearRetning, tempchar, 10); 
-		sendtekst(tempchar);
-
-
-
-/*
-		itoa(gearStock, tempchar, 10); 
-		sendtekst(tempchar);
-
-*/
 		sendtekst("\n\r");
-
 		debug = 0;
 	}
 }
