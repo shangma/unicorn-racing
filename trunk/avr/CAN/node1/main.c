@@ -119,6 +119,8 @@ int main (void)
 	int ratio = 0;
 	int water_temp = 0;
 	int water2_temp = 0;
+	char e;
+	char test[] = "test1234test";
 
 	IoInit();
 
@@ -171,6 +173,8 @@ int main (void)
 		can_send(error_msgid, (U8)EcuCommError, 1); /* ECU error */
 
 		send_status();				/* Send data */
+		f_write(&file1, test, 12, e);
+
 		_delay_ms(50);
 	}
 }
