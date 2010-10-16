@@ -16,8 +16,8 @@
 #define DD_SS   0
 
 /* Defines for SD card SPI access */
-#define SD_CS_PIN   1
-#define SD_CS_PORT   PORTC
+#define SD_CS_PIN   0
+#define SD_CS_PORT   PORTB
 //#define SD_PWR_PIN   0
 //#define SD_PWR_PORT   PORTC 
 

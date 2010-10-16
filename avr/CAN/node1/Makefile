@@ -1,5 +1,5 @@
 TARGET         = node1
-CSRC           = main.c uart.c sdcard/ff.c sdcard/mmc.c sdcard/rtc.c sdcard/cc932_avr.c can_std/can_drv.c can_std/can_lib.c can_func.c isr.c error.c comm.c adc.c
+CSRC           = sd_test.c uart.c sdcard/ff.c sdcard/mmc.c sdcard/rtc.c sdcard/cc932_avr.c can_std/can_drv.c can_std/can_lib.c can_func.c isr.c error.c comm.c adc.c
 ASRC           = xitoa.S
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
