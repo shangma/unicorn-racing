@@ -212,44 +212,46 @@ int main (void)
 	/* Join xitoa module to uart module */
 	xfunc_out = (void (*)(char))uart_put;
 
-	_delay_ms(1000);
+	_delay_ms(2000);
 
 	xprintf(PSTR("System startet\n"));
 	xprintf(PSTR("Initialize disk 0\n"));    
 	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));
 	xprintf(PSTR("Initialize logical drice 0\n"));
 	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
-	xprintf(PSTR("Opening file hej\n"));
-	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE));
-	_delay_ms(1000);
-	init_can_data_mobs();
+/*	xprintf(PSTR("Opening file hej\n"));*/
+/*	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE));*/
+/*	_delay_ms(1000);*/
+/*	init_can_data_mobs();*/
 
-	for (i=0; i<num_of_response_mobs; i++) {
-		can_data_mob_setup(i);
-	}
-	tx_remote_msg.pt_data = &tx_remote_buffer[0];
-	tx_remote_msg.status = 0;
+/*	for (i=0; i<num_of_response_mobs; i++) {*/
+/*		can_data_mob_setup(i);*/
+/*	}*/
+/*	tx_remote_msg.pt_data = &tx_remote_buffer[0];*/
+/*	tx_remote_msg.status = 0;*/
 
-	can_send(rpm_msgid, 8, 1);
+/*	can_send(rpm_msgid, 8, 1);*/
+
+	xprintf(PSTR("open dir \n")); 
+	xprintf(PSTR("rc=%d\n"), f_opendir(&dir, "0:"));
+	freelognumber = get_free_log_number(&dir);
+	xprintf(PSTR("Free log nr %d\n"), freelognumber);
+	itoa(freelognumber, filename, 10);
+	xprintf(PSTR("Opening file %s\n"), filename);
+	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));
+	//f_close(&file1);
+	_delay_ms(50);
+	//xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_WRITE));
+	i = 0;
 	sei();
-
 	while(1) {
-		xprintf(PSTR("open dir \n")); 
-		xprintf(PSTR("rc=%d\n"), f_opendir(&dir, "0:"));
-		freelognumber = get_free_log_number(&dir);
-		xprintf(PSTR("Free log nr %d\n"), freelognumber);
-		itoa(freelognumber, filename, 10);
-		xprintf(PSTR("Opening file %s\n"), filename);
-		xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW));
-		_delay_ms(3000);
-		f_close(&file1);
-		xprintf(PSTR("hehe"));
-/*		for (i=0; i<30; i++) {*/
-/*			f_write(&file1, test, 12, e);*/
-/*			xprintf(PSTR("a"));*/
-/*			_delay_ms(50);*/
-/*		}*/
-/*		f_close(&file1);*/
+			i++;
+			xprintf(PSTR("rc=%d\n"), (WORD)f_write(&file1, test, 12, e));
+			if (i == 50) {
+				i = 0;
+				f_sync(&file1);
+			}
+			_delay_ms(100);
 	}
 }
 
