@@ -1,8 +1,7 @@
 ------------------------------- SD-KORT ----------------------------------------
 - Lav funktion til at bestemme hvad filnavn for log skal være baseret på hvad 
-  for nogle logs der allerede eksistere på kortet.		     -- IGANG --
-- Lav funktion til at logge ønskede værdier til kortet.
-- 
+  for nogle logs der allerede eksistere på kortet.		     -- DONE --
+- Lav funktion til at logge ønskede værdier til kortet.		-- IGANG --
 - På lidt længere sigt kunne det være fedt at få lavet det sådan at man kan 
   starte koden i enden log-mode eller setup-mode hvor der skal være mulighed for
   at se filer der er på kortet og slette dem. Det skal også laves sådan at det
