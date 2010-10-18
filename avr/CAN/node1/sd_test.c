@@ -21,18 +21,12 @@
 #include "comm.h"
 #include "error.h"
 #include "adc.h"
+#include "log.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
 
 void can(FIL *file_to_log);
-
-DWORD acc_size;				/* Work register for fs command */
-WORD acc_files, acc_dirs;
-FILINFO Finfo;
-#if _USE_LFN
-char Lfname[_MAX_LFN+1];
-#endif
 
 
 FATFS Fatfs[1];				/* File system object for each logical drive */
@@ -102,88 +96,6 @@ void IoInit ()
 	PORTF|= (1<<PF7);
 }
 
-void list_files_test( DIR *dir )
-{
-	BYTE res;
-	DWORD p1, p2;
-	UINT s1, s2;
-	UINT maxname=0;
-#if _USE_LFN
-	Finfo.lfname = Lfname;
-	Finfo.lfsize = sizeof(Lfname);
-#endif
-	for(;;) {
-		res = f_readdir(dir, &Finfo);
-		if ((res != FR_OK) || !Finfo.fname[0]) break;
-		if (Finfo.fattrib & AM_DIR) {
-			s2++;
-		} else {
-			s1++; p1 += Finfo.fsize;
-		}
-		xprintf(PSTR("%s\n"), &(Finfo.fname[0]));
-		if ( atoi(&(Finfo.fname[0])) > maxname )
-			maxname = atoi(&(Finfo.fname[0]));
-/*			xprintf(PSTR("%c%c%c%c%c %u/%02u/%02u %02u:%02u %9lu  %s"), */
-/*			(Finfo.fattrib & AM_DIR) ? 'D' : '-',*/
-/*			(Finfo.fattrib & AM_RDO) ? 'R' : '-',*/
-/*			(Finfo.fattrib & AM_HID) ? 'H' : '-',*/
-/*			(Finfo.fattrib & AM_SYS) ? 'S' : '-',*/
-/*			(Finfo.fattrib & AM_ARC) ? 'A' : '-',*/
-/*			(Finfo.fdate >> 9) + 1980, (Finfo.fdate >> 5) & 15, Finfo.fdate & 31,*/
-/*			(Finfo.ftime >> 11), (Finfo.ftime >> 5) & 63,*/
-/*			Finfo.fsize, &(Finfo.fname[0]));*/
-/*#if _USE_LFN*/
-/*			for (p2 = strlen(Finfo.fname); p2 < 14; p2++)*/
-/*				xputc(' ');*/
-/*			xprintf(PSTR("%s\n"), Lfname);*/
-/*#else*/
-/*			xputc('\n');*/
-/*#endif*/
-	}
-	xprintf(PSTR("%d\n"), maxname);
-}
-
-int get_free_log_number( DIR *dir )
-{
-	BYTE res;
-	DWORD p1, p2;
-	UINT s1, s2;
-	UINT maxname=0;
-#if _USE_LFN
-	Finfo.lfname = Lfname;
-	Finfo.lfsize = sizeof(Lfname);
-#endif
-	for(;;) {
-		res = f_readdir(dir, &Finfo);
-		if ((res != FR_OK) || !Finfo.fname[0]) break;
-		if (Finfo.fattrib & AM_DIR) {
-			s2++;
-		} else {
-			s1++; p1 += Finfo.fsize;
-		}
-		xprintf(PSTR("%s\n"), &(Finfo.fname[0]));
-		if ( atoi(&(Finfo.fname[0])) > maxname )
-			maxname = atoi(&(Finfo.fname[0]));
-/*			xprintf(PSTR("%c%c%c%c%c %u/%02u/%02u %02u:%02u %9lu  %s"), */
-/*			(Finfo.fattrib & AM_DIR) ? 'D' : '-',*/
-/*			(Finfo.fattrib & AM_RDO) ? 'R' : '-',*/
-/*			(Finfo.fattrib & AM_HID) ? 'H' : '-',*/
-/*			(Finfo.fattrib & AM_SYS) ? 'S' : '-',*/
-/*			(Finfo.fattrib & AM_ARC) ? 'A' : '-',*/
-/*			(Finfo.fdate >> 9) + 1980, (Finfo.fdate >> 5) & 15, Finfo.fdate & 31,*/
-/*			(Finfo.ftime >> 11), (Finfo.ftime >> 5) & 63,*/
-/*			Finfo.fsize, &(Finfo.fname[0]));*/
-/*#if _USE_LFN*/
-/*			for (p2 = strlen(Finfo.fname); p2 < 14; p2++)*/
-/*				xputc(' ');*/
-/*			xprintf(PSTR("%s\n"), Lfname);*/
-/*#else*/
-/*			xputc('\n');*/
-/*#endif*/
-	}
-	xprintf(PSTR("%d\n"), maxname);
-	return maxname + 1;
-}
 
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
@@ -219,19 +131,6 @@ int main (void)
 	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));
 	xprintf(PSTR("Initialize logical drice 0\n"));
 	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));
-/*	xprintf(PSTR("Opening file hej\n"));*/
-/*	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE));*/
-/*	_delay_ms(1000);*/
-/*	init_can_data_mobs();*/
-
-/*	for (i=0; i<num_of_response_mobs; i++) {*/
-/*		can_data_mob_setup(i);*/
-/*	}*/
-/*	tx_remote_msg.pt_data = &tx_remote_buffer[0];*/
-/*	tx_remote_msg.status = 0;*/
-
-/*	can_send(rpm_msgid, 8, 1);*/
-
 	xprintf(PSTR("open dir \n")); 
 	xprintf(PSTR("rc=%d\n"), f_opendir(&dir, "0:"));
 	freelognumber = get_free_log_number(&dir);
@@ -239,9 +138,18 @@ int main (void)
 	itoa(freelognumber, filename, 10);
 	xprintf(PSTR("Opening file %s\n"), filename);
 	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));
-	//f_close(&file1);
-	_delay_ms(50);
-	//xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_WRITE));
+
+
+	init_can_data_mobs();
+
+	for (i=0; i<num_of_response_mobs; i++) {
+		can_data_mob_setup(i);
+	}
+	tx_remote_msg.pt_data = &tx_remote_buffer[0];
+	tx_remote_msg.status = 0;
+
+	can_send(rpm_msgid, 8, 1);
+
 	i = 0;
 	sei();
 	while(1) {

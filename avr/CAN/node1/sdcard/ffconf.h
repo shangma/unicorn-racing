@@ -86,7 +86,7 @@
 */
 
 
-#define	_USE_LFN	1		/* 0, 1 or 2 */
+#define	_USE_LFN	0		/* 0, 1 or 2 */
 #define	_MAX_LFN	64		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN support.
 /
@@ -116,7 +116,7 @@
 / Physical Drive Configurations
 /----------------------------------------------------------------------------*/
 
-#define _DRIVES		2
+#define _DRIVES		1
 /* Number of volumes (logical drives) to be used. */
 
 
