@@ -1,6 +1,6 @@
 ------------------------------- SD-KORT ----------------------------------------
 - Lav funktion til at bestemme hvad filnavn for log skal være baseret på hvad 
-  for nogle logs der allerede eksistere på kortet.		     -- DONE --
+  for nogle logs der allerede eksistere på kortet.		-- DONE --
 - Lav funktion til at logge ønskede værdier til kortet.		-- IGANG --
 - På lidt længere sigt kunne det være fedt at få lavet det sådan at man kan 
   starte koden i enden log-mode eller setup-mode hvor der skal være mulighed for
@@ -18,6 +18,8 @@
   ændres en masse for at få dem ind i systemet.
 
 --------------------------------- Trådløs protokol -----------------------------
+- Tilføje bit der angiver om log til sd-kort kører til eksisterende protokol 
+  inden torsdag							-- IGANG --
 - Ændre protokolen og modtager programmet så det bliver muligt at sende pakker
   med forskellig længde og indhold.
 - Få lavet en protokol til når systemet er i setup mode. Det skal blandet andet

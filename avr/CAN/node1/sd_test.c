@@ -118,6 +118,7 @@ int main (void)
 	char test[] = "test1234test";
 	int freelognumber;
 	char filename[10]; 
+	int valtocard;
 
 	IoInit();
 
@@ -139,7 +140,7 @@ int main (void)
 	xprintf(PSTR("Opening file %s\n"), filename);
 	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));
 
-
+	_delay_ms(3000);
 	init_can_data_mobs();
 
 	for (i=0; i<num_of_response_mobs; i++) {
@@ -154,12 +155,14 @@ int main (void)
 	sei();
 	while(1) {
 			i++;
-			xprintf(PSTR("rc=%d\n"), (WORD)f_write(&file1, test, 12, e));
+			valtocard = convertanalog(1);
+			xprintf(PSTR("rc=%d\n"), (WORD)f_write(&file1, &valtocard, 2, e));
+			//xprintf(PSTR("adc = %d\n"), (BYTE)valtocard);
 			if (i == 50) {
 				i = 0;
 				f_sync(&file1);
 			}
-			_delay_ms(100);
+			_delay_ms(5);
 	}
 }
 
