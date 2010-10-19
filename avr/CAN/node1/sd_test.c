@@ -92,8 +92,10 @@ void IoInit ()
 	DDRF = 0x00;
 
 	// ADC 3,7 pull-up
-	PORTF|= (1<<PF3);
-	PORTF|= (1<<PF7);
+	//PORTF|= (1<<PF3);
+	//PORTF|= (1<<PF4);
+	//PORTF|= (1<<PF5);
+	//PORTF|= (1<<PF7);
 }
 
 
@@ -118,7 +120,7 @@ int main (void)
 	char test[] = "test1234test";
 	int freelognumber;
 	char filename[10]; 
-	int valtocard;
+	int radiator1,radiator2,olie,valtocard;
 
 	IoInit();
 
@@ -155,14 +157,24 @@ int main (void)
 	sei();
 	while(1) {
 			i++;
-			valtocard = convertanalog(1);
-			xprintf(PSTR("rc=%d\n"), (WORD)f_write(&file1, &valtocard, 2, e));
-			//xprintf(PSTR("adc = %d\n"), (BYTE)valtocard);
-			if (i == 50) {
+			radiator1 = convertanalog(1);
+			xprintf(PSTR("1 = %d"), (BYTE)(radiator1>>2));
+			f_write(&file1, &radiator1, 2, e);
+			radiator2 = convertanalog(3);
+			xprintf(PSTR(", 3 = %d"), (BYTE)(radiator2>>2));
+			f_write(&file1, &radiator2, 2, e);
+			olie = convertanalog(5);
+			xprintf(PSTR(", 5 = %d"), (BYTE)(olie>>2));
+			f_write(&file1, &olie, 2, e);
+			valtocard = convertanalog(7);
+			xprintf(PSTR(", 7 = %d\n"), (BYTE)(valtocard>>2));
+			//xprintf(PSTR("rc=%d\n"), (WORD)f_write(&file1, &valtocard, 2, e));
+			//f_write(&file1, &valtocard, 2, e);
+			if (i == 10) {
 				i = 0;
 				f_sync(&file1);
 			}
-			_delay_ms(5);
+			_delay_ms(50);
 	}
 }
 
