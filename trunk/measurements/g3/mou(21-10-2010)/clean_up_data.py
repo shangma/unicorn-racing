@@ -20,7 +20,7 @@ plot(x, olie, label='Olie tryk')
 ylim( 0, 200)
 grid()
 legend()
-title('SD-kort data mou 21/10-2010')
+title('SD-kort data mou 21/10-2010 (data_fra_sd.txt)')
 
 savetxt('sd_data.csv', flipud(rot90(vstack([vand1,vand2,olie]))), delimiter=',')
 f = open('sd_data.csv', 'r')
