@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.10.3)  15 NOV 2010 23:11
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.10.3)  15 NOV 2010 23:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -718,11 +718,7 @@ File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
 )
 \smpagewidth=\skip76
 \smpageheight=\skip77
-) (./main.aux
-
-LaTeX Warning: Label `table:std_can_pakke' multiply defined.
-
-)
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 2.
@@ -734,7 +730,8 @@ LaTeX Font Info:    ... okay on input line 2.
 LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 2.
 LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 2.
 
- (/usr/share/texmf-texlive/tex/latex/psnfss/omspzccm.fd
+
+(/usr/share/texmf-texlive/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
 LaTeX Font Info:    ... okay on input line 2.
@@ -848,51 +845,76 @@ File: t1pbk.fd 2001/06/04 font definitions for T1/pbk.
 LaTeX Font Info:    Font shape `T1/pbk/m/n' in size <72.26999> not available
 (Font)              Font shape `T1/pbk/l/n' tried instead on input line 25.
 
-(../software/can/can_protocol.tex
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 2.
+Underfull \hbox (badness 1803) in paragraph at lines 25--25
+ []\T1/pbk/db/n/25 Noder
+ []
 
+(../software/noder/node_specs.tex
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 1.
+
+
+pdfTeX warning: pdflatex (file ../software/noder/diagram_car.pdf): PDF inclusio
+n: found PDF version <1.5>, but at most version <1.4> allowed
+<../software/noder/diagram_car.pdf, id=33, 597.50786pt x 845.04686pt>
+File: ../software/noder/diagram_car.pdf Graphic file (type pdf)
+
+<use ../software/noder/diagram_car.pdf>
+Overfull \hbox (59.834pt too wide) in paragraph at lines 5--6
+ [][] 
+ []
+
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 6.
+LaTeX Font Info:    Font shape `T1/ptm/bx/it' in size <9> not available
+(Font)              Font shape `T1/ptm/b/it' tried instead on input line 6.
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
+)
+LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 10
+.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptmcm.fd
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 2.
-
+LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 10
+.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/omlptmcm.fd
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 2.
-
+LaTeX Font Info:    Try loading font information for OMX+psycm on input line 10
+.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/omxpsycm.fd
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
-LaTeX Font Info:    Try loading font information for U+msa on input line 2.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
+LaTeX Font Info:    Try loading font information for U+msa on input line 10.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 2.
+LaTeX Font Info:    Try loading font information for U+msb on input line 10.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 3.
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 10.
-LaTeX Font Info:    Font shape `T1/ptm/bx/it' in size <9> not available
-(Font)              Font shape `T1/ptm/b/it' tried instead on input line 10.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 11.
 
-(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-0.def
-File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
-)) [3
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3
+
+ <../software/noder/diagram_car.pdf>]) [4]
+Chapter 2.
+(../software/can/can_protocol.tex) [5
 
 ]
 
@@ -904,25 +926,26 @@ FiXme Summary: Number of notes: 0,
 
 (./main.aux)
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 11997 strings out of 493848
- 170960 string characters out of 1152823
- 303840 words of memory out of 3000000
- 14971 multiletter control sequences out of 15000+50000
- 37300 words of font info for 61 fonts, out of 3000000 for 9000
+ 12034 strings out of 493848
+ 171557 string characters out of 1152823
+ 300840 words of memory out of 3000000
+ 14991 multiletter control sequences out of 15000+50000
+ 46269 words of font info for 67 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 63i,11n,96p,412b,708s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 63i,11n,96p,412b,839s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/urw/bookman/ubkd8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
 /bookman/ubkl8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-t
-exlive/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (3 pages, 54421 bytes).
+exlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/u
+rw/times/utmri8a.pfb>
+Output written on main.pdf (5 pages, 202295 bytes).
 PDF statistics:
- 56 PDF objects out of 1000 (max. 8388607)
- 11 named destinations out of 1000 (max. 500000)
- 17 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 361 PDF objects out of 1000 (max. 8388607)
+ 19 named destinations out of 1000 (max. 500000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

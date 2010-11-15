@@ -1,2 +1,5 @@
 \BOOKMARK [-1][-]{part.1}{I software}{}
-\BOOKMARK [0][-]{chapter.1}{Can protocol}{part.1}
+\BOOKMARK [0][-]{chapter.1}{Noder}{part.1}
+\BOOKMARK [1][-]{section.1.1}{Node specifikationer}{chapter.1}
+\BOOKMARK [0][-]{chapter.2}{Can protocol}{part.1}
+\BOOKMARK [1][-]{section.2.1}{CAN data pakke}{chapter.2}
