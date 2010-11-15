@@ -1,0 +1,65 @@
+\begin{table}[H] \centering
+	\begin{tabular}{|c|c|c|c|c|}
+        \hline \multicolumn{5}{|c|}{\textbf{Node 6}} \\
+	    \hline \hline \textbf{Sensor} & \textbf{Antal} & \textbf{Data size [bit]} & \textbf{Total [bit]} & \textbf{Updateringsrate [Hz]}\\
+        \hline Wheel speed back & 2 &  8 & 16 & 50 ?\\
+        \hline Olie press & 1 &  8 & 8 & 10\\
+        \hline GPS & 1 &  40 ? & 40 ? & < 5 ?\\
+        \hline
+    \end{tabular}
+\caption{Layout for standart CAN data pakke.}
+\label{table:std_can_pakke}
+\end{table}
+
+\begin{table}[H] \centering
+	\begin{tabular}{|c|c|c|}
+        \hline \multicolumn{3}{|c|}{\textbf{Standart CAN datapakke}} \\
+	    \hline \hline \textbf{Type} & \textbf{Tid}& \textbf{Variabel data længde}\\
+        \hline 6 bit & 6 bit & max 52 bit \\ 
+        \hline
+    \end{tabular}
+\caption{Layout for standart CAN data pakke.}
+\label{table:std_can_pakke}
+\end{table}
+
+\begin{table}[H] \centering
+	\begin{tabular}{|c|c|c|c|}
+        \hline \multicolumn{4}{|c|}{\textbf{Definition af værdi for CAN datapakke typer}} \\
+	    \hline \hline \textbf{Navn} & \textbf{Kort navn} & \textbf{Værdi hex}& \textbf{Beskrivelse}\\
+        \hline Wheel speed back & WhlSpdB & 0x01 & Hjul hastighed for begge baghjul\\
+        \hline Wheel speed front & WhlSpdF & 0x02 & Hjul hastighed for begge forhjul\\
+        \hline
+    \end{tabular}
+\caption{CAN datapakke typer.}
+\label{table:CAN_data_typer}
+\end{table}
+
+\begin{table}[H] \centering
+	\begin{tabular}{|c||c|c|c|c|c|c|c|}
+        \hline \multicolumn{8}{|c|}{\textbf{Definition af wheel speed back CAN datafelt}} \\
+	    \hline \hline & \multicolumn{6}{|c|}{\textbf{Datafelt}} & \textbf{Total [bit]}\\ 
+        \hline \textbf{Size [bit]} & 8 & 8 & 8 & 8 & 8 & 8 & 48 \\
+        \hline \textbf{Indhold} & Left & Left & Left & Right & Right & Right & \\
+        \hline
+    \end{tabular}
+\caption{CAN wheel speed back datafelt.}
+\label{table:CAN_WhlSpdB_pakke}
+\end{table}
+
+\begin{table}[H] \centering
+	\begin{tabular}{|c||c|c|c|c|c|c|c|}
+        \hline \multicolumn{8}{|c|}{\textbf{Definition af wheel speed front CAN datafelt}} \\
+	    \hline \hline & \multicolumn{6}{|c|}{\textbf{Datafelt}} & \textbf{Total [bit]}\\ 
+        \hline \textbf{Size [bit]} & 8 & 8 & 8 & 8 & 8 & 8 & 48 \\
+        \hline \textbf{Indhold} & Left & Left & Left & Right & Right & Right & \\
+        \hline
+    \end{tabular}
+\caption{CAN wheel speed front datafelt.}
+\label{table:CAN_WhlSpdF_pakke}
+\end{table}
+
+
+
+
+
+
