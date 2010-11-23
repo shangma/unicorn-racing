@@ -1,11 +1,12 @@
 TARGET         = node1
-CSRC           = sd_test.c uart.c sdcard/ff.c sdcard/mmc.c sdcard/rtc.c sdcard/cc932_avr.c can_std/can_drv.c can_std/can_lib.c can_func.c isr.c error.c comm.c adc.c log.c
+CSRC           = main.c uart.c sdcard_fs_driver/ff.c sdcard_fs_driver/mmc.c sdcard_fs_driver/rtc.c can_std/can_drv.c can_std/can_lib.c can_func.c isr.c error.c comm.c log.c
 ASRC           = xitoa.S
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
 DEFS           =
 LIBS           =
 DEBUG          = dwarf-2
+
 CC             = avr-gcc
 ASFLAGS        = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 ALL_ASFLAGS    = -mmcu=$(MCU_TARGET) -I. -x assembler-with-cpp $(ASFLAGS)
