@@ -123,7 +123,7 @@ int main (void)
 	itoa(freelognumber, filename, 10);			/* Convert to string for use in f_open() */
 	xprintf(PSTR("Opening file %s\n"), filename);
 	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));	/* Create new logfile for writing */
-
+	f_sync(&file1);			/* Sync filesystem to write changes to disk */
 	_delay_ms(1000);
 	sei();				/* Enable interrupt */
 
