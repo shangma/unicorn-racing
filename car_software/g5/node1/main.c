@@ -20,6 +20,7 @@
 #include "ecu.h"
 #include "comm.h"
 #include "error.h"
+#include "log.h"
 
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
@@ -80,18 +81,19 @@ DWORD get_fattime ()
 static
 void IoInit ()
 {
-//	OCR2A = 90-1;      // Timer2: 100Hz interval (OC2)
-//	TCCR2A = 0b00001101;
-//	TIMSK2 = 0b00000010;   // Enable TC2.oc interrupt
+	/* Timer2 used for filesystem functions */
+	OCR2A = 90-1;      // Timer2: 100Hz interval (OC2)
+	TCCR2A = 0b00001101;
+	TIMSK2 = 0b00000010;   // Enable TC2.oc interrupt
 
-	/* Timer 0 bruges til at sende data req til ECU */
+	/* Timer0 bruges til at sende data req til ECU */
 	OCR0A = 100;			// Sæt start værdi
 	TCCR0A |= 1<<CS02 | 1<<CS00;    // prescaler til 1024
 	TIMSK0 |= 1<<OCIE0A; 		// Slår timer compare match interrupt til
 
 	rtc_init();         // Initialize RTC
-	can_init(0);
-	uart_init();
+	can_init(0);		/* Initialize can controllor */
+	uart_init();		/* Initialize uart 0 and 1 for ecu and xbee */
 }
 
 /*-----------------------------------------------------------------------*/
@@ -100,22 +102,30 @@ int main (void)
 {
 	FATFS *fs;
 	FIL file1;			/* File object */
+	DIR dir;			/* Dir object */
+	int freelognumber;		/* Free log number */
+	char filename[10]; 		/* Free log number as a string */
+
 	IoInit();
 
 	/* Join xitoa module to uart module */
-	xfunc_out = (void (*)(char))uart_put;
-
+	xfunc_out = (void (*)(char))uart_put;		/* xprintf writes to uart connected to the xbee */
 
 	xprintf(PSTR("System startet\n"));
-	xprintf(PSTR("Initialize disk 0\n"));    
-	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));
-	xprintf(PSTR("Initialize logical drice 0\n"));
-	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));	
-	xprintf(PSTR("Opening file hej\n"));
-	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, "hej",FA_WRITE)); 
+	xprintf(PSTR("Initialize disk 0\n"));
+	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));		/* initialize filesystem */
+	xprintf(PSTR("Initialize logical drice 0\n"));	
+	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));		/* mount filesystem */
+	xprintf(PSTR("open dir \n")); 
+	xprintf(PSTR("rc=%d\n"), f_opendir(&dir, "0:"));	/* open root dir on fs */
+	freelognumber = get_free_log_number(&dir);		/* Get lowest free log number */
+	xprintf(PSTR("Free log nr %d\n"), freelognumber);
+	itoa(freelognumber, filename, 10);			/* Convert to string for use in f_open() */
+	xprintf(PSTR("Opening file %s\n"), filename);
+	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));	/* Create new logfile for writing */
 
-    	_delay_ms(1000);
-	sei();
+	_delay_ms(1000);
+	sei();				/* Enable interrupt */
 
 	while(1) {	
 		_delay_ms(50);
