@@ -106,6 +106,64 @@ void TWI_init()
 	TWBR = (F_CPU/TWI_CLOCK-16)/2;	/* Calculate TWBR value */
 }
 
+BOOL TWI_read(
+	char dev,		/* Device address */
+	uint8_t adr,		/* Read start address */
+	uint8_t cnt,		/* Read byte count */
+	uint8_t *buff		/* Read data buffer */
+)
+{
+	uint8_t *rbuff = buff;
+	uint8_t n;
+	BOOL start = FALSE;
+
+	if (!cnt) return FALSE;
+	
+	/*
+	 * Start in master write mode to transmit read start address to slave
+	 */
+	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */				
+
+	TWDR = dev | TW_WRITE;		/* Select device dev */
+	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
+
+	/* Send address for reading start position to slave device */	
+	TWDR = adr;
+	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	
+	/*
+	 * Switch to master read mode to recive data from slave 
+	 */	
+	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */
+	TWDR = dev | TW_READ;
+	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	if (!(TW_STATUS == TW_MR_SLA_ACK)) return FALSE;	/* Device could not be selected */
+
+	/* Device should start send now and first stop when do not recive a ACK after data transmition */
+	do {					/* Receive data */
+		cnt--;
+		if (cnt > 0) {
+			TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWEA); /* Send ACK after reviced data to continue */
+			while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+			if (!(TW_STATUS == TW_MR_DATA_ACK)) return FALSE; /* Return if an ACK not where send after data recived */
+			*rbuff++ = TWDR;
+		} else {
+			TWCR = _BV(TWINT) | _BV(TWEN); /* send NACK this time to stop slave sending data */
+			while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+			if (!(TW_STATUS == TW_MR_DATA_NACK)) return FALSE; /* Return if an NACK not where send after data recived */
+			*rbuff++ = TWDR;
+		}
+	} while (cnt);
+	
+	TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN); /* send stop condition */
+	return TRUE;
+}
+
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
 int main (void)
