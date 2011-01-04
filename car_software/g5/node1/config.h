@@ -51,6 +51,9 @@
 #define ECU 0
 #define XBEE 1
 
+/* --------------- TWI --------------- */
+#define TWI_CLOCK 100000UL	/* 100 kHz */
+
 //_____ D E C L A R A T I O N S ________________________________________________
 
 #endif  // _CONFIG_H_

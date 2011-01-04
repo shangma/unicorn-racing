@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <util/delay.h>
+#include <util/twi.h>
 #include "uart.h"
 #include "xitoa.h"
 #include "sdcard_fs_driver/ff.h"
@@ -96,6 +97,15 @@ void IoInit ()
 	uart_init();		/* Initialize uart 0 and 1 for ecu and xbee */
 }
 
+void TWI_init()
+{
+	PORTD |= (1<<PORTD0)|(1<<PORTD1);	/* Enable pull-up on TWI pins */
+
+	/* Set TWI clock */
+	TWSR = 0;	/* Set prescaler to 1 */
+	TWBR = (F_CPU/TWI_CLOCK-16)/2;	/* Calculate TWBR value */
+}
+
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
 int main (void)
@@ -107,6 +117,7 @@ int main (void)
 	char filename[10]; 		/* Free log number as a string */
 
 	IoInit();
+	TWI_init();	/* Init TWI interface */
 
 	/* Join xitoa module to uart module */
 	xfunc_out = (void (*)(char))uart_put;		/* xprintf writes to uart connected to the xbee */
@@ -137,7 +148,7 @@ int main (void)
 void can(FIL *file)
 {
     U8 i,j;
-    char e;
+    int *e;
 
     for (j=0; j<num_of_response_mobs; j++){
         if (can_get_status(&response_msg[j]) == CAN_STATUS_COMPLETED){
