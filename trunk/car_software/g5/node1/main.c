@@ -118,32 +118,37 @@ BOOL TWI_read(
 	BOOL start = FALSE;
 
 	if (!cnt) return FALSE;
-	
+	xprintf(PSTR("1 \n"));
 	/*
 	 * Start in master write mode to transmit read start address to slave
 	 */
 	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
 	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
 	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */				
-
+	xprintf(PSTR("2 \n"));
 	TWDR = dev | TW_WRITE;		/* Select device dev */
 	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
 	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
-
+	xprintf(PSTR("3 \n"));
 	/* Send address for reading start position to slave device */	
 	TWDR = adr;
 	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
-	
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
+
 	/*
 	 * Switch to master read mode to recive data from slave 
 	 */	
 	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
 	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
 	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */
+	xprintf(PSTR("4 \n"));
 	TWDR = dev | TW_READ;
 	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
 	if (!(TW_STATUS == TW_MR_SLA_ACK)) return FALSE;	/* Device could not be selected */
-
+	xprintf(PSTR("5 \n"));
 	/* Device should start send now and first stop when do not recive a ACK after data transmition */
 	do {					/* Receive data */
 		cnt--;
@@ -174,6 +179,10 @@ int main (void)
 	int freelognumber;		/* Free log number */
 	char filename[10]; 		/* Free log number as a string */
 
+	/* vars to test rtc code */
+	uint8_t buffer[10];
+	BOOL res;
+	
 	IoInit();
 	TWI_init();	/* Init TWI interface */
 
@@ -196,8 +205,13 @@ int main (void)
 	_delay_ms(1000);
 	sei();				/* Enable interrupt */
 
-	while(1) {	
-		_delay_ms(50);
+	while(1) {
+		buffer[0] = 3;
+		buffer[1] = 4;
+		res = TWI_read(0b11010000, 0x0A, 4, buffer);
+		xprintf(PSTR("RTC read res: %d\n"), (int)res);
+		xprintf(PSTR("Buf 0: %d, Buf 1: %d, Buf 2: %d\n"), buffer[0], buffer[1], buffer[2]); 	
+		_delay_ms(5000);
 	}
 }
 
