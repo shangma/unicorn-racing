@@ -242,7 +242,27 @@ BOOL rtc_gettimeNew(RTC *rtc)
 	return TRUE;
 }
 
+BOOL rtc_settimeNew(RTC *rtc)
+{
+	uint8_t buf[7];
 
+	buf[0] = ((rtc->sec / 10) * 16 + rtc->sec % 10) & 0x7F;
+	buf[1] = ((rtc->min / 10) * 16 + rtc->min % 10) & 0xF7;
+	buf[2] = ((rtc->hour / 10) * 16 + rtc->hour % 10) & 0x3F;
+	buf[3] = rtc->wday & 7;
+	buf[4] = ((rtc->mday / 10) * 16 + rtc->mday % 10) & 0x3F;
+	buf[5] = ((rtc->month / 10) * 16 + rtc->month % 10) & 0x1F;
+	buf[6] = ((rtc->year - 2000) / 10) * 16 + (rtc->year - 2000) % 10;
+
+	return TWI_write(0b11010000, 0x01, 7, buf);
+}
+
+BOOL rtc_clearHaltBit()
+{
+	uint8_t buf[1];
+	buf[0] = 63;
+	return TWI_write(0b11010000, 0x0C, 1, buf);
+}
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
 int main (void)
@@ -280,20 +300,24 @@ int main (void)
 	_delay_ms(1000);
 	sei();				/* Enable interrupt */
 
+/*	rtc.sec = 0;*/
+/*	rtc.min = 35;*/
+/*	rtc.hour = 1;*/
+/*	rtc.wday = 3;*/
+/*	rtc.mday = 5;*/
+/*	rtc.month = 1;*/
+/*	rtc.year = 2011;*/
+
+/*	res = rtc_settimeNew(&rtc);*/
+/*	xprintf(PSTR("RTC timeset res: %d\n"), (int)res);*/
+
+	rtc_clearHaltBit();
+
 	while(1) {
-		buffer[0] = 3;
-		buffer[1] = 4;
-		res = TWI_read(0b11010000, 0x01, 4, buffer);
-		xprintf(PSTR("RTC read res: %d\n"), (int)res);
-		xprintf(PSTR("Buf 0: %d, Buf 1: %d, Buf 2: %d\n"), buffer[0], buffer[1], buffer[2]); 	
-		_delay_ms(3000);
+
 		res = rtc_gettimeNew(&rtc);
-		xprintf(PSTR("RTC time read res: %d\n"), (int)res);
-		xprintf(PSTR("Month: %d, Day: %d, Hour: %d, Min: %d, Sec: %d\n"), rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec); 
-/*		buffer[0] = 0;*/
-/*		res = TWI_write(0b11010000, 0x01, 1, buffer);*/
-/*		xprintf(PSTR("RTC write res: %d\n"), (int)res);*/
-/*		_delay_ms(2500);*/
+		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec); 
+		_delay_ms(3000);
 	}
 }
 
