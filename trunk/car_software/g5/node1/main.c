@@ -106,6 +106,74 @@ void TWI_init()
 	TWBR = (F_CPU/TWI_CLOCK-16)/2;	/* Calculate TWBR value */
 }
 
+BOOL TWI_start(void)
+{
+	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */
+	return TRUE;
+}
+
+/* Send a byte to the TWI bus */
+void TWI_send(uint8_t data)
+{
+	TWDR = data;
+	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
+	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+}	
+
+/* Read a byte from the TWI bus */
+uint8_t TWI_rcvr(BOOL ack)
+{
+	if (ack) {
+		TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWEA); 	/* send ACK after data recived */
+	} else {
+		TWCR = _BV(TWINT) | _BV(TWEN);			/* send NACK after data recived */
+	}		 
+	while ((TWCR & _BV(TWINT)) == 0) ; 			/* wait for transmission */	
+	return 	TWDR;
+}
+		
+
+void TWI_stop(void)
+{
+	TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN); /* send stop condition */
+}
+
+BOOL TWI_write(
+	char dev,		/* Device address */
+	uint8_t adr,		/* Write start address */
+	uint8_t cnt,		/* Write byte count */
+	uint8_t *buff		/* Write data buffer */
+)
+{
+	uint8_t *wbuff = buff;
+	
+	if (!cnt) return FALSE;	
+	/*
+	 * Start in master write mode to transmit data to slave 
+	 */
+	if (!(TWI_start())) return FALSE;	/* send start condition */	
+
+	TWI_send(dev | TW_WRITE);		/* Select device dev */
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
+
+	/* Send address for writing start position to slave device */	
+	TWI_send(adr);
+	if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
+
+	/* send data */
+	do {
+		TWI_send(*wbuff++);
+		if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
+	} while(--cnt);
+
+	/* send stop */
+	TWI_stop();
+
+	return TRUE;
+}
+
 BOOL TWI_read(
 	char dev,		/* Device address */
 	uint8_t adr,		/* Read start address */
@@ -116,58 +184,64 @@ BOOL TWI_read(
 	uint8_t *rbuff = buff;
 	uint8_t n;
 	BOOL start = FALSE;
+	uint8_t data;
 
 	if (!cnt) return FALSE;
-	xprintf(PSTR("1 \n"));
 	/*
 	 * Start in master write mode to transmit read start address to slave
 	 */
-	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
-	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */				
-	xprintf(PSTR("2 \n"));
-	TWDR = dev | TW_WRITE;		/* Select device dev */
-	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!(TWI_start())) return FALSE;	/* send start condition */				
+
+	TWI_send(dev | TW_WRITE);		/* Select device dev */
 	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
-	xprintf(PSTR("3 \n"));
+
 	/* Send address for reading start position to slave device */	
-	TWDR = adr;
-	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	TWI_send(adr);
 	if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
 
 	/*
 	 * Switch to master read mode to recive data from slave 
 	 */	
-	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
-	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */
-	xprintf(PSTR("4 \n"));
-	TWDR = dev | TW_READ;
-	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+	if (!(TWI_start())) return FALSE;	/* send start condition */
+
+	TWI_send(dev | TW_READ);		/* Select device dev */
 	if (!(TW_STATUS == TW_MR_SLA_ACK)) return FALSE;	/* Device could not be selected */
-	xprintf(PSTR("5 \n"));
-	/* Device should start send now and first stop when do not recive a ACK after data transmition */
+
+	/* Device should start sending now and first stop when do not recive a ACK after data transmition */
 	do {					/* Receive data */
 		cnt--;
 		if (cnt > 0) {
-			TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWEA); /* Send ACK after reviced data to continue */
-			while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+			data = TWI_rcvr(TRUE);		/* Send ACK after reviced data */
 			if (!(TW_STATUS == TW_MR_DATA_ACK)) return FALSE; /* Return if an ACK not where send after data recived */
-			*rbuff++ = TWDR;
+			*rbuff++ = data;
 		} else {
-			TWCR = _BV(TWINT) | _BV(TWEN); /* send NACK this time to stop slave sending data */
-			while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
+			data = TWI_rcvr(FALSE);		/* Send NACK after reviced data */
 			if (!(TW_STATUS == TW_MR_DATA_NACK)) return FALSE; /* Return if an NACK not where send after data recived */
 			*rbuff++ = TWDR;
 		}
 	} while (cnt);
 	
-	TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN); /* send stop condition */
+	TWI_stop(); /* send stop condition */
 	return TRUE;
 }
+
+BOOL rtc_gettimeNew(RTC *rtc)
+{
+	uint8_t buf[7];
+
+	if (!TWI_read(0b11010000, 0x01, 7, buf)) return FALSE;
+
+	rtc->sec = (buf[0] & 0x0F) + ((buf[0] >> 4) & 7) * 10;
+	rtc->min = (buf[1] & 0x0F) + (buf[1] >> 4) * 10;
+	rtc->hour = (buf[2] & 0x0F) + ((buf[2] >> 4) & 3) * 10;
+	rtc->wday = (buf[3] & 0x07);
+	rtc->mday = (buf[4] & 0x0F) + ((buf[4] >> 4) & 3) * 10;
+	rtc->month = (buf[5] & 0x0F) + (buf[5] >> 4) * 10;
+	rtc->year = 2000 + (buf[6] & 0x0F) + (buf[6] >> 4) * 10;
+
+	return TRUE;
+}
+
 
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
@@ -182,6 +256,7 @@ int main (void)
 	/* vars to test rtc code */
 	uint8_t buffer[10];
 	BOOL res;
+	RTC rtc;
 	
 	IoInit();
 	TWI_init();	/* Init TWI interface */
@@ -208,10 +283,17 @@ int main (void)
 	while(1) {
 		buffer[0] = 3;
 		buffer[1] = 4;
-		res = TWI_read(0b11010000, 0x0A, 4, buffer);
+		res = TWI_read(0b11010000, 0x01, 4, buffer);
 		xprintf(PSTR("RTC read res: %d\n"), (int)res);
 		xprintf(PSTR("Buf 0: %d, Buf 1: %d, Buf 2: %d\n"), buffer[0], buffer[1], buffer[2]); 	
-		_delay_ms(5000);
+		_delay_ms(3000);
+		res = rtc_gettimeNew(&rtc);
+		xprintf(PSTR("RTC time read res: %d\n"), (int)res);
+		xprintf(PSTR("Month: %d, Day: %d, Hour: %d, Min: %d, Sec: %d\n"), rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec); 
+/*		buffer[0] = 0;*/
+/*		res = TWI_write(0b11010000, 0x01, 1, buffer);*/
+/*		xprintf(PSTR("RTC write res: %d\n"), (int)res);*/
+/*		_delay_ms(2500);*/
 	}
 }
 
