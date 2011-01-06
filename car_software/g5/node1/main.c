@@ -15,6 +15,7 @@
 #include "sdcard_fs_driver/ff.h"
 #include "sdcard_fs_driver/diskio.h"
 #include "sdcard_fs_driver/rtc.h"
+#include "twi/twi.h"
 #include "can_std/can_lib.h"
 #include "can_func.h"
 #include "../lib/can_defs.h"
@@ -97,172 +98,6 @@ void IoInit ()
 	uart_init();		/* Initialize uart 0 and 1 for ecu and xbee */
 }
 
-void TWI_init()
-{
-	PORTD |= (1<<PORTD0)|(1<<PORTD1);	/* Enable pull-up on TWI pins */
-
-	/* Set TWI clock */
-	TWSR = 0;	/* Set prescaler to 1 */
-	TWBR = (F_CPU/TWI_CLOCK-16)/2;	/* Calculate TWBR value */
-}
-
-BOOL TWI_start(void)
-{
-	TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);	/* send start condition */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
-	if (!((TW_STATUS == TW_REP_START) || (TW_STATUS == TW_START))) return FALSE; /* Return if communication could not be started */
-	return TRUE;
-}
-
-/* Send a byte to the TWI bus */
-void TWI_send(uint8_t data)
-{
-	TWDR = data;
-	TWCR = _BV(TWINT) | _BV(TWEN); /* clear interrupt to start transmission */
-	while ((TWCR & _BV(TWINT)) == 0) ; /* wait for transmission */
-}	
-
-/* Read a byte from the TWI bus */
-uint8_t TWI_rcvr(BOOL ack)
-{
-	if (ack) {
-		TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWEA); 	/* send ACK after data recived */
-	} else {
-		TWCR = _BV(TWINT) | _BV(TWEN);			/* send NACK after data recived */
-	}		 
-	while ((TWCR & _BV(TWINT)) == 0) ; 			/* wait for transmission */	
-	return 	TWDR;
-}
-		
-
-void TWI_stop(void)
-{
-	TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN); /* send stop condition */
-}
-
-BOOL TWI_write(
-	char dev,		/* Device address */
-	uint8_t adr,		/* Write start address */
-	uint8_t cnt,		/* Write byte count */
-	uint8_t *buff		/* Write data buffer */
-)
-{
-	uint8_t *wbuff = buff;
-	
-	if (!cnt) return FALSE;	
-	/*
-	 * Start in master write mode to transmit data to slave 
-	 */
-	if (!(TWI_start())) return FALSE;	/* send start condition */	
-
-	TWI_send(dev | TW_WRITE);		/* Select device dev */
-	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
-
-	/* Send address for writing start position to slave device */	
-	TWI_send(adr);
-	if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
-
-	/* send data */
-	do {
-		TWI_send(*wbuff++);
-		if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
-	} while(--cnt);
-
-	/* send stop */
-	TWI_stop();
-
-	return TRUE;
-}
-
-BOOL TWI_read(
-	char dev,		/* Device address */
-	uint8_t adr,		/* Read start address */
-	uint8_t cnt,		/* Read byte count */
-	uint8_t *buff		/* Read data buffer */
-)
-{
-	uint8_t *rbuff = buff;
-	uint8_t n;
-	BOOL start = FALSE;
-	uint8_t data;
-
-	if (!cnt) return FALSE;
-	/*
-	 * Start in master write mode to transmit read start address to slave
-	 */
-	if (!(TWI_start())) return FALSE;	/* send start condition */				
-
-	TWI_send(dev | TW_WRITE);		/* Select device dev */
-	if (!(TW_STATUS == TW_MT_SLA_ACK)) return FALSE;	/* Device could not be selected */
-
-	/* Send address for reading start position to slave device */	
-	TWI_send(adr);
-	if (!(TW_STATUS == TW_MT_DATA_ACK)) return FALSE;	/* No ACK from device return */
-
-	/*
-	 * Switch to master read mode to recive data from slave 
-	 */	
-	if (!(TWI_start())) return FALSE;	/* send start condition */
-
-	TWI_send(dev | TW_READ);		/* Select device dev */
-	if (!(TW_STATUS == TW_MR_SLA_ACK)) return FALSE;	/* Device could not be selected */
-
-	/* Device should start sending now and first stop when do not recive a ACK after data transmition */
-	do {					/* Receive data */
-		cnt--;
-		if (cnt > 0) {
-			data = TWI_rcvr(TRUE);		/* Send ACK after reviced data */
-			if (!(TW_STATUS == TW_MR_DATA_ACK)) return FALSE; /* Return if an ACK not where send after data recived */
-			*rbuff++ = data;
-		} else {
-			data = TWI_rcvr(FALSE);		/* Send NACK after reviced data */
-			if (!(TW_STATUS == TW_MR_DATA_NACK)) return FALSE; /* Return if an NACK not where send after data recived */
-			*rbuff++ = TWDR;
-		}
-	} while (cnt);
-	
-	TWI_stop(); /* send stop condition */
-	return TRUE;
-}
-
-BOOL rtc_gettimeNew(RTC *rtc)
-{
-	uint8_t buf[7];
-
-	if (!TWI_read(0b11010000, 0x01, 7, buf)) return FALSE;
-
-	rtc->sec = (buf[0] & 0x0F) + ((buf[0] >> 4) & 7) * 10;
-	rtc->min = (buf[1] & 0x0F) + (buf[1] >> 4) * 10;
-	rtc->hour = (buf[2] & 0x0F) + ((buf[2] >> 4) & 3) * 10;
-	rtc->wday = (buf[3] & 0x07);
-	rtc->mday = (buf[4] & 0x0F) + ((buf[4] >> 4) & 3) * 10;
-	rtc->month = (buf[5] & 0x0F) + (buf[5] >> 4) * 10;
-	rtc->year = 2000 + (buf[6] & 0x0F) + (buf[6] >> 4) * 10;
-
-	return TRUE;
-}
-
-BOOL rtc_settimeNew(RTC *rtc)
-{
-	uint8_t buf[7];
-
-	buf[0] = ((rtc->sec / 10) * 16 + rtc->sec % 10) & 0x7F;
-	buf[1] = ((rtc->min / 10) * 16 + rtc->min % 10) & 0xF7;
-	buf[2] = ((rtc->hour / 10) * 16 + rtc->hour % 10) & 0x3F;
-	buf[3] = rtc->wday & 7;
-	buf[4] = ((rtc->mday / 10) * 16 + rtc->mday % 10) & 0x3F;
-	buf[5] = ((rtc->month / 10) * 16 + rtc->month % 10) & 0x1F;
-	buf[6] = ((rtc->year - 2000) / 10) * 16 + (rtc->year - 2000) % 10;
-
-	return TWI_write(0b11010000, 0x01, 7, buf);
-}
-
-BOOL rtc_clearHaltBit()
-{
-	uint8_t buf[1];
-	buf[0] = 63;
-	return TWI_write(0b11010000, 0x0C, 1, buf);
-}
 /*-----------------------------------------------------------------------*/
 /* Main                                                                  */
 int main (void)
@@ -278,12 +113,13 @@ int main (void)
 	BOOL res;
 	RTC rtc;
 	
-	IoInit();
 	TWI_init();	/* Init TWI interface */
+	IoInit();
 
 	/* Join xitoa module to uart module */
 	xfunc_out = (void (*)(char))uart_put;		/* xprintf writes to uart connected to the xbee */
 
+	_delay_ms(500);
 	xprintf(PSTR("System startet\n"));
 	xprintf(PSTR("Initialize disk 0\n"));
 	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));		/* initialize filesystem */
@@ -300,23 +136,10 @@ int main (void)
 	_delay_ms(1000);
 	sei();				/* Enable interrupt */
 
-/*	rtc.sec = 0;*/
-/*	rtc.min = 35;*/
-/*	rtc.hour = 1;*/
-/*	rtc.wday = 3;*/
-/*	rtc.mday = 5;*/
-/*	rtc.month = 1;*/
-/*	rtc.year = 2011;*/
-
-/*	res = rtc_settimeNew(&rtc);*/
-/*	xprintf(PSTR("RTC timeset res: %d\n"), (int)res);*/
-
-	rtc_clearHaltBit();
-
 	while(1) {
 
-		res = rtc_gettimeNew(&rtc);
-		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec); 
+		res = rtc_gettime(&rtc);
+		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);
 		_delay_ms(3000);
 	}
 }
