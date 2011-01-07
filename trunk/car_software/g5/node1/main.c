@@ -112,6 +112,12 @@ int main (void)
 	uint8_t buffer[10];
 	BOOL res;
 	RTC rtc;
+
+	/* Can test vars */
+	U8 canData=0;
+	// Recieve buffer
+	U8 rpm_response_buffer[8];
+	st_cmd_t rpm_msg;
 	
 	TWI_init();	/* Init TWI interface */
 	IoInit();
@@ -134,13 +140,28 @@ int main (void)
 	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));	/* Create new logfile for writing */
 	f_sync(&file1);			/* Sync filesystem to write changes to disk */
 	_delay_ms(1000);
+
+	/*
+	 *	Kode til hurtig test af can 
+	 */
+	rpm_msg.pt_data = &rpm_response_buffer[0];
+	rpm_msg.status = 0;
+
+	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+
 	sei();				/* Enable interrupt */
 
 	while(1) {
+		// check for rpm_msg
+		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {  
+			canData = rpm_response_buffer[0];                     
+			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
+			xprintf(PSTR("Modtog %d fra can\n"), canData);
+		}
 
-		res = rtc_gettime(&rtc);
-		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);
-		_delay_ms(3000);
+/*		res = rtc_gettime(&rtc);*/
+/*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
+/*		_delay_ms(3000);*/
 	}
 }
 
