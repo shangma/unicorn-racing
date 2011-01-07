@@ -114,7 +114,7 @@ int main (void)
 	RTC rtc;
 
 	/* Can test vars */
-	U8 canData=0;
+	U8 canData[8];
 	// Recieve buffer
 	U8 rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
@@ -144,7 +144,7 @@ int main (void)
 	/*
 	 *	Kode til hurtig test af can 
 	 */
-	rpm_msg.pt_data = &rpm_response_buffer[0];
+	rpm_msg.pt_data = rpm_response_buffer;
 	rpm_msg.status = 0;
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
@@ -154,9 +154,9 @@ int main (void)
 	while(1) {
 		// check for rpm_msg
 		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {  
-			canData = rpm_response_buffer[0];                     
+                    
+			xprintf(PSTR("1 = %d, 2 = %d, 3 = %d, 4 = %d, 5 = %d, 6 = %d, 7 = %d, 8 = %d, dlc = %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2], rpm_response_buffer[3],rpm_response_buffer[4], rpm_response_buffer[5],rpm_response_buffer[6], rpm_response_buffer[7], rpm_msg.dlc);
 			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
-			xprintf(PSTR("Modtog %d fra can\n"), canData);
 		}
 
 /*		res = rtc_gettime(&rtc);*/
