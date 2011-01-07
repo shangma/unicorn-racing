@@ -40,7 +40,7 @@ void can_data_mob_setup(U8 mob_num)
 void can_send(U8 msg_id, U8 msg, U8 dlc)
 {
     tx_remote_buffer[0] = msg; 
-
+	dlc = 4;
     tx_remote_msg.id.std = msg_id;
     tx_remote_msg.ctrl.ide = 0;
     tx_remote_msg.ctrl.rtr = 1;
@@ -50,4 +50,23 @@ void can_send(U8 msg_id, U8 msg, U8 dlc)
     while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
 
     while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
+}
+
+/* funktion til at sende en besked der er dlc byte lang */
+void can_send_test(U8 msg_id, void* buf, U8 dlc)
+{
+	uint8_t *tmp;
+	tmp = tx_remote_msg.pt_data; /* Backup of pointer to restore it */    
+	tx_remote_msg.pt_data = buf; 
+	
+	tx_remote_msg.id.std = msg_id;
+	tx_remote_msg.ctrl.ide = 0;
+	tx_remote_msg.ctrl.rtr = 0;
+	tx_remote_msg.dlc = dlc;
+	tx_remote_msg.cmd = CMD_TX_DATA;
+
+	while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
+
+	while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
+	tx_remote_msg.pt_data = tmp;
 }

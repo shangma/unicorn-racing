@@ -15,6 +15,7 @@ int main (void)
 {	
 	U8 canData=0;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
+	uint8_t data_buf[8];
 
 //  Init CAN, UART, I/O
 	init();
@@ -25,10 +26,21 @@ int main (void)
 	tx_remote_msg.pt_data = &tx_remote_buffer[0];
 	tx_remote_msg.status = 0;
 
+	data_buf[0] = 10;
+	data_buf[1] = 30;
+	data_buf[2] = 50;
+	data_buf[3] = 70;
+	data_buf[4] = 90;
+	data_buf[5] = 110;
+	data_buf[6] = 130;
+	data_buf[7] = 211;
+	
 
 	while (1) {		
 		can_send(rpm_msgid, 8, 1);
-		_delay_ms(4000);
+		_delay_ms(2000);
+		can_send_test(rpm_msgid, data_buf, 8);
+		_delay_ms(2000);
 	}
 	return 0;
 }

@@ -55,10 +55,6 @@ void can_send(U8 msg_id, U8 msg, U8 dlc)
 unsigned short int can_update_rx_msg(st_cmd_t* msg, U8 msg_id, U8 dlc)
 {
         U8 i;
-    
-        for (i=0; i<dlc; i++) {
-                *(msg->pt_data+i) = 255;
-        }
         
         msg->id.std = msg_id;
         msg->ctrl.ide = 0;
