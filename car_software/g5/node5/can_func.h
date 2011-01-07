@@ -15,5 +15,3 @@ void can_data_mob_setup(U8 mob_num);
 
 /* Funktion til at sende en besked via CAN */
 void can_send(U8 msg_id, U8 msg, U8 data_length);
-
-unsigned short int can_update_rx_msg(st_cmd_t* msg, U8 msg_id, U8 dlc);
