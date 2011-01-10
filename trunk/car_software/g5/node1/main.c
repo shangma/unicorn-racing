@@ -115,6 +115,7 @@ int main (void)
 
 	/* Can test vars */
 	U8 canData[8];
+	int i;
 	// Recieve buffer
 	U8 rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
@@ -157,6 +158,9 @@ int main (void)
                     
 			xprintf(PSTR("1 = %d, 2 = %d, 3 = %d, 4 = %d, 5 = %d, 6 = %d, 7 = %d, 8 = %d, dlc = %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2], rpm_response_buffer[3],rpm_response_buffer[4], rpm_response_buffer[5],rpm_response_buffer[6], rpm_response_buffer[7], rpm_msg.dlc);
 			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
+		}
+		for (i=0;i<8;i++) {
+			rpm_response_buffer[i] = 0;
 		}
 
 /*		res = rtc_gettime(&rtc);*/
