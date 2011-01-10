@@ -1,6 +1,7 @@
 #include "config.h"
 #include "can_std/can_lib.h"
 #include "can_func.h"
+#include "can_logning.h"
 
 U8 response_buffer[num_of_response_mobs][8];
 st_cmd_t response_msg[num_of_response_mobs];
@@ -11,6 +12,21 @@ U8 bufferindex = 0;
 
 U8 tx_remote_buffer[8];
 st_cmd_t tx_remote_msg;
+
+U8 sample_time = 0; /* Should be updated by a timing function */
+
+/* New can vars */
+U8 tx_buffer[8];
+st_cmd_t tx_std_msg;
+
+BOOL can_send_standart_data(
+dataPackage* type,
+U8 *datapakke	/* pointer to datapakke buffer. Datapakke should follow the protol!!! */
+)
+{
+	can_send_test(STD_DATA, datapakke, type->dlc);
+	return TRUE;
+}
 
 void init_can_data_mobs(void)
 {
@@ -67,6 +83,7 @@ void can_send_test(U8 msg_id, void* buf, U8 dlc)
 
 	while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
 
-	while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
-	tx_remote_msg.pt_data = tmp;
+	Can_set_mob_int_ena(tx_remote_msg.handle);	/* Enable interrupt for mob so it will clear it self when data is send */
+
+	tx_remote_msg.pt_data = tmp;	/* Restore pointer */
 }

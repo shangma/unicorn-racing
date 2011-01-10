@@ -4,6 +4,7 @@
 #include <util/delay.h>
 #include "can_func.h"
 #include "../lib/can_defs.h"
+#include "can_logning.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -26,6 +27,9 @@ int main (void)
 	tx_remote_msg.pt_data = &tx_remote_buffer[0];
 	tx_remote_msg.status = 0;
 
+	tx_std_msg.pt_data = &tx_buffer[0];
+	tx_std_msg.status = 0;
+
 	data_buf[0] = 10;
 	data_buf[1] = 30;
 	data_buf[2] = 50;
@@ -36,11 +40,16 @@ int main (void)
 	data_buf[7] = 211;
 	
 
+	Can_sei();		/* Enable general can interrupt */
+	Can_set_tx_int();	/* Enable can tx interrupt */
+
 	while (1) {		
 		can_send(rpm_msgid, 8, 1);
-		_delay_ms(2000);
+		_delay_ms(1000);
 		can_send_test(rpm_msgid, data_buf, 8);
-		_delay_ms(2000);
+		_delay_ms(1000);
+		can_send_standart_data(&watPack, data_buf);
+		_delay_ms(1000);
 	}
 	return 0;
 }
