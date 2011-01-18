@@ -11,3 +11,5 @@ char volatile E_W_indicator;
 
 extern unsigned short int volatile satellites;
 
+extern unsigned int speed;
+

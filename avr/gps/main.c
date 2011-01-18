@@ -24,6 +24,8 @@ char volatile E_W_indicator = '0';
 // satellites
 unsigned short int volatile satellites = 0;
 
+unsigned int speed = 0;
+
 int main(void)
 {
 	char tempchar[2];
@@ -63,7 +65,11 @@ int main(void)
 		sendtekst("Sat: ");
 		itoa(satellites,tempchar,10);
 		sendtekst(tempchar);
+		sendtekst("  ");
 
+		sendtekst("Speed [km/h]: "); // Ikke testet, ikke engang om index er ok
+		itoa(speed,tempchar,10);
+		sendtekst(tempchar);
 
 		sendtekst("\n\r");
 

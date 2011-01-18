@@ -11,8 +11,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-char start_flag = 0;
 char GPGGA_flag = 0;
+char GPRMC_flag = 0;
 int char_counter = 0;
 
 char msg_type[5];
@@ -25,6 +25,8 @@ char min_char[3] = {'0','0'};
 char hours_char[3] = {'0','0'};
 
 char satellites_char[3] = {'0','0'};
+
+char speed_char[5] = {'0','0','0','0'}; 
 
  // UART0 interrupt
 ISR(USART0_RX_vect)
@@ -39,6 +41,7 @@ ISR(USART1_RX_vect)
 	data = UDR1;
 	//UDR0 = UDR1;
 
+	// Index
 	char_counter++;
 
 	// Finder starten af beskeden
@@ -46,6 +49,7 @@ ISR(USART1_RX_vect)
 	{
 		char_counter = 0;	// Reset char counter
 		GPGGA_flag = 0;
+		GPRMC_flag = 0;
 	}
 
 	// Besked typen, index 1-5
@@ -56,23 +60,19 @@ ISR(USART1_RX_vect)
 	if(char_counter == 5)
 	{
 		if(!strcmp(msg_type,"GPGGA"))
-		{
 			GPGGA_flag = 1;
-			//UDR0 = 'A';	
-		}
+		else if(!strcmp(msg_type,"GPRMC"))
+			GPRMC_flag = 1;
 		else
 			char_counter = 0;
 	}
 
 	// The time, index 7 to 12
 	if((GPGGA_flag == 1) && ((char_counter>=7) && (char_counter<=12)))
-	{
 		the_time_char[char_counter-7] = data;
-	}
 
 	if((char_counter==12))
 	{
-
 	char i;
 		for(i=0 ; i<=5 ; i++)
 		{
@@ -103,7 +103,14 @@ ISR(USART1_RX_vect)
 	if((GPGGA_flag == 1) && ((char_counter>=45) && (char_counter<=46)))
 		satellites_char[char_counter-45] = data;
 
-	if((char_counter==46))
+	if((GPGGA_flag == 1) && (char_counter==46))
 		satellites = atoi(satellites_char);
+
+	// Speed, index 45 til 48
+	if((GPRMC_flag == 1) && ((char_counter>=45) && (char_counter<=48)))
+		speed_char[char_counter-45] = data;
+
+	if((GPRMC_flag == 1) && (char_counter==48))
+		speed = (int)(atof(speed_char)*1.852); // Knots til km/h
 
 }
