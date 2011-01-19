@@ -11,20 +11,26 @@
 #include <stdlib.h>
 
 // GPS TIME
-int volatile the_time_h = 0;
-int volatile the_time_m = 0;
-int volatile the_time_s = 0;
+int the_time_h = 0;
+int the_time_m = 0;
+int the_time_s = 0;
 
 // North/South
-char volatile N_S_indicator = '0';
+char N_S_indicator = '0';
 
 // East/West
-char volatile E_W_indicator = '0';
+char E_W_indicator = '0';
 
 // satellites
-unsigned short int volatile satellites = 0;
+unsigned short int satellites = 0;
 
 unsigned int speed = 0;
+
+// Pos
+double lat = 0.0;
+double lon = 0.0;
+
+long int test = 0;
 
 int main(void)
 {
@@ -41,6 +47,8 @@ int main(void)
 
 	while (1)
 	{
+		PORTC |= (1<<PC7); //tic
+
 		sendtekst("Time: ");
 		itoa(the_time_h,tempchar,10);
 		sendtekst(tempchar);
@@ -51,10 +59,24 @@ int main(void)
 		itoa(the_time_s,tempchar,10);
 		sendtekst(tempchar);
 		sendtekst("  ");
+		
+		test = lat*10000;
+
+		sendtekst("Lat: ");
+		ltoa(test,tempchar,10);
+		sendtekst(tempchar);
+		sendtekst("  ");
 
 		sendtekst("N/S: ");
 		while ((UCSR0A & (1 << UDRE0)) == 0) {};
 		UDR0 = N_S_indicator;
+		sendtekst("  ");
+
+		test = lon*10000;
+
+		sendtekst("Lon: ");
+		ltoa(test,tempchar,10);
+		sendtekst(tempchar);
 		sendtekst("  ");
 
 		sendtekst("E/W: ");
@@ -67,15 +89,16 @@ int main(void)
 		sendtekst(tempchar);
 		sendtekst("  ");
 
-		sendtekst("Speed [km/h]: "); // Ikke testet, ikke engang om index er ok
+		sendtekst("Speed [km/h]: "); // Ikke testet
 		itoa(speed,tempchar,10);
 		sendtekst(tempchar);
 
 		sendtekst("\n\r");
 
-		_delay_ms(500);
-		PORTC^= (1<<PC7);
-		_delay_ms(500);
+		PORTC &=~ (1<<PC7); //toc
+
+		//PORTC^= (1<<PC7);
+		_delay_ms(1000);
 	}
     return 0;
 }
