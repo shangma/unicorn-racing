@@ -28,6 +28,16 @@ char satellites_char[3] = {'0','0'};
 
 char speed_char[5] = {'0','0','0','0'}; 
 
+// Pos
+char lat_dd_char[3] = {'0','0','\0'};
+char lat_mm_char[7] = {'0','0','0','0','0','0','\0'};
+char lon_ddd_char[4] = {'0','0','0','\0'};
+char lon_mm_char[7] = {'0','0','0','0','0','0','\0'};
+double lat_dd = 0.0;	
+double lat_mm = 0.0;
+double lon_ddd = 0.0;	
+double lon_mm = 0.0;
+
  // UART0 interrupt
 ISR(USART0_RX_vect)
 {
@@ -113,4 +123,33 @@ ISR(USART1_RX_vect)
 	if((GPRMC_flag == 1) && (char_counter==48))
 		speed = (int)(atof(speed_char)*1.852); // Knots til km/h
 
+	// Latitude dd, index 18 til 19
+	if((GPGGA_flag == 1) && ((char_counter>=18) && (char_counter<=19)))	
+		lat_dd_char[char_counter-18] = data;
+
+	// Latitude mm.mmmm,  index 20 til 26
+	if((GPGGA_flag == 1) && ((char_counter>=20) && (char_counter<=26)))	
+		lat_mm_char[char_counter-20] = data;
+
+	if((GPGGA_flag == 1) && (char_counter==26))
+	{
+		lat_dd = atof(lat_dd_char);
+		lat_mm = atof(lat_mm_char);
+		lat = lat_dd + (lat_mm/60.0); // Konvertering til dd.dddd (google maps)
+	}
+
+	// Longitude ddd, index 30 til 32
+	if((GPGGA_flag == 1) && ((char_counter>=30) && (char_counter<=32)))	
+		lon_ddd_char[char_counter-30] = data;
+
+	// Longitude mm.mmmm,  index 33 til 39
+	if((GPGGA_flag == 1) && ((char_counter>=33) && (char_counter<=39)))	
+		lon_mm_char[char_counter-33] = data;
+
+	if((GPGGA_flag == 1) && (char_counter==39))
+	{
+		lon_ddd = atof(lon_ddd_char);
+		lon_mm = atof(lon_mm_char);
+		lon = lon_ddd + (lon_mm/60.0); // Konvertering til dd.dddd (google maps)
+	}
 }
