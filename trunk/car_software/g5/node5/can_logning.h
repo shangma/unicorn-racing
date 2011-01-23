@@ -19,6 +19,6 @@ typedef struct{
 	uint8_t dlc;
 } dataPackage;
 
-static dataPackage watPack = {3,2};
+static dataPackage watPack = {WatTmp,2};
 
 #endif // _CAN_LOG

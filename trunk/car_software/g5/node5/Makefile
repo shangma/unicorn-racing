@@ -1,5 +1,5 @@
 TARGET         = node5
-CSRC           = main.c can_std/can_drv.c can_std/can_lib.c can_func.c
+CSRC           = main.c can_std/can_drv.c can_std/can_lib.c can_func.c adc.c
 ASRC           = 
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
