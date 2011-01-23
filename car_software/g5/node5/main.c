@@ -5,12 +5,12 @@
 #include "can_func.h"
 #include "../lib/can_defs.h"
 #include "can_logning.h"
+#include "adc.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
 //_____ D E C L A R A T I O N S ________________________________________________
 void init(void);
-
 
 int main (void)
 {	
@@ -42,7 +42,6 @@ int main (void)
 
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
-
 	while (1) {		
 		can_send(rpm_msgid, 8, 1);
 		_delay_ms(1000);
