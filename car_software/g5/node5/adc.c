@@ -7,16 +7,18 @@ ADCReadObject ADCReadObjects[] = {{Temp1, 100, 0, 0}, {Temp2,500, 0, 0}, {Temp3,
 void AdcReadStart(void)
 {
 	int i;
-	/* Search for ADCReadObject with lowest interval to make it first in list */	
+	ADCReadObject *P1;
+	/* Search for ADCReadObject with lowest interval to make it first in list */
 	QH = &ADCReadObjects[0];
+	P1 = QH;
 	for (i=1; i<NumOfSensors; i++){
-		if (QH->interval > ADCReadObjects[i].interval){
-			 QH = &ADCReadObjects[i];
-		}
-	}
+		P1->next = &ADCReadObjects[i];
+		P1 = P1->next;
+	}			
 }
+
 
 void SetTimer(uint16_t val)
 {
-
+	
 }
