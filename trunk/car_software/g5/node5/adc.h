@@ -1,11 +1,18 @@
 #include "integer.h"
 
-/* Used for timer */
-#define ADCTIMERRES 16			/* Timer is 16 bit resolution */
-#define ADCTIMERPRESCALER 5		/* 1024 */
-#define PRESCALERMASK 0xF8
+#ifndef _ADC
+#define _ADC 1
 
-#define SETADCTIMERPRESCALER		TCCR1B &= (PRESCALERMASK | ADCTIMERPRESCALER)
+/* Used for timer */
+#define ADC_TIMER_RES 		16		/* Timer is 16 bit resolution */
+#define ADC_TIMER_MAX_VAL	65536		/* 2^16 */
+#define ADC_TIMER_PRESCALER 	5		/* 1024 */
+#define TICKS_PER_MS 		10.8		/* (F_CPU/prescaler)*10^-3 */
+#define PRESCALER_MASK 		0xF8
+
+#define SET_ADC_TIMER_PRESCALER		TCCR1B &= (PRESCALER_MASK | ADC_TIMER_PRESCALER)
+#define ADC_TIMER_TOIE			TIMSK1 |= 1<<TOIE1			
+		
 
 typedef struct ADCReadObject_{
 	uint8_t adc;		/* ADC input pin (0-7) */
@@ -23,10 +30,11 @@ enum Sensor {
 	NumOfSensors
 };
 
-
 /* Function to init list and start reading values from adc */
 void AdcReadStart(void);
 
 
-/* Function to set timer value based on wanted time to next timer interrupt */ 
+/* Function to set timer value based on wanted time (in ms) to next timer interrupt */ 
 void SetTimer(uint16_t TimeToInt);
+
+#endif // _ADC
