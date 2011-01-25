@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.10.3)  3 JAN 2011 01:29
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.10.3)  9 JAN 2011 19:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -942,10 +942,10 @@ FiXme Summary: Number of notes: 0,
 
 (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 12060 strings out of 493848
- 171862 string characters out of 1152823
- 300840 words of memory out of 3000000
- 15000 multiletter control sequences out of 15000+50000
+ 12062 strings out of 493848
+ 171903 string characters out of 1152823
+ 303840 words of memory out of 3000000
+ 15001 multiletter control sequences out of 15000+50000
  46880 words of font info for 69 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
  63i,11n,96p,412b,839s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -956,9 +956,9 @@ er/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/
 share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive
 /fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on main.pdf (9 pages, 227334 bytes).
+Output written on main.pdf (9 pages, 228841 bytes).
 PDF statistics:
- 399 PDF objects out of 1000 (max. 8388607)
- 27 named destinations out of 1000 (max. 500000)
+ 400 PDF objects out of 1000 (max. 8388607)
+ 28 named destinations out of 1000 (max. 500000)
  70 words of extra memory for PDF output out of 10000 (max. 10000000)
 

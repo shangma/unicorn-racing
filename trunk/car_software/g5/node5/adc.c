@@ -8,16 +8,23 @@ ADCReadObject ADCReadObjects[] = {	{Temp1, 100, 100, 0},
 /* Timer1 overflow interrupt used for adc read function */
 ISR (TIMER1_OVF_vect)
 {
-	/* TODO Disable timer interrupt */
+	uint8_t i;
+
+	ADC_TIMER_TOID;		/* Disable timer interrupt */ 
 	
-	/* TODO count all timeout down */
+	/* Count timeout for all items in queue down by timeout for item 
+	 * first i queue */
+	CountDown();
 
 	/* TODO start conversion for items with timeout at zero or less */
 
-	/* TODO remove items with timeout at zero or less and put them back into
-	 *	queue at the correct place 
+	/* Remove items with timeout at zero or less and put them back into
+	 * queue at the correct place 
 	*/
-
+	while(QH->timeout == 0){
+		ReloadQueue();
+	}
+	
 	/* TODO Load timer with value of timeout for the first item in the queue 
 	*/
 
@@ -43,8 +50,7 @@ void AdcReadStart(void)
 
 	SET_ADC_TIMER_PRESCALER;	/* Start timer 1 but no interrup yet */
 
-	/* Search for ADCReadObject with lowest interval
-	 * to make it first in list */
+	/* Link ADCReadObjects */
 	QH = &ADCReadObjects[0];
 	P1 = QH;
 	for (i=1; i<NumOfSensors; i++){
@@ -56,7 +62,6 @@ void AdcReadStart(void)
 	ADC_TIMER_TOIE;	/* Enable interrupt for timer */
 }
 
-
 void SetTimer(uint16_t val)
 {
 	int ticks;
@@ -65,4 +70,56 @@ void SetTimer(uint16_t val)
 					 * before timer interrupt */
 	ticks = ADC_TIMER_MAX_VAL-ticks;	/* Calculate value for timer */
 	TCNT1 = ticks;				/* Load timer with value */	
+}
+
+int ReloadQueue(void)
+{
+	ADCReadObject *P1, *P2, *P3;
+	int i=0;
+	
+	/* If there only is one sensor it's a special case */
+	if (NumOfSensors <= 1){	
+		return 1;	
+	}
+
+	P3=QH;			/* Pointer to object first in queue that we 
+				 * want to remove and put into the queue again 
+				 * after reload of timeout */
+	P3->timeout = P3->interval; /* Reload P3's timeout */	
+	QH=P3->next;		/* New head is object right after P3 */
+	
+	P1=QH;
+	P2=QH->next;
+
+	if (P1->timeout > P3->timeout){		/* P3 new head ? */	
+		P3->next=P1;
+		QH=P3;
+	}else{		/* If not smallest timeout find place in queue */
+		/* Can be used as long as we are in the middle og the queue */
+		while (P2->timeout < P3->timeout && (NumOfSensors-3) != i){
+			i++;
+			P1=P2;
+			P2=P2->next;
+		}
+		/* Test if we stoped the loop because we reached the end 
+		 * and if this is the case test on what side of P2 P3 belong */ 
+		if (i == (NumOfSensors-3) && P2->timeout < P3->timeout){
+			P2->next=P3;
+		}else{
+			P3->next=P2;
+			P1->next=P3;
+		}
+	}
+	return 1;
+}
+
+void CountDown(void)
+{
+	uint8_t i;
+	uint16_t tmpTimeout;		
+	
+	tmpTimeout = QH->timeout;
+	for (i=0; i<NumOfSensors; i++){
+		ADCReadObjects[i].timeout -= tmpTimeout;
+	}
 }
