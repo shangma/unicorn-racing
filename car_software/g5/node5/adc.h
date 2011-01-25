@@ -12,7 +12,7 @@
 
 #define SET_ADC_TIMER_PRESCALER		TCCR1B &= (PRESCALER_MASK | ADC_TIMER_PRESCALER)
 #define ADC_TIMER_TOIE			TIMSK1 |= 1<<TOIE1			
-		
+#define ADC_TIMER_TOID			TIMSK1 &= ~(1<<TOIE1)
 
 typedef struct ADCReadObject_{
 	uint8_t adc;		/* ADC input pin (0-7) */
@@ -34,7 +34,14 @@ enum Sensor {
 void AdcReadStart(void);
 
 
+/* This function take the first item in the queue and reload it's timeout with
+ * interval and put it into the queue again at the right place */
+int ReloadQueue(void);
+
 /* Function to set timer value based on wanted time (in ms) to next timer interrupt */ 
 void SetTimer(uint16_t TimeToInt);
+
+/* Function to count down timeout for all items in queue by QH->timeout */
+void CountDown(void);
 
 #endif // _ADC
