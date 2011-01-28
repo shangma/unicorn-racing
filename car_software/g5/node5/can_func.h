@@ -24,4 +24,6 @@ BOOL can_send_standart_data(dataPackage *, U8 *buf);
 
 void can_send(U8 msg_id, U8 msg, U8 data_length);
 
+void can_send_ny(U8 msg_id, void* msg, U8 data_length);
+
 void can_send_test(U8 msg_id, void* msg, U8 data_length);
