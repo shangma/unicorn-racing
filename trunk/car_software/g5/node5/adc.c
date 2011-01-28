@@ -1,17 +1,25 @@
 #include "config.h"
+#include <util/delay.h>
+#include "can_std/can_lib.h"
+#include "can_func.h"
+#include "../lib/can_defs.h"
 #include "adc.h"
 
-ADCReadObject ADCReadObjects[] = {	{Temp1, 100, 100, 0}, 
-					{Temp2,500, 500, 0}, 
-					{Temp3, 700, 700, 0}};	
+ADCReadObject ADCReadObjects[] = {	{Temp1, 2000, 2000, 0}, 
+					{Temp2,2500, 2500, 0}, 
+					{Temp3, 2700, 2700, 0}};	
 
 /* Timer1 overflow interrupt used for adc read function */
 ISR (TIMER1_OVF_vect)
 {
 	uint8_t i;
+	uint8_t data_buf[8];
+	data_buf[0] = 1;
+	data_buf[1] = 120;
 
 	ADC_TIMER_TOID;		/* Disable timer interrupt */ 
 	
+
 	/* Count timeout for all items in queue down by timeout for item 
 	 * first i queue */
 	CountDown();
@@ -21,14 +29,21 @@ ISR (TIMER1_OVF_vect)
 	/* Remove items with timeout at zero or less and put them back into
 	 * queue at the correct place 
 	*/
+
 	while(QH->timeout == 0){
 		ReloadQueue();
 	}
 	
-	/* TODO Load timer with value of timeout for the first item in the queue 
-	*/
+	data_buf[0] = QH->adc;
+	data_buf[1] = QH->interval/20;
+	data_buf[2] = QH->timeout/20;		
+	can_send_ny(rpm_msgid, data_buf, 8);
 
-	/* TODO Enable timer interrupt */
+	/* Load timer with value of timeout for the first item in the queue 
+	*/
+	SetTimer(QH->timeout);
+
+	ADC_TIMER_TOIE;
 }
 
 /* ADC conversion done interrupt */
@@ -46,7 +61,8 @@ ISR (ADC_vect)
 void AdcReadStart(void)
 {
 	int i;
-	ADCReadObject *P1;
+	ADCReadObject *P1;	
+
 
 	SET_ADC_TIMER_PRESCALER;	/* Start timer 1 but no interrup yet */
 
@@ -116,7 +132,7 @@ int ReloadQueue(void)
 void CountDown(void)
 {
 	uint8_t i;
-	uint16_t tmpTimeout;		
+	int tmpTimeout;		
 	
 	tmpTimeout = QH->timeout;
 	for (i=0; i<NumOfSensors; i++){

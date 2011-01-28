@@ -10,14 +10,14 @@
 #define TICKS_PER_MS 		10.8		/* (F_CPU/prescaler)*10^-3 */
 #define PRESCALER_MASK 		0xF8
 
-#define SET_ADC_TIMER_PRESCALER		TCCR1B &= (PRESCALER_MASK | ADC_TIMER_PRESCALER)
+#define SET_ADC_TIMER_PRESCALER		TCCR1B |= ADC_TIMER_PRESCALER
 #define ADC_TIMER_TOIE			TIMSK1 |= 1<<TOIE1			
 #define ADC_TIMER_TOID			TIMSK1 &= ~(1<<TOIE1)
 
 typedef struct ADCReadObject_{
 	uint8_t adc;		/* ADC input pin (0-7) */
-	uint16_t interval;	/* Sampling rate = 1/(interval*10^-3) */
-	uint16_t timeout;
+	int interval;	/* Sampling rate = 1/(interval*10^-3) */
+	int timeout;
 	struct ADCReadObject_* next;
 }ADCReadObject;
 

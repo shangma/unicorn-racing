@@ -69,6 +69,25 @@ void can_send(U8 msg_id, U8 msg, U8 dlc)
 }
 
 /* funktion til at sende en besked der er dlc byte lang */
+void can_send_ny(U8 msg_id, void* buf, U8 dlc)
+{
+    tx_remote_msg.pt_data = buf; 
+    tx_remote_msg.id.std = msg_id;
+    tx_remote_msg.ctrl.ide = 0;
+    tx_remote_msg.ctrl.rtr = 1;
+    tx_remote_msg.dlc = dlc;
+    tx_remote_msg.cmd = CMD_TX_DATA;
+
+    while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
+
+    while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
+}
+
+/* funktion til at sende en besked der er dlc byte lang */
+/* TODO find out why the board reboot when using this function. 
+ * Probably the error can be fixed by making an interrupt function 
+ * for the can tx interrupt to clear 
+ */ 
 void can_send_test(U8 msg_id, void* buf, U8 dlc)
 {
 	uint8_t *tmp;
