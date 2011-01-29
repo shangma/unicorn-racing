@@ -3,6 +3,16 @@
 #ifndef _ADC
 #define _ADC 1
 
+/* Used for ADC settings */
+#define ADC_PRESCALER 		(1<<ADPS2 | 1<<ADPS1)/* Divide F_CPU with 64 */
+#define SET_ADC_PRESCALER	ADCSRA |= ADC_PRESCALER	/* Set ADC prescaler */
+#define EN_ADC			ADCSRA |= 1<<ADEN	/* Enable ADC */
+#define DIS_ADC			ADCSRA &= ~(1<<ADEN)	/* Disable ADC */
+#define ADC_START_CONV		ADCSRA |= 1<<ADSC	/* Start conversion */
+#define ADC_IE			ADCSRA |= 1<<ADIE	/* ADC interrupt */
+#define ADC_ID			ADCSRA &= ~(1<<ADIE)	/* ADC interrupt 
+							 * disable */
+
 /* Used for timer */
 #define ADC_TIMER_RES 		16		/* Timer is 16 bit resolution */
 #define ADC_TIMER_MAX_VAL	65536		/* 2^16 */
@@ -16,7 +26,7 @@
 
 typedef struct ADCReadObject_{
 	uint8_t adc;		/* ADC input pin (0-7) */
-	int interval;	/* Sampling rate = 1/(interval*10^-3) */
+	int interval;		/* Sampling rate = 1/(interval*10^-3) */
 	int timeout;
 	struct ADCReadObject_* next;
 }ADCReadObject;
@@ -30,9 +40,8 @@ enum Sensor {
 	NumOfSensors
 };
 
-/* Function to init list and start reading values from adc */
+/* Function to init list and start reading values from ADC */
 void AdcReadStart(void);
-
 
 /* This function take the first item in the queue and reload it's timeout with
  * interval and put it into the queue again at the right place */

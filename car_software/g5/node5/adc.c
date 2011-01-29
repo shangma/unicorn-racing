@@ -27,9 +27,7 @@ ISR (TIMER1_OVF_vect)
 	/* TODO start conversion for items with timeout at zero or less */
 
 	/* Remove items with timeout at zero or less and put them back into
-	 * queue at the correct place 
-	*/
-
+	 * queue at the correct place */
 	while(QH->timeout == 0){
 		ReloadQueue();
 	}
@@ -39,8 +37,7 @@ ISR (TIMER1_OVF_vect)
 	data_buf[2] = QH->timeout/20;		
 	can_send_ny(rpm_msgid, data_buf, 8);
 
-	/* Load timer with value of timeout for the first item in the queue 
-	*/
+	/* Load timer with value of timeout for the first item in the queue */
 	SetTimer(QH->timeout);
 
 	ADC_TIMER_TOIE;
