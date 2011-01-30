@@ -60,8 +60,8 @@ enum Sensor {
 ADCReadObject* ADCReadObjectBuff[NumOfSensors];
 
 /* Used together with ADCReadObjectBuff */
-extern uint8_t ADCReadObjectBuffSize;
-extern uint8_t ADCReadObjectBuffHead;
+extern volatile uint8_t ADCReadObjectBuffSize;
+extern volatile uint8_t ADCReadObjectBuffHead;
 
 
 /* Function to call when ADCReadObject that are ready for conversion has

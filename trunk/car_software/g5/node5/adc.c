@@ -10,8 +10,8 @@ ADCReadObject ADCReadObjects[] = {	{ADC0, 2000, 2000, 0},
 					{ADC2, 2700, 2700, 0}};	
 
 /* Used together with ADCReadObjectBuff */
-uint8_t ADCReadObjectBuffSize = 0;
-uint8_t ADCReadObjectBuffHead = 0;
+volatile uint8_t ADCReadObjectBuffSize = 0;
+volatile uint8_t ADCReadObjectBuffHead = 0;
 
 /* Timer1 overflow interrupt used for adc read function */
 ISR (TIMER1_OVF_vect)
@@ -19,9 +19,9 @@ ISR (TIMER1_OVF_vect)
 	uint8_t i;
 	ADCReadObject *P1;
 	/* test vars */
-	uint8_t data_buf[8];
-	data_buf[0] = 1;
-	data_buf[1] = 120;
+/*	uint8_t data_buf[8];*/
+/*	data_buf[0] = 1;*/
+/*	data_buf[1] = 120;*/
 	/* test vars stop */
 
 	ADC_TIMER_TOID;		/* Disable timer interrupt */ 
@@ -40,7 +40,7 @@ ISR (TIMER1_OVF_vect)
 		P1 = P1->next;
 	}
 	
-	MakeADCReadObjectConversion(); /* Start conversion. Next objects will
+	MakeADCReadObjectConversion(); /* Start conversion. Next objects
 					* will be called from ADC conversion 
    					* done interrupt */
 	/* NEW CODE END*/
@@ -53,10 +53,9 @@ ISR (TIMER1_OVF_vect)
 	}
 	
 	/* test printing */
-	data_buf[0] = QH->adc;
-	data_buf[1] = QH->interval/20;
-	data_buf[2] = QH->timeout/20;		
-	can_send_ny(rpm_msgid, data_buf, 8);
+/*	data_buf[0] = QH->adc;*/
+/*	data_buf[1] = QH->interval/20;*/
+/*	data_buf[2] = QH->timeout/20;		*/
 	/* test printing stop */
 
 	/* Load timer with value of timeout for the first item in the queue */
@@ -67,8 +66,7 @@ ISR (TIMER1_OVF_vect)
 
 /* ADC conversion done interrupt */
 ISR (ADC_vect)
-{	
-
+{
 	/* TODO
 	 * Figure out some way to to arrange data from the conversion in
 	 * accordans with the can data packaged definitions. 
@@ -112,7 +110,7 @@ void AdcReadStart(void)
 	int i;
 	ADCReadObject *P1;	
 
-	InitADC;	/* Initialize ADC in accordance with definitions made in 
+	InitADC();	/* Initialize ADC in accordance with definitions made in 
 			 * adc.h */
 
 	SET_ADC_TIMER_PRESCALER;	/* Start timer 1 but no interrup yet */
