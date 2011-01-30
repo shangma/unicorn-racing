@@ -6,6 +6,10 @@
 /* Used for ADC settings */
 #define ADC_PRESCALER 		(1<<ADPS2 | 1<<ADPS1)/* Divide F_CPU with 64 */
 #define SET_ADC_PRESCALER	ADCSRA |= ADC_PRESCALER	/* Set ADC prescaler */
+#define ADC_REF			(1<<REFS0)	/* AVcc */
+#define SET_ADC_REF		ADMUX |= ADC_REF	/* Set ADC reference */
+#define ADC_MUX_MASK		0xE0			/* Mux mask */
+#define Set_adc_mux(ADC)	{ ADMUX &= ADC_MUX_MASK; ADMUX |= ADC; }	
 #define EN_ADC			ADCSRA |= 1<<ADEN	/* Enable ADC */
 #define DIS_ADC			ADCSRA &= ~(1<<ADEN)	/* Disable ADC */
 #define ADC_START_CONV		ADCSRA |= 1<<ADSC	/* Start conversion */
@@ -33,12 +37,36 @@ typedef struct ADCReadObject_{
 
 ADCReadObject *QH, *QT;		/* Pointers to queue head and tail */
 
+/* ADC input numbers */
+enum ADCInput {
+	ADC0,
+	ADC1,
+	ADC2,
+	ADC3,
+	ADC4,
+	ADC5,
+	ADC6,
+	ADC7
+};
+
 enum Sensor {
 	Temp1,
 	Temp2,
 	Temp3,
 	NumOfSensors
 };
+
+/* Buffer to hold ADCReadObjects that the ADC should make conversions for */ 
+ADCReadObject* ADCReadObjectBuff[NumOfSensors];
+
+/* Used together with ADCReadObjectBuff */
+extern uint8_t ADCReadObjectBuffSize;
+extern uint8_t ADCReadObjectBuffHead;
+
+
+/* Function to call when ADCReadObject that are ready for conversion has
+ * been put in ADCReadObjectBuff */
+void MakeADCReadObjectConversion(void);
 
 /* Function to init list and start reading values from ADC */
 void AdcReadStart(void);
