@@ -34,7 +34,7 @@ ISR (TIMER1_OVF_vect)
 	/* Start conversion for items with timeout at zero */
 	P1 = QH;
 	ADCReadObjectBuffSize = 0;
-	while (P1->timeout == 0){	/* for alle Objects with timeout == 0 */
+	while (P1->timeout == 0 && ADCReadObjectBuffSize != (NumOfSensors-1)){	/* for alle Objects with timeout == 0 */
 		ADCReadObjectBuff[ADCReadObjectBuffSize] = P1;
 		ADCReadObjectBuffSize++;
 		P1 = P1->next;
