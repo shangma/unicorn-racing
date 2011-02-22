@@ -1,0 +1,3 @@
+i2c LED driver (16 led): PCA9532
+i2c 7-segment driver: SAA1064
+
