@@ -1,3 +1,5 @@
 i2c LED driver (16 led): PCA9532
 i2c 7-segment driver: SAA1064
 
+
+http://dk.farnell.com/lumex/sml-lxl1206yc-tr/led-1-1mm-yellow-16mcd-585nm/dp/1789148
