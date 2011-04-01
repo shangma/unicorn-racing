@@ -79,6 +79,7 @@ U8 can_cmd(st_cmd_t* cmd)
 {
   U8 mob_handle, cpt;
   U32 u32_temp;
+  U16 tmp;
   
   if (cmd->cmd == CMD_ABORT)
   {
@@ -122,6 +123,11 @@ U8 can_cmd(st_cmd_t* cmd)
           cmd->ctrl.rtr=0; Can_clear_rtr();
           Can_set_dlc(cmd->dlc);
           Can_config_tx();
+	  if(!cmd->blocking){	/* Enable interrupt */
+		tmp = (1<<mob_handle)	/* Virker ikke!!! Nyt mangler test */
+		CANIE2 |= (tmp & 0xff);
+		CANIE1 |= ((tmp>>8) & 0x7f);
+	  }
           break;
         //------------      
         case CMD_TX_REMOTE:       

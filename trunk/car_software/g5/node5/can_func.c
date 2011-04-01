@@ -19,6 +19,24 @@ U8 sample_time = 0; /* Should be updated by a timing function */
 U8 tx_buffer[8];
 st_cmd_t tx_std_msg;
 
+ISR(CANIT_vect)
+{
+	uint8_t tmp,i;
+	uint8_t data_buf[8];
+	data_buf[0] = 10;
+	data_buf[1] = 11;
+	data_buf[2] = 11;
+	data_buf[3] = 11;
+	tmp = CANSIT2;
+	//xprintf(PSTR("rc=%d\n"), tmp);
+	for(i=0;i<=14;i++){
+		Can_set_mob(i);
+		Can_mob_abort();        // Freed the MOB
+		Can_clear_status_mob(); //   and reset MOb status
+	}
+	//can_send_ny(133, data_buf, 4);
+}
+
 BOOL can_send_standart_data(
 dataPackage* type,
 U8 *datapakke	/* pointer to datapakke buffer. Datapakke should follow the protol!!! */
@@ -80,7 +98,7 @@ void can_send_ny(U8 msg_id, void* buf, U8 dlc)
 
     while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
 
-    while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
+    //while (can_get_status(&tx_remote_msg) == CAN_STATUS_NOT_COMPLETED);
 }
 
 /* funktion til at sende en besked der er dlc byte lang */
