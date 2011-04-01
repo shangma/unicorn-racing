@@ -2,7 +2,7 @@
 #include "config.h"
 #include "can_std/can_lib.h"
 #include <util/delay.h>
-#include "can_func.h"
+#include "can_new.h"
 #include "../lib/can_defs.h"
 #include "can_logning.h"
 #include "adc.h"
@@ -17,19 +17,17 @@ int main (void)
 	U8 canData=0;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 	uint8_t data_buf[8];
-	uint8_t i=0;
+	uint8_t j,i=0;
 
 //  Init CAN, UART, I/O
 	init();
 
 	sei();		/* Interrupt enable */
 
-    	// --- Init variables
-	tx_remote_msg.pt_data = &tx_remote_buffer[0];
-	tx_remote_msg.status = 0;
+	Can_sei();		/* Enable general can interrupt */
+	Can_set_tx_int();	/* Enable can tx interrupt */
 
-	tx_std_msg.pt_data = &tx_buffer[0];
-	tx_std_msg.status = 0;
+    	// --- Init variables
 
 	data_buf[0] = 10;
 	data_buf[1] = 30;
@@ -41,22 +39,35 @@ int main (void)
 	data_buf[7] = 211;
 	
 
-	Can_sei();		/* Enable general can interrupt */
-	Can_set_tx_int();	/* Enable can tx interrupt */
+	
+/*	for(i=0;i<=14;i++){*/
+/*		Can_set_mob_int_ena(i)*/
+/*	}*/
 
-	AdcReadStart();		/* Start ADC read process */
+/* TODO
+ * Remove the two following lines when code for single mob interrupt in can_cmd
+ * is done
+*/
+	CANIE1 = 0x7f;
+	CANIE2 = 0xff;
+
+	//AdcReadStart();		/* Start ADC read process */
 	_delay_ms(500);
 	data_buf[0] = 111;
 	data_buf[1] = 111;
 	data_buf[2] = 111;
 	data_buf[3] = 111;
-	can_send_ny(rpm_msgid, data_buf, 4);
-	_delay_ms(500);
+/*	can_send_ny(rpm_msgid, data_buf, 4);*/
+/*	_delay_ms(500);*/
 	while (1) {
 		data_buf[0] = i;
 		i++;
-		can_send_ny(rpm_msgid, data_buf, 4);
-		_delay_ms(5000);
+		can_send_non_blocking(rpm_msgid, data_buf, 4);
+		/* TEST */
+		while(hej != 1){}
+		hej = 0;
+		/* TEST */
+		_delay_ms(100);
 	}
 	return 0;
 }
