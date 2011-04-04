@@ -23,6 +23,7 @@
 #include "../config.h"
 #include "can_lib.h"
 #include "can_drv.h"
+#include "../test_vars.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 
@@ -124,9 +125,10 @@ U8 can_cmd(st_cmd_t* cmd)
           Can_set_dlc(cmd->dlc);
           Can_config_tx();
 	  if(!cmd->blocking){	/* Enable interrupt */
-		tmp = (1<<mob_handle)	/* Virker ikke!!! Nyt mangler test */
+		tmp = (1<<mob_handle);	/* Ser ud til at virke */
 		CANIE2 |= (tmp & 0xff);
 		CANIE1 |= ((tmp>>8) & 0x7f);
+		tIntReg = (CANIE1<<8) + CANIE2; /* test var */
 	  }
           break;
         //------------      
