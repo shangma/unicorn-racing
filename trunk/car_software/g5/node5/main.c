@@ -6,6 +6,7 @@
 #include "../lib/can_defs.h"
 #include "can_logning.h"
 #include "adc.h"
+#include "test_vars.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -39,18 +40,6 @@ int main (void)
 	data_buf[7] = 211;
 	
 
-	
-/*	for(i=0;i<=14;i++){*/
-/*		Can_set_mob_int_ena(i)*/
-/*	}*/
-
-/* TODO
- * Remove the two following lines when code for single mob interrupt in can_cmd
- * is done
-*/
-	CANIE1 = 0x7f;
-	CANIE2 = 0xff;
-
 	//AdcReadStart();		/* Start ADC read process */
 	_delay_ms(500);
 	data_buf[0] = 111;
@@ -62,12 +51,22 @@ int main (void)
 	while (1) {
 		data_buf[0] = i;
 		i++;
+		data_buf[1] = (tIntReg>>8) & 0xff;
+		data_buf[2] = tIntReg & 0xff;
 		can_send_non_blocking(rpm_msgid, data_buf, 4);
-		/* TEST */
-		while(hej != 1){}
-		hej = 0;
-		/* TEST */
-		_delay_ms(100);
+		data_buf[0] = i;
+		i++;
+		_delay_ms(10);
+		can_send_non_blocking(rpm_msgid, data_buf, 4);
+		data_buf[0] = i;
+		i++;
+		_delay_ms(10);
+		can_send_non_blocking(rpm_msgid, data_buf, 4);		
+		data_buf[0] = i;
+		i++;
+		_delay_ms(10);
+		can_send_non_blocking(rpm_msgid, data_buf, 4);
+		_delay_ms(1000);
 	}
 	return 0;
 }

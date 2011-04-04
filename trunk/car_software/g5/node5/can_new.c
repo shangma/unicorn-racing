@@ -1,10 +1,7 @@
 #include "config.h"
 #include "can_std/can_lib.h"
 #include "can_new.h"
-
-/* TEST VAR */
-volatile hej = 0;
-/* TEST VAR */
+#include "test_vars.h"
 
 
 st_cmd_t tx_remote_msg;
@@ -14,8 +11,8 @@ ISR(CANIT_vect)
 {
 	uint8_t i,interrupt;
 	uint16_t tmp,tmp2,mask=1;
-	/* TODO
-	 * Make function to clear only the mob that generated the interrupt 
+	/*
+	 * Function to clear only the mob that generated the interrupt 
 	 * ------------- Code flow --------------------
 	 * Read CANSIT1 and CANSIT2 to figure out what mob(s) that generated
 	 * the interrupt.
@@ -24,9 +21,8 @@ ISR(CANIT_vect)
 	 * Make a switch case over the types and do meaning full handling for
 	 * the types.
 	 * TXOK just need to call Can_mob_abort() and Can_clear_status_mob()
-	 * proper action for all other types is TODO  
+	 * Proper action for all other types is TODO
 	*/
-	hej = 1;
 
 	/* Test mob's for pending interrupt */
 	tmp = CANSIT2+(CANSIT1<<8);
@@ -40,10 +36,8 @@ ISR(CANIT_vect)
 					/* TODO */
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
-					Can_clear_status_mob(); //   and reset MOb status	
-					/* TODO
-					 * Disable interrupt 
-					*/
+					Can_clear_status_mob(); // and reset MOb status	
+					/* Disable interrupt */
 					tmp2 = 1<<i;
 					CANIE2 &= !(tmp2 & 0xff);
 					CANIE1 &= !((tmp2>>8) & 0x7f);
@@ -65,7 +59,7 @@ ISR(CANIT_vect)
 					break;
 				default:
 					Can_mob_abort();        // Freed the MOB
-					Can_clear_status_mob(); //   and reset MOb status
+					Can_clear_status_mob(); // and reset MOb status
 					break;
 			}
 		}

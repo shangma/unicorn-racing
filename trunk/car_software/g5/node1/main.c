@@ -162,7 +162,7 @@ int main (void)
 				rpm_response_buffer[i] = 0;
 			}		
 		}
-		_delay_ms(5);
+//		_delay_ms(5);
 /*		res = rtc_gettime(&rtc);*/
 /*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
 /*		_delay_ms(3000);*/
