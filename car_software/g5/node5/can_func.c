@@ -120,7 +120,7 @@ void can_send_test(U8 msg_id, void* buf, U8 dlc)
 
 	while (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED);
 
-	Can_set_mob_int_ena(tx_remote_msg.handle);	/* Enable interrupt for mob so it will clear it self when data is send */
+	Can_set_mob_int(tx_remote_msg.handle);	/* Enable interrupt for mob so it will clear it self when data is send */
 
 	tx_remote_msg.pt_data = tmp;	/* Restore pointer */
 }

@@ -125,9 +125,7 @@ U8 can_cmd(st_cmd_t* cmd)
           Can_set_dlc(cmd->dlc);
           Can_config_tx();
 	  if(!cmd->blocking){	/* Enable interrupt */
-		tmp = (1<<mob_handle);	/* Ser ud til at virke */
-		CANIE2 |= (tmp & 0xff);
-		CANIE1 |= ((tmp>>8) & 0x7f);
+        Can_set_mob_int(mob_handle) /* Ser ud til at virke */
 		tIntReg = (CANIE1<<8) + CANIE2; /* test var */
 	  }
           break;
