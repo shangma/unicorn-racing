@@ -38,9 +38,7 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
 					/* Disable interrupt */
-					tmp2 = 1<<i;
-					CANIE2 &= !(tmp2 & 0xff);
-					CANIE1 &= !((tmp2>>8) & 0x7f);
+					Can_unset_mob_int(i);
 					break;				
 				case MOB_ACK_ERROR:
 					/* TODO */
@@ -86,13 +84,11 @@ U8 can_send_non_blocking(U8 msg_id, void* buf, U8 dlc)
 	tx_remote_msg.cmd = CMD_TX_DATA;
 	tx_remote_msg.blocking = 0;	/* For non blocking */
 
-	/* TODO
-	 * Extend can_cmd function with a feature to enable interrupt for
+	/* can_cmd function extended with a feature to enable interrupt for
 	 * the message mob picked for the message
 	*/
-
 	if (can_cmd(&tx_remote_msg) != CAN_CMD_ACCEPTED){
-		return 0;
+		return 0;	// No free mob could not put message in mail box
 	}else{
 		return 1;
 	}

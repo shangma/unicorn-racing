@@ -161,6 +161,7 @@
 #define INT_GEN_MSK ((1<<BOFFIT)|(1<<BXOK)|(ERR_GEN_MSK))                //! MaSK for GENeral INTerrupts
 #define INT_ALL		(1<<ENIT)					//! ENIT in CANGIE
 #define INT_TX		(1<<ENTX)					//! ENTX in CANGIE
+#define INT_RX		(1<<ENRX)					//! ENTX in CANGIE
 
 #define BRP_MSK     ((1<<BRP5)|(1<<BRP4)|(1<<BRP3)|(1<<BRP2)|(1<<BRP1)|(1<<BRP0))  //! Mask for BRP in CANBT1
 #define SJW_MSK     ((1<<SJW1)|(1<<SJW0))                                //! MaSK for SJW  in CANBT2
@@ -316,8 +317,11 @@ typedef enum {
 		// Interrupt
 #define Can_sei()		( CANGIE |= INT_ALL )
 #define Can_set_tx_int()	( CANGIE |= INT_TX )
-#define Can_set_mob_int_ena(mob)	{ if (mob <= 7) CANIE1 |= (1<<(mob)); \
-					  if (mob > 7 ) CANIE2 |= (1<<(mob-8)); }	
+#define Can_set_rx_int()	( CANGIE |= INT_RX )
+#define Can_set_mob_int(mob)	{ CANIE2 |= ((1<<mob) & 0xff); \
+				  CANIE1 |= (((1<<mob)>>8) & 0x7f); }
+#define Can_unset_mob_int(mob)	{ CANIE2 &= !((1<<mob) & 0xff); \
+				  CANIE1 &= !(((1<<mob)>>8) & 0x7f); }
 
 //_____ D E C L A R A T I O N S ________________________________________________
 

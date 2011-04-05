@@ -36,6 +36,7 @@ clean:
 	rm -rf *.o $(TARGET).elf *.eps *.bak *.a
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 	rm -rf $(TARGET).hex
+	rm -rf can_std/*.o
 
 
 
