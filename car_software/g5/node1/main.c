@@ -155,7 +155,7 @@ int main (void)
 	while(1) {
 		// check for rpm_msg
 		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {
-			xprintf(PSTR("Satellites: %d, Time: %d:%d:%d, N/S: %c, E/W: %c, 7=%d, 8=%d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2], rpm_response_buffer[3], rpm_response_buffer[4], rpm_response_buffer[5], rpm_response_buffer[6], rpm_response_buffer[7]);
+			xprintf(PSTR("i: %d, Hjul5: %d Hjul6: %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2]);
 			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
 			for (i=0;i<8;i++) {
 				rpm_response_buffer[i] = 0;

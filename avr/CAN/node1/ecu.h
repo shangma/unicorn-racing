@@ -3,12 +3,12 @@
 * For at få en streng med data fra ecu'en skal der sendes strengen ecu_data. 			 *
 * Svaret afkodes efter tabellen herunder.												 *
 +----------------------------------------------------------------------------------------+
-|		Navn	|		Beskrivelse			|  Byte nr	| Length | 		gain	| offset |
+|		Navn	|		Beskrivelse		|	Byte nr	|	Length	|gain| offset |
 +----------------------------------------------------------------------------------------+
-| fuel pressure	|							|     0		|	2	 |	  0			|	0	 |
-| motor oil temp|	Temp i ?				|	  8		|	2	 |	  0			|	0	 |
-| water temp. 	|	Temp i ?				|	 46		|	2	 | -150,0/3840	|	120	 |
-| rpm 			|	Omdrejninger i sek.		|	 54		|	2	 |	  0,9408	|	0	 |
+| fuel pressure		|					|	0	|	2	| 0|0|
+| motor oil temp	|	Temp i ?			|	  8	|	2	 |0|0|
+| water temp. 		|	Temp i ?			|	 46	|	2	 | -150,0/3840|120|
+| rpm 			|	Omdrejninger i sek.		|	 54	|	2	 | 0,9408|0 |
 +----------------------------------------------------------------------------------------+
 */
 
