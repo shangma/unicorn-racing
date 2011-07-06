@@ -15,6 +15,21 @@
 /* Streng der skal sendes til ecu for at få data */
 static const char ecu_data[10] = {0x12,0x34,0x56,0x78,0x17,0x08,0,0,0,0};
 
+enum valueID {
+	VandTemp,
+	OilPress,
+	RPM,
+	ValueIdLength
+};
+
+typedef struct {
+	uint8_t length;
+	enum valueID id;
+} ECUValueObject;
+
+static const ECUValueObject ECUObjects[]=	{2,VandTemp,
+						2,OilPress};
+
 /* Indeholder data fra ECU'en */
 U8 EcuData[228]; 
 

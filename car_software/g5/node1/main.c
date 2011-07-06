@@ -128,7 +128,12 @@ int main (void)
 
 	_delay_ms(500);
 	xprintf(PSTR("System startet\n"));
+
+	res = rtc_gettime(&rtc);
+	xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);
+
 	xprintf(PSTR("Initialize disk 0\n"));
+	xprintf(PSTR("test %d %d %d %d\n"), ECUObjects[0].length, ECUObjects[0].id, ECUObjects[1].length, ECUObjects[1].id);
 	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));		/* initialize filesystem */
 	xprintf(PSTR("Initialize logical drice 0\n"));	
 	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));		/* mount filesystem */
