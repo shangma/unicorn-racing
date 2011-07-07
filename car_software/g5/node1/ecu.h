@@ -16,10 +16,45 @@
 static const char ecu_data[10] = {0x12,0x34,0x56,0x78,0x17,0x08,0,0,0,0};
 
 enum valueID {
-	VandTemp,
-	OilPress,
-	RPM,
-	ValueIdLength
+	empty,			// 0
+	fuelPressure,		// 1
+	statusLapCount,		// 2
+	statusInjSum,		// 3
+	lastGearShift,		// 4
+	motorOilTemp,		// 5
+	oilPressure,		// 6
+	statusTime,		// 7
+	statusLapTime,		// 8
+	gearOilTemp,		// 9
+	statusTraction,		// 10
+	statusGas,		// 11
+	statusLambdaV2,		// 12
+	statusCamTrigP1,	// 13
+	statusCamTrigP2,	// 14
+	statusChokerAdd,	// 15
+	statusLambdaPWM,	// 16
+	waterTemp,		// 17
+	airTemp,		// 18
+	potmeter,		// 19
+	rpm,			// 20
+	triggerErr,		// 21
+	camAngle1,		// 22
+	camAngle2,		// 23
+	roadSpeed,		// 24
+	mapSensor,		// 25
+	batteryV,		// 26
+	lambdaV,		// 27
+	load,			// 28
+	injectorTime,		// 29
+	ignitionTime,		// 30
+	dwellTime,		// 31
+	gX,			// 32
+	gY,			// 33
+	gZ,			// 34
+	motorFlags,		// 35
+	outBits,		// 36
+	time,			// 37
+	ValueIdLength		// 38
 };
 
 typedef struct {
@@ -27,15 +62,58 @@ typedef struct {
 	enum valueID id;
 } ECUValueObject;
 
-static const ECUValueObject ECUObjects[] =	{2,VandTemp,
-						2,OilPress};
+static const ECUValueObject ECUObjects[] =	{2,fuelPressure,
+						2,statusLapCount,
+						2,statusInjSum,
+						2,lastGearShift,
+						2,motorOilTemp,
+						2,oilPressure,
+						4,statusTime,
+						4,statusLapTime,
+						2,gearOilTemp,
+						2,statusTraction,
+						2,statusGas,
+						2,statusLambdaV2,
+						2,statusCamTrigP1,
+						2,statusCamTrigP2,
+						2,statusChokerAdd,
+						2,statusLambdaPWM,
+						10,empty,
+						2,waterTemp,
+						2,airTemp,
+						2,potmeter,
+						2,empty,
+						2,rpm,
+						2,triggerErr,
+						2,camAngle1,
+						2,camAngle2,
+						2,roadSpeed,
+						2,mapSensor,
+						2,batteryV,
+						2,lambdaV,
+						4,empty,
+						2,load,
+						2,empty,
+						2,injectorTime,
+						2,empty,
+						2,ignitionTime,
+						2,dwellTime,
+						10,empty,
+						2,gX,
+						2,gY,
+						2,gZ,
+						9,empty,
+						1,motorFlags,
+						1,empty,
+						1,outBits,
+						1,time};
 
 typedef struct {
 	uint8_t length;		/* Length of data in bits eg. 8, 10 or some other length */
 	uint8_t action;		/* bit 0 = CANSend, bit 1 = SDSave, bit 2 = Xbee */
 } valueObject;
 
-static const valueObject valueObjects[] =	{8, 7,		/* VandTemp */
+static const valueObject valueObjects[] =	{0, 0,		/* empty */
 						10, 7,		/* OilPress */
 						16, 7};		/* RPM */
 
@@ -83,3 +161,5 @@ U8 EcuData[228];
 #define LAMBDALENGTH 1
 #define LAMBDAGAIN -14.7*0.6/3840
 #define LAMBDAOFFSET 0.7*14.7
+
+void ecu_data_handler( void );
