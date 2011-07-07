@@ -134,6 +134,7 @@ int main (void)
 
 	xprintf(PSTR("Initialize disk 0\n"));
 	xprintf(PSTR("test %d %d %d %d\n"), ECUObjects[0].length, ECUObjects[0].id, ECUObjects[1].length, ECUObjects[1].id);
+	xprintf(PSTR("test2 %d %d %d %d\n"), valueObjects[ECUObjects[0].id].length, valueObjects[ECUObjects[0].id].action, valueObjects[ECUObjects[1].id].length, valueObjects[ECUObjects[1].id].action);
 	xprintf(PSTR("rc=%d\n"), (WORD)disk_initialize(0));		/* initialize filesystem */
 	xprintf(PSTR("Initialize logical drice 0\n"));	
 	xprintf(PSTR("rc=%d\n"), (WORD)f_mount(0, &Fatfs[0]));		/* mount filesystem */
@@ -158,19 +159,24 @@ int main (void)
 	sei();				/* Enable interrupt */
 
 	while(1) {
-		// check for rpm_msg
-		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {
-			xprintf(PSTR("i: %d, Hjul5: %d Hjul6: %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2]);
-			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg
-			for (i=0;i<8;i++) {
-				rpm_response_buffer[i] = 0;
-			}		
-		}
-//		_delay_ms(5);
-/*		res = rtc_gettime(&rtc);*/
-/*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
-/*		_delay_ms(3000);*/
+		ecu_data_handler();
+		_delay_ms(5000)
 	}
+
+/*	while(1) {*/
+/*		// check for rpm_msg*/
+/*		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {*/
+/*			xprintf(PSTR("i: %d, Hjul5: %d Hjul6: %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2]);*/
+/*			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg*/
+/*			for (i=0;i<8;i++) {*/
+/*				rpm_response_buffer[i] = 0;*/
+/*			}		*/
+/*		}*/
+/*//		_delay_ms(5);*/
+/*/*		res = rtc_gettime(&rtc);*/
+/*/*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
+/*/*		_delay_ms(3000);*/
+/*	}*/
 }
 
 

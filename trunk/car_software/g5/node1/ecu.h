@@ -27,11 +27,20 @@ typedef struct {
 	enum valueID id;
 } ECUValueObject;
 
-static const ECUValueObject ECUObjects[]=	{2,VandTemp,
+static const ECUValueObject ECUObjects[] =	{2,VandTemp,
 						2,OilPress};
 
+typedef struct {
+	uint8_t length;		/* Length of data in bits eg. 8, 10 or some other length */
+	uint8_t action;		/* bit 0 = CANSend, bit 1 = SDSave, bit 2 = Xbee */
+} valueObject;
+
+static const valueObject valueObjects[] =	{8, 7,		/* VandTemp */
+						10, 7,		/* OilPress */
+						16, 7};		/* RPM */
+
 /* Indeholder data fra ECU'en */
-U8 EcuData[228]; 
+U8 EcuData[228];
 
 /* Motor oil temp */
 #define MOTOR_OIL_TEMP_START 20
