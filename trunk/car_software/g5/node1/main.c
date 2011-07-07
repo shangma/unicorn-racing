@@ -160,7 +160,7 @@ int main (void)
 
 	while(1) {
 		ecu_data_handler();
-		_delay_ms(5000)
+		_delay_ms(5000);
 	}
 
 /*	while(1) {*/
