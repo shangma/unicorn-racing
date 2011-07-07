@@ -15,8 +15,10 @@ void ecu_data_handler( void )
 		/* TODO When the xbee data function is done the following data 
 		 * should use it to get into the bufferindex
 		 */
-		xprintf(PSTR("%d,%d,%d\n"), i, j, ECUObjects[j].id);
-		_delay_us(1000);
+		if (valueObjects[ECUObjects[j].id].action & 4) {
+			xprintf(PSTR("%d,%d,%d\n"), i, j, ECUObjects[j].id);
+			_delay_us(1000);
+		}
 /*		ECUObjects[i].id;*/
 /*		valueObjects[ECUObjects[i].id];*/
 		

@@ -113,9 +113,45 @@ typedef struct {
 	uint8_t action;		/* bit 0 = CANSend, bit 1 = SDSave, bit 2 = Xbee */
 } valueObject;
 
-static const valueObject valueObjects[] =	{0, 0,		/* empty */
-						10, 7,		/* OilPress */
-						16, 7};		/* RPM */
+static const valueObject valueObjects[] =	{0, 0,	// empty 
+						16, 0,	// fuelPressure
+						16, 0,	// statusLapCount
+						16, 0,	// statusInjSum
+						16, 0,	// lastGearShift
+						16, 0,	// motorOilTemp
+						16, 0,	// oilPressure
+						16, 0,	// statusTime
+						16, 0,	// statusLapTime
+						16, 0,	// gearOilTemp
+						16, 0,	// statusTraction
+						16, 0,	// statusGas
+						16, 0,	// statusLambdaV2
+						16, 0,	// statusCamTrigP1
+						16, 0,	// statusCamTrigP2
+						16, 0,	// statusChokerAdd
+						16, 0,	// statusLambdaPWM
+						16, 6,	// waterTemp
+						16, 6,	// airTemp
+						16, 6,	// potmeter
+						16, 7,	// rpm
+						16, 0,	// triggerErr
+						16, 0,	// camAngle1
+						16, 0,	// camAngle2
+						16, 6,	// roadSpeed
+						16, 6,	// mapSensor
+						16, 6,	// batteryV
+						16, 0,	// lambdaV
+						16, 0,	// load
+						16, 0,	// injectorTime
+						16, 0,	// ignitionTime
+						16, 0,	// dwellTime
+						16, 0,	// gX
+						16, 0,	// gY
+						16, 0,	// gZ
+						16, 0,	// motorFlags
+						16, 0,	// outBits
+						16, 0};	// time
+
 
 /* Indeholder data fra ECU'en */
 U8 EcuData[228];
