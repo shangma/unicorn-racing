@@ -5,11 +5,15 @@
 #include "uart.h"
 #include "ecu.h"
 #include "error.h"
+#include "comm.h"
+#include "queue.h"
 
 int RecIndex = 0;	// Bruges til at tælle hvor mange bytes der er modtaget fra ECU'en
 int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
 
-/* Funktion der sender data req til ECU */
+volatile uint8_t xbee_sending = 0;
+
+/* Funktion der sender data request til ECU */
 ISR(TIMER0_COMP_vect)
 {
 	int i;
@@ -38,5 +42,28 @@ ISR(USART0_RX_vect)
 	if (RecIndex <= 114) {			// Der skal modtages 228 bytes fra ECU'en
 		EcuData[RecIndex] = UDR0;	// Gem data fra ECU
 		RecIndex++;
+	}
+}
+
+/* ISR to take care of xbee data sending */
+ISR(USART1_UDRE_vect)
+{
+	uint8_t tmp;
+	/* TODO
+	 * -Check if sending package start or package data and if more data 
+	 * is to be send
+	 * -Send the right data based on some buffer index
+	 * -Clear sending bit when done with all data
+	 */
+	UCSR1A &= ~(1<<UDRE1);
+	/* if xbee_seq_index is less than 3 send package start sequence */
+	if (xbee_seq_index<3) {
+		UDR1 = start_sequence[xbee_seq_index++];
+	} else if (!QUEUE_EMPTY(my_q)) {
+		QUEUE_GET(my_q, tmp);
+		UDR1 = tmp;
+	} else {
+		xbee_sending = 0;
+		Usart1_tx_ei_dis(); /* Remove when done testing */
 	}
 }
