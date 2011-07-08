@@ -154,8 +154,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 
 
 /* Indeholder data fra ECU'en */
-U8 EcuData[228];
-
+extern U8 EcuData[228];
 /* Motor oil temp */
 #define MOTOR_OIL_TEMP_START 20
 #define MOTOR_OIL_TEMP_LENGTH 2

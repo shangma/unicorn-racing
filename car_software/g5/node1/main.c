@@ -158,8 +158,12 @@ int main (void)
 
 	sei();				/* Enable interrupt */
 
+
+	QUEUE_INIT(my_q);
+
 	while(1) {
 		ecu_data_handler();
+		
 		_delay_ms(5000);
 	}
 
