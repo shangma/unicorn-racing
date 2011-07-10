@@ -2,38 +2,44 @@
  * Gear Torque Controller
  *********************************************/
 
-#include <config.h>
-#include <prototyper.h>
-#include <extern.h>
+#include "config.h"
+#include "extern.h"
+#include "prototyper.h"
 #include <avr/io.h>
 #include <stdlib.h>
 
-int Kp = 1;
-int filterCurrentOld = 0;
+int Kp = 100;
+// Debugging
+char tempchar[10];
 
 unsigned int torqueController(unsigned int current)
 {
 	int torqueErr = 0;
 	int pwm = 0;
-	int filterCurrent = 0;
 
 	// Eksperimentielt (for at undga at PWM gAr helt i 0 ved start og bremsestrom)
-	if(current>GEARFORCEREF/2)
-		current = GEARFORCEREF/2;
+	//if(current>GEARFORCEREF/2)
+	//	current = GEARFORCEREF/2;
 
-	// Lav-pass filter for at undga regulering pa strom spikes
-    filterCurrent = (int)((double)FILTERKONSTANT*current+(double)(1-FILTERKONSTANT)*filterCurrentOld);
-    filterCurrentOld = filterCurrent;
-
-	torqueErr = GEARFORCEREF-filterCurrent;
+	torqueErr = FREF - current;
 
 	pwm = torqueErr * Kp;
 
 	// Saturation
 	if(pwm<0)
 		pwm = 0;
-	if(pwm>255)
-		pwm = 255;
+	if(pwm>DUTYMAX)
+		pwm = DUTYMAX;
+
+	sendtekst("torqueErr: ");
+	itoa(torqueErr,tempchar,10);
+	sendtekst(tempchar);
+
+	sendtekst("  pwm: ");
+	itoa(pwm,tempchar,10);
+	sendtekst(tempchar);
+	sendtekst("\n\r");
 
 	return (unsigned short int)pwm;
 }
+

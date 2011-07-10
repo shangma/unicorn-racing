@@ -2,23 +2,23 @@
  * Config header
  *********************************************/
 
-/*
-
-OBS !! Op er ikke op i gear, men aktivering af gear armen ud af.
-Omvendt er ned ikke ned i gear, men aktivering ind
-
-*/
-
-
 // UART
 #define USART_BAUDRATE 115200
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
 
-// UART Transmit queue
-#define UARTQUEUESIZE 7
+// POS Filter
+#define FILTERKONSTANTPOS 0.5
+// Current Sense Filter
+#define FILTERKONSTANTCURRENT 0.3
+
+// Force control ref
+#define FREF 15
+
+// PWM duty Max
+#define DUTYMAX 2047
 
 // CPU clock
-#define F_CPU 18432000
+#define F_CPU 11059200
 
 #define ADCtotnum 2
 
@@ -30,70 +30,23 @@ Omvendt er ned ikke ned i gear, men aktivering ind
 #define counter0prescale256 4
 #define counter0prescale1024 5
 
-// Ign Cut
-#define IgnCutOn PORTC|= (1<<PC7)
-#define IgnCutOff PORTC&=~ (1<<PC7)
-
-// LED
-
-#define LEDYellowOn PORTC|= (1<<PC7)
-#define LEDYellowOff PORTC&=~ (1<<PC7)
-
-#define LEDRed1On PORTC|= (1<<PC7)
-#define LEDRed1Off PORTC&=~ (1<<PC7)
-
-#define LEDRed2On PORTC|= (1<<PC7)
-#define LEDRed2Off PORTC&=~ (1<<PC7)
-
 // PWM 16 bit duty Max
 #define dutymax 2047
 
 #define AON PORTA|= (1<<PA0)
-#define AOFF PORTA&=~ (1<<PA0)
+#define AOF PORTA&=~ (1<<PA0)
 
-#define BON PORTC|=(1<<PC0)
-#define BOFF PORTC&=~(1<<PC0)
+#define BON PORTA|=(1<<PA1)
+#define BOF PORTA&=~ (1<<PA1)
 
-#define AENA PORTA|= (1<<PA1)
-#define ADIS PORTA&=~ (1<<PA1)
+#define AENA PORTA|= (1<<PA2)
+#define ADIS PORTA&=~ (1<<PA2)
 
-#define BENA PORTC|=(1<<PC1)
-#define BDIS PORTC&=~(1<<PC1)
+#define BENA PORTA|=(1<<PA3)
+#define BDIS PORTA&=~(1<<PA3)
 
 #define CW 0
 #define CCW 1
 
-#define softwareTrig PORTC^=(1<<PORTC7)
-
-#define GEAROP 1
-#define GEARNED 2
-
-// Gear ADC pos, Min/Max
-#define GEARPOSMIDDLE 761
-
-#define GEARPOSMAX GEARPOSMIDDLE+42 // 38
-#define GEARPOSMIN GEARPOSMIDDLE-44 //-45
-
-#define GEARPOSNEUTRALUP GEARPOSMIDDLE+14
-#define GEARPOSNEUTRALDOWN GEARPOSMIDDLE-14
-
-#define GearMiddleDeadZone 4
-
-#define IGNCUT 2 // Middle + Deadzone + IGNCUT = Ignition cut off
-
-// Force (current) safety limit
-#define GEARFORCECRITICALMAX 320		// MAX current
-#define GEARFORCEMAXTIMEOUT1 80		// Timeout 1, go back
-#define GEARFORCEMAXTIMEOUT2 200		// Timeout 2, turn off
-
-// Force Ref
-#define GEARFORCEREF 320
-
-// Gear Stock Timeout
-#define GEARSTOCKTIMEOUT1 300 //280 pr tick pr sec
-#define GEARSTOCKTIMEOUT2 500 
-
-// Current filter
-#define FILTERKONSTANT 0.9
-
-#define FILTERKONSTANTPOS 0.9
+#define UD 0
+#define IND 1

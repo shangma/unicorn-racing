@@ -2,17 +2,13 @@
  * Functions
  *********************************************/
 
-#include <config.h>
-#include <prototyper.h>
-#include <extern.h>
+#include "config.h"
+#include "extern.h"
+#include "prototyper.h"
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
 
-void PWM_duty_cycle_A_set(unsigned int x)
-{
-	OCR2A = x; 
-}
 
 void PWM_duty_cycle_A16_set(unsigned int x)
 {
@@ -30,27 +26,11 @@ void sendtekst(char *tekstarray)
 	short int i;
 	for (i = 0; tekstarray[i] != '\0'; i++)
 	{	
-		while ((UCSR0A & (1 << UDRE0)) == 0) {};
-		UDR0 = tekstarray[i];
+		while ((UCSR1A & (1 << UDRE1)) == 0) {};
+		UDR1 = tekstarray[i];
 	}
 }
-/*
-void uartTransmitQueue(unsigned short int toQueue, unsigned short int *uartQueueNumber,unsigned short int *uartQueueEnd, unsigned short int *uartFifoBuff)
-{
 
-	if(*uartQueueNumber<UARTQUEUESIZE) // Hvis queue ikke er fuld
-	{
-		if(*uartQueueNumber==0) // Hvis queue er helt tom
-			UDR0 = '0';
-
-		if(*uartQueueNumber!=0)
-		{
-			uartFifoBuff[*uartNextSlot++] = toQueue;
-		}
-		//update *uartNextSlot
-	}
-}
-*/
 void hbroEnable(unsigned short int enable)
 {
 	if(enable == 1)
@@ -65,31 +45,27 @@ void hbroEnable(unsigned short int enable)
 	}
 }
 
-void motorControl(unsigned short int ret, unsigned short int speed, unsigned int pos)
+void motorControl(unsigned short int ret, unsigned short int speed)
 {
 	if((ret==CW) && (speed>0))
 	{
-		BOFF;
+		BOF;
 		AON;		
 	}
 	else if((ret==CCW) && (speed>0))
 	{
-		AOFF;
+		AOF;
 		BON;
 	}
 	else if((ret!=0) && (speed<=0))
 	{
-		AOFF;
-		BOFF;
+		AOF;
+		BOF;
 	}
 	else
 	{
-		//AON;
-		//BON;
-
-		AOFF;
-		BOFF;
+		AOF;
+		BOF;
 	}
-
-	PWM_duty_cycle_A_set(speed);
+	PWM_duty_cycle_A16_set(speed);
 }
