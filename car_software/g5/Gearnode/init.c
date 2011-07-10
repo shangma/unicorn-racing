@@ -2,9 +2,9 @@
  * Hardware init
  *********************************************/
 
-#include <config.h>
-#include <prototyper.h>
-#include <extern.h>
+#include "config.h"
+#include "extern.h"
+#include "prototyper.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -18,30 +18,24 @@
 
 void ioinit(void)
 {
-/*
-	DDRA|= (1<<PA7);	// Retning A set
-	DDRA|= (1<<PA6);	// Retning A Enable
-	DDRA|= (1<<PA5);	// Retning B Enalbe
-	DDRA|= (1<<PA4);	// Retning B set
-	DDRD|= (1<<PD7);	// PWM til gearMotor
-*/
 	DDRA|= (1<<PA0);	// Retning A set
-	DDRA|= (1<<PA1);	// Retning A Enable
-	DDRC|= (1<<PC1);	// Retning B Enalbe
-	DDRC|= (1<<PC0);	// Retning B set
-	DDRD|= (1<<PD7);	// PWM til gearMotor
+	DDRA|= (1<<PA1);	// Retning B set
+	DDRA|= (1<<PA2);	// Retning A Enable
+	DDRA|= (1<<PA3);	// Retning B Enalbe
+		
+	DDRB|= (1<<PB5);	// PWM til gearMotor
 
-	DDRA &=~(1<<PA3);	// Position sense
-	DDRA &=~(1<<PA7);	// CS (Current Sense !)
+	DDRF &=~(1<<PF1);	// Position sense
+	DDRF &=~(1<<PF0);	// CS (Current Sense !)
 
-	// Hbro Disable
+	// Hbro Disable (h-bro slukkes ved start)
 	PORTA &=~ (1<<PA0);	
 	PORTA &=~ (1<<PA1);	
-	PORTC &=~ (1<<PC1);	
-	PORTC &=~ (1<<PC0);	
+	PORTA &=~ (1<<PA2);	
+	PORTA &=~ (1<<PA3);	
 
 	// PCINT (og led)
-	DDRC|= (1<<PC7);
+	//DDRC|= (1<<PC7);
 /*
 	//LED
 	DDRC|= (1<<PC0);
@@ -64,22 +58,22 @@ void ioinit(void)
 void uartinit(void)
 {
 	//Enable TXen og RXen
-	UCSR0B = (1<<RXEN0)|(1<<TXEN0); 
+	UCSR1B = (1<<RXEN1)|(1<<TXEN1); 
 	
 	// Format: 8data, 1 stop bit
-	UCSR0C = (3<<UCSZ00);
+	UCSR1C = (3<<UCSZ10);
 
 	// Baud rate
-	UBRR0L = BAUD_PRESCALE;
-	UBRR0H = (BAUD_PRESCALE >> 8);
+	UBRR1L = BAUD_PRESCALE;
+	UBRR1H = (BAUD_PRESCALE >> 8);
 	
 	// Rx Uart interrupt (Receive Complete Interrupt)
-	UCSR0B|=(1<<RXCIE0);
+	UCSR1B|=(1<<RXCIE1);
 
 	// Tx Uart interrupt (Transmit Complete Interrupt)
 	//UCSR0B|=(1<<TXCIE0);
 }
-
+/*
 void pwm8Init(void)
 {
 	// (OC2A) Output
@@ -99,16 +93,16 @@ void pwm8Init(void)
 
 	PWM_duty_cycle_A_set(0);
 }
-
+*/
 void pwm16Init(void)
 {
 	//PWM, 16 bit counter (counter1)
 	// (OC1A) Output
-    DDRD|= (1<<PD4);  
+    DDRB|= (1<<PB5);  
      
 	// Opsætning af compare match.
 	TCCR1A |=(1<<COM1A1);
-	TCCR1A |=(1<<COM1A0);
+	TCCR1A &=~(1<<COM1A0);
 
 	// FAST-PWM TOP = ICRn
 	TCCR1A &=~(1<<WGM10);
@@ -116,7 +110,7 @@ void pwm16Init(void)
 	TCCR1B |=(1<<WGM12);
 	TCCR1B |=(1<<WGM13);
 
-	//Top (10-bit)
+	//Top (11-bit)
 	ICR1H = 0x07;
 	ICR1L = 0xFF;
 
@@ -124,14 +118,15 @@ void pwm16Init(void)
     TCCR1B &=~(1<<CS10);
 	TCCR1B |=(1<<CS11); 
 	TCCR1B &=~(1<<CS12); 
-
+/*
 	// Compare match værdi
 	PWM_duty_cycle_A16_set(0);
+*/	
 }
 
 void counter0Init(void)
 {
-	TCCR0B |= counter0prescale256;
+	TCCR0A |= counter0prescale1024;
 	TIMSK0 |=(1<<TOIE0);
 }
 
@@ -149,7 +144,7 @@ void adcInit(unsigned int channel)
 
 	// ADC frequency prescaler
 	ADCSRA |=(1<<ADPS0);
-	ADCSRA &=~(1<<ADPS1);
+	ADCSRA |=(1<<ADPS1);
 	ADCSRA |=(1<<ADPS2);
 
 	/* ADC Tigger mode
@@ -164,7 +159,7 @@ void adcInit(unsigned int channel)
 	// ADC interrupt enable
 	ADCSRA |=(1<<ADIE);
 }
-
+/*
 void pcintInit(void)
 {
 	// PCINT2 Enable
@@ -173,3 +168,4 @@ void pcintInit(void)
 	// PCMSK2 pin trigger
 	PCMSK2 = 0b10000000;
 }
+*/
