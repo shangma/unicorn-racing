@@ -6,7 +6,7 @@
 #include "queue.h"
 #include "comm.h"
 
-uint8_t EcuData[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+uint8_t EcuData[] = {65,66,67,68,69,70,71,72,73,74,75,76,77,78,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -17,13 +17,9 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	uint8_t k=0;
 //	xprintf(PSTR("i%d,j%d \n"), i, j);
 	/* Add value to xbee buffer */
-//	Usart1_tx_ei_dis();
 	QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
-//	Usart1_tx_ei_en();
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
-//		Usart1_tx_ei_dis();
-		QUEUE_PUT(my_q, 0/*EcuData[i+k]*/);
-//		Usart1_tx_ei_en();
+		QUEUE_PUT(my_q, 65/*EcuData[i+k]*/);
 	}
 	/* Check if more than 20 elements in xbee buffer */
 	if (QUEUE_GET_NUM_ELE(my_q) >= 20) {
