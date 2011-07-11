@@ -12,6 +12,8 @@ int RecIndex = 0;	// Bruges til at tælle hvor mange bytes der er modtaget fra E
 int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
 
 volatile uint8_t xbee_sending = 0;
+volatile uint8_t nextId = 0;
+volatile uint8_t xbee_send = 0;
 
 /* Funktion der sender data request til ECU */
 ISR(TIMER0_COMP_vect)
@@ -60,8 +62,17 @@ ISR(USART1_UDRE_vect)
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
 	} else if (!QUEUE_EMPTY(my_q)) {
-		QUEUE_GET(my_q, tmp);
-		UDR1 = tmp;
+		if (nextId == 0) {
+			QUEUE_GET(my_q, tmp);
+			nextId = valueObjects[tmp].length;
+			if (!(QUEUE_GET_NUM_ELE(my_q) >= nextId)){
+				xbee_sending = 0;
+				Usart1_tx_ei_dis(); /* Remove when done testing */
+			}
+		}
+		if (xbee_sending) {
+			UDR1 = tmp;
+		}
 	} else {
 		xbee_sending = 0;
 		Usart1_tx_ei_dis(); /* Remove when done testing */
