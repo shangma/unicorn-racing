@@ -21,7 +21,7 @@ void adcStop(void);
 
 // Hbro
 void hbroEnable(unsigned short int);
-void motorControl(unsigned short int, unsigned short int);
+void motorControl(unsigned short int ret, unsigned int speed);
 
 // Force controller
 unsigned int torqueController(unsigned int current);
