@@ -19,7 +19,13 @@ unsigned int currentOld = 0;
 char setChannel = 0;
 char channel = 0;
 
+// PWM
 unsigned int pwm = 0;
+unsigned int pwmOut = 0;
+unsigned int pwmOld = 0;
+
+// Gear
+unsigned short int gearRetning = 0;
 
 // Debugging
 char tempchar[10];
@@ -44,25 +50,14 @@ ISR(ADC_vect,ISR_NOBLOCK)
 	{
 		current = (int)((double)FILTERKONSTANTCURRENT*ADCconv+(double)(1-FILTERKONSTANTCURRENT)*currentOld);
 		currentOld = current;
-
-		sendtekst("ADC0: ");
-		itoa(current,tempchar,10);
-		sendtekst(tempchar);
-		sendtekst("  ");
 	}
 
 	// Channel 1 = Pos ADC convert
 	if(channel == 1)
 	{
-	// Pos lav pass filter (for at undga at stoj oedelaegger skiftet)
-	pos = (int)((double)FILTERKONSTANTPOS*ADCconv+(double)(1-FILTERKONSTANTPOS)*posOld);
-	posOld = pos;
-
-	sendtekst("POS: ");
-	itoa(pos,tempchar,10);
-	sendtekst(tempchar);
-	sendtekst("\n\r");
-	
+		// Pos lav pass filter (for at undga at stoj oedelaegger skiftet)
+		pos = (int)((double)FILTERKONSTANTPOS*ADCconv+(double)(1-FILTERKONSTANTPOS)*posOld);
+		posOld = pos;
 	}
 }
 
@@ -101,10 +96,41 @@ ISR(TIMER0_OVF_vect)
 	//pwm = torqueController(current);
 	pwm = DUTYMAX;
 
+	// PWM lav pass filter
+	pwmOut = (unsigned int)((double)FILTERKONSTANTPWM*pwm+(double)(1-FILTERKONSTANTPWM)*pwmOld);
+	pwmOld = pwmOut;
+
+	sendtekst("PWM: ");
+	itoa(pwmOut,tempchar,10);
+	sendtekst(tempchar);
+	sendtekst("  ");
+
+	sendtekst("POS: ");
+	itoa(pos,tempchar,10);
+	sendtekst(tempchar);
+	sendtekst("\n\r");
+
+
 	// POS
 	if(pos>900)
-		motorControl(IND, pwm-1000);
+	{
+		motorControl(IND, (unsigned int) pwmOut);
+
+		// Hvis retningen lige er skiftet
+		if(gearRetning == UD)
+			pwmOld = 0; // Soft start
+
+		gearRetning = IND;
+	}
 
 	if(pos<300)
-		motorControl(UD, pwm);
+	{
+		motorControl(UD, (unsigned int) pwmOut);
+
+		// HVis retningen lige er skiftet
+		if(gearRetning == IND)
+			pwmOld = 0; // Soft start
+
+		gearRetning = UD;
+	}
 }

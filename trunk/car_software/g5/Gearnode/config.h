@@ -7,12 +7,14 @@
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
 
 // POS Filter
-#define FILTERKONSTANTPOS 0.5
+#define FILTERKONSTANTPOS 0.95
 // Current Sense Filter
-#define FILTERKONSTANTCURRENT 0.3
+#define FILTERKONSTANTCURRENT 0.95
+// PWM Filter
+#define FILTERKONSTANTPWM 0.1
 
 // Force control ref
-#define FREF 15
+#define FREF 35
 
 // PWM duty Max
 #define DUTYMAX 2047

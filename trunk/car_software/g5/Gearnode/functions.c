@@ -45,8 +45,11 @@ void hbroEnable(unsigned short int enable)
 	}
 }
 
-void motorControl(unsigned short int ret, unsigned short int speed)
+void motorControl(unsigned short int ret, unsigned int speed)
 {
+
+	PWM_duty_cycle_A16_set(speed);
+
 	if((ret==CW) && (speed>0))
 	{
 		BOF;
@@ -67,5 +70,5 @@ void motorControl(unsigned short int ret, unsigned short int speed)
 		AOF;
 		BOF;
 	}
-	PWM_duty_cycle_A16_set(speed);
+	
 }

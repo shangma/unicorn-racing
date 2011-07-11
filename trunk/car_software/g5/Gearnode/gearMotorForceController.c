@@ -31,15 +31,6 @@ unsigned int torqueController(unsigned int current)
 	if(pwm>DUTYMAX)
 		pwm = DUTYMAX;
 
-	sendtekst("torqueErr: ");
-	itoa(torqueErr,tempchar,10);
-	sendtekst(tempchar);
-
-	sendtekst("  pwm: ");
-	itoa(pwm,tempchar,10);
-	sendtekst(tempchar);
-	sendtekst("\n\r");
-
 	return (unsigned short int)pwm;
 }
 
