@@ -45,7 +45,7 @@ valueID = list(enumerate ([
 	('gX', 16, 0),
 	('gY', 16, 0),
 	('gZ', 16, 0),
-	('motorFlags', 16, 0),
+	('motorFlags', 8, 0),
 	('outBits', 16, 0),
 	('time', 16, 0),
 	('ValueIdLength', 16, 0)]))
@@ -53,8 +53,8 @@ valueID = list(enumerate ([
 nextID = -1
 
 while 1:
-    #tmp = ser.read(1)
-    tmp = test[i]
+    tmp = ord(ser.read(1))
+    #tmp = test[i]
     i += 1
 
     if (package_start == True):
@@ -77,14 +77,15 @@ while 1:
     package_start = False
 
     print "Data: ", tmp
-    if (package_start_counter == 0 and tmp == 123):
+    if (package_start_counter == 0 and tmp == 255):
         print "Start 0"
         package_start_counter = 1
-    elif (package_start_counter == 1 and tmp == 255):
+    elif (package_start_counter == 1 and tmp == 123):
         print "Start 1"
         package_start_counter = 2
     elif (package_start_counter == 2 and tmp == 10):
         print "Start 2"
         package_start_counter = 0
         package_start = True
+
         
