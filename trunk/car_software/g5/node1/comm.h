@@ -12,8 +12,8 @@ struct {
 } my_q;
 
 static uint8_t start_sequence[] = {255,123,10};
-extern uint8_t xbee_seq_index;
 
+volatile extern uint8_t xbee_seq_index;
 
 volatile extern uint8_t xbee_sending; /* Var to indicate if xbee TX ISR is active */
 

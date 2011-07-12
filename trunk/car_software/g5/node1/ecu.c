@@ -39,6 +39,7 @@ void ecu_data_handler( void )
 		if (valueObjects[ECUObjects[j].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
 			/* Value to xbee? */
 			if (valueObjects[ECUObjects[j].id].action & TO_XBEE) {
+			    	_delay_ms(1);
 				val_to_xbee(i,j);
 			}
 	

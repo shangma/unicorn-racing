@@ -76,7 +76,7 @@ while 1:
 
     package_start = False
 
-    print "Data: ", tmp
+#    print "Data: ", tmp
     if (package_start_counter == 0 and tmp == 255):
         print "Start 0"
         package_start_counter = 1
