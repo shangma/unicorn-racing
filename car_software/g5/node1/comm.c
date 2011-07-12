@@ -6,7 +6,7 @@
 #include "error.h"
 #include "queue.h"
 
-uint8_t xbee_seq_index=0;
+volatile uint8_t xbee_seq_index=0;
 
 void xbee_send_trigger( void )
 {
@@ -22,8 +22,7 @@ void xbee_send_trigger( void )
 	if (QUEUE_GET_NUM_ELE(my_q)>=20){
 		xbee_sending = 1;
 		xbee_seq_index = 0;
-		_delay_us(1000);
-/*		Usart1_tx_ei_en();	/* Remove when done testing */
+	    	Usart1_tx_ei_en();	/* Remove when done testing */
 		UDR1 = start_sequence[xbee_seq_index++];
 	}
 	return;

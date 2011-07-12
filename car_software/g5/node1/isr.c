@@ -14,7 +14,6 @@ int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
 
 volatile uint8_t xbee_sending = 0;
 volatile uint8_t nextId = 0;
-volatile uint8_t xbee_send = 0;
 
 /* Funktion der sender data request til ECU */
 ISR(TIMER0_COMP_vect)
@@ -58,7 +57,7 @@ ISR(USART1_UDRE_vect)
 	 * -Send the right data based on some buffer index
 	 * -Clear sending bit when done with all data
 	 */
-	UCSR1A &= ~(1<<UDRE1);
+//	UCSR1A |= (1<<UDRE1);
 	if (xbee_sending){
 	/* if xbee_seq_index is less than 3 send package start sequence */
 	if (xbee_seq_index<3) {
@@ -66,14 +65,13 @@ ISR(USART1_UDRE_vect)
 	}else{
 		QUEUE_GET(my_q, tmp);
 		if (nextId == 0) {
-			nextId = valueObjects[tmp].length+1;
+			nextId = valueObjects[tmp].length+8;
 		}
 		UDR1 = tmp;
-		nextId--;
-		if (nextId == 0) {
-			if (QUEUE_GET_NUM_ELE(my_q) <= 40) {
+		nextId = nextId - 8;
+	    	if (nextId == 0) {
+			if (QUEUE_GET_NUM_ELE(my_q) <= 4) {
 				xbee_sending = 0;
-
 				Usart1_tx_ei_dis();
 			}
 		}

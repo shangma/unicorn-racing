@@ -160,8 +160,6 @@ int main (void)
 
 
 	QUEUE_INIT(my_q);
-/*	UCSR1A &= ~(1<<UDRE1);*/
-	Usart1_tx_ei_en();
 	while(1) {
 		ecu_data_handler();
 		
