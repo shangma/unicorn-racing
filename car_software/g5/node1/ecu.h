@@ -137,17 +137,17 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
-						16, 6,	// roadSpeed
-						16, 6,	// mapSensor
+						16, 0,	// roadSpeed
+						16, 0,	// mapSensor
 						16, 6,	// batteryV
 						16, 0,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime
 						16, 0,	// ignitionTime
 						16, 0,	// dwellTime
-						16, 7,	// gX
-						16, 7,	// gY
-						16, 7,	// gZ
+						16, 0,	// gX
+						16, 0,	// gY
+						16, 0,	// gZ
 						16, 0,	// motorFlags
 						16, 0,	// outBits
 						16, 0};	// time

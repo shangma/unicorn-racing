@@ -19,7 +19,7 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	/* Add value to xbee buffer */
 	QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
-		QUEUE_PUT(my_q, 65/*EcuData[i+k]*/);
+		QUEUE_PUT(my_q, EcuData[i+k]);
 	}
 	/* Check if more than 20 elements in xbee buffer */
 	if (QUEUE_GET_NUM_ELE(my_q) >= 20) {
