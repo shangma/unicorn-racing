@@ -8,6 +8,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdlib.h>
+
+// Debugging
+char tempchar[10];
 
 int main(void)
 {
@@ -24,10 +28,9 @@ int main(void)
 	
 	sendtekst("Start...\n\r");
 
-	PWM_duty_cycle_A16_set(2047);
-
 	while (1)
 	{
+
 	}
     return 0;
 }

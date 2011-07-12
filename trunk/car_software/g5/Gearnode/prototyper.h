@@ -25,3 +25,5 @@ void motorControl(unsigned short int ret, unsigned int speed);
 
 // Force controller
 unsigned int torqueController(unsigned int current);
+
+unsigned short int getBut(void);
