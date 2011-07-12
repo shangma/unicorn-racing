@@ -11,13 +11,32 @@
 // Current Sense Filter
 #define FILTERKONSTANTCURRENT 0.95
 // PWM Filter
-#define FILTERKONSTANTPWM 0.1
+#define FILTERKONSTANTPWM 0.3
 
 // Force control ref
 #define FREF 35
 
 // PWM duty Max
 #define DUTYMAX 2047
+
+// Buttons
+#define GEARUPBUT 1
+#define GEARDOWNBUT 2 
+#define GEARNEUBUT 3
+
+// Gear ADC pos, Min/Max
+#define GEARPOSMID 512
+#define GEARPOSMAX GEARPOSMID+100
+#define GEARPOSMIN GEARPOSMID-100
+#define GEARPOSNEUTRALMAX GEARPOSMID+50
+#define GEARPOSNEUTRALMIN GEARPOSMID-50
+#define GearMiddleDeadZone 0
+#define IGNCUT 50 // Middle + Deadzone + IGNCUT = Ignition cut off
+
+// Force (over current) protection
+#define GEARFORCECRITICALMAX 50		// MAX current
+#define GEARFORCEMAXTIMEOUT1 15		// Timeout 1, go back (168 = ~ 1 sec)
+#define GEARFORCEMAXTIMEOUT2 50		// Timeout 2, turn off (168 = ~ 1 sec)
 
 // CPU clock
 #define F_CPU 11059200
@@ -47,8 +66,12 @@
 #define BENA PORTA|=(1<<PA3)
 #define BDIS PORTA&=~(1<<PA3)
 
+// Ign Cut
+#define IgnCutOn PORTE|= (1<<PE4)
+#define IgnCutOff PORTE&=~ (1<<PE4)
+
 #define CW 0
 #define CCW 1
 
-#define UD 0
-#define IND 1
+#define UD 1
+#define IND 0
