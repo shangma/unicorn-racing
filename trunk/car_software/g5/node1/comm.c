@@ -2,6 +2,7 @@
 #include "uart.h"
 #include "comm.h"
 #include "ecu.h"
+#include <util/delay.h>
 #include "error.h"
 #include "queue.h"
 
@@ -21,7 +22,8 @@ void xbee_send_trigger( void )
 	if (QUEUE_GET_NUM_ELE(my_q)>=20){
 		xbee_sending = 1;
 		xbee_seq_index = 0;
-		Usart1_tx_ei_en();	/* Remove when done testing */
+		_delay_us(1000);
+/*		Usart1_tx_ei_en();	/* Remove when done testing */
 		UDR1 = start_sequence[xbee_seq_index++];
 	}
 	return;

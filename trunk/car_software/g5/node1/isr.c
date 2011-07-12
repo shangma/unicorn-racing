@@ -1,6 +1,7 @@
 #include "config.h"
 #include "can_std/can_lib.h"
 #include "can_func.h"
+#include <util/delay.h>
 #include "../lib/can_defs.h"
 #include "uart.h"
 #include "ecu.h"
@@ -58,23 +59,24 @@ ISR(USART1_UDRE_vect)
 	 * -Clear sending bit when done with all data
 	 */
 	UCSR1A &= ~(1<<UDRE1);
+	if (xbee_sending){
 	/* if xbee_seq_index is less than 3 send package start sequence */
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
-	} else if (!QUEUE_EMPTY(my_q)) {
+	}else{
+		QUEUE_GET(my_q, tmp);
 		if (nextId == 0) {
-			QUEUE_GET(my_q, tmp);
-			nextId = valueObjects[tmp].length;
-			if (!(QUEUE_GET_NUM_ELE(my_q) >= nextId)){
+			nextId = valueObjects[tmp].length+1;
+		}
+		UDR1 = tmp;
+		nextId--;
+		if (nextId == 0) {
+			if (QUEUE_GET_NUM_ELE(my_q) <= 40) {
 				xbee_sending = 0;
-				Usart1_tx_ei_dis(); /* Remove when done testing */
+
+				Usart1_tx_ei_dis();
 			}
 		}
-		if (xbee_sending) {
-			UDR1 = tmp;
-		}
-	} else {
-		xbee_sending = 0;
-		Usart1_tx_ei_dis(); /* Remove when done testing */
+	}
 	}
 }
