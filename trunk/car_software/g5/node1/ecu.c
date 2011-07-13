@@ -17,7 +17,7 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	uint8_t k=0;
 //	xprintf(PSTR("i%d,j%d \n"), i, j);
 	/* Add value to xbee buffer */
-    	cli();
+    	cli();					/* !!! BYT UD MED util/atomic.h */
 	QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
     	sei();
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
