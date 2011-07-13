@@ -150,12 +150,14 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// gX
 						16, 0,	// gY
 						16, 0,	// gZ
-						8, 0,	// motorFlags
-						8, 0,	// outBits
-						8, 0};	// time
+						8, 7,	// motorFlags
+						8, 7,	// outBits
+						8, 7};	// time
 
 
 /* Indeholder data fra ECU'en */
-extern U8 EcuData[228];
+extern U8 EcuData[115];
 
 void ecu_data_handler( void );
+
+void ecu_val_to_xbee(uint8_t i, uint8_t j);
