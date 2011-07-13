@@ -56,14 +56,14 @@ ISR(USART1_UDRE_vect)
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
 	}else{
-		QUEUE_GET(my_q, tmp);
+		QUEUE_GET(xbee_q, tmp);
 		if (nextId == 0) {
 			nextId = valueObjects[tmp].length+8;
 		}
 		UDR1 = tmp;
 		nextId = nextId - 8;
 	    	if (nextId == 0) {
-			if (QUEUE_GET_NUM_ELE(my_q) <= 4) {
+			if (QUEUE_GET_NUM_ELE(xbee_q) <= 4) {
 				xbee_sending = 0;
 				Usart1_tx_ei_dis();
 			}

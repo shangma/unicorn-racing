@@ -46,8 +46,8 @@ valueID = list(enumerate ([
 	('gY', 16, 0),
 	('gZ', 16, 0),
 	('motorFlags', 8, 0),
-	('outBits', 16, 0),
-	('time', 16, 0),
+	('outBits', 8, 0),
+	('time', 8, 0),
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1

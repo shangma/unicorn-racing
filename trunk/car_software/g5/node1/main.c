@@ -159,7 +159,7 @@ int main (void)
 	sei();				/* Enable interrupt */
 
 
-	QUEUE_INIT(my_q);
+	QUEUE_INIT(xbee_q);
 	while(1) {
 		ecu_data_handler();
 		

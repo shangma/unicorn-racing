@@ -113,10 +113,12 @@ typedef struct {
 	uint8_t action;		/* bit 0 = CANSend, bit 1 = SDSave, bit 2 = Xbee */
 } valueObject;
 
+/* Remember to set a queue size in comm.h large enough to hold enough data 
+ * based on how many values from the ecu that are send via xbee */
 static const valueObject valueObjects[] =	{0, 0,	// empty 
 						16, 0,	// fuelPressure
 						16, 0,	// statusLapCount
-						16, 0,	// statusInjSum
+						16, 7,	// statusInjSum
 						16, 0,	// lastGearShift
 						16, 0,	// motorOilTemp
 						16, 0,	// oilPressure
@@ -137,9 +139,9 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
-						16, 0,	// roadSpeed
-						16, 0,	// mapSensor
-						16, 6,	// batteryV
+						16, 7,	// roadSpeed
+						16, 7,	// mapSensor
+						16, 7,	// batteryV
 						16, 0,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime
@@ -148,53 +150,12 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// gX
 						16, 0,	// gY
 						16, 0,	// gZ
-						16, 0,	// motorFlags
-						16, 0,	// outBits
-						16, 0};	// time
+						8, 0,	// motorFlags
+						8, 0,	// outBits
+						8, 0};	// time
 
 
 /* Indeholder data fra ECU'en */
 extern U8 EcuData[228];
-/* Motor oil temp */
-#define MOTOR_OIL_TEMP_START 20
-#define MOTOR_OIL_TEMP_LENGTH 2
-#define MOTOR_OIL_TEMP_GAIN 1
-#define MOTOR_OIL_TEMP_OFFSET 0
-
-/* WATER temp */
-#define WATER_TEMP_START 46
-#define WATER_TEMP_LENGTH 2
-#define WATER_TEMP_GAIN -0.0390625
-#define WATER_TEMP_OFFSET 120
-
-/* RPM */
-#define RPMSTART 54
-#define RPMLENGTH 2
-#define RPMGAIN 0.9408
-#define RPMOFFSET 0
-
-/* Road speed */
-#define SPEEDSTART 62
-#define SPEEDLENGTH 2
-#define SPEEDGAIN 0.01
-#define SPEEDOFFSET 0
-
-/* potmeter */
-#define POTSTART 50
-#define POTLENGTH 2
-#define POTGAIN 0.0510
-#define POTOFFSET -31.4
-
-/* Map */
-#define MAPSTART 64
-#define MAPLENGTH 2
-#define MAPGAIN 1.0/800/5*3000
-#define MAPOFFSET 0
-
-/* Lambda */
-#define LAMBDASTART 68
-#define LAMBDALENGTH 1
-#define LAMBDAGAIN -14.7*0.6/3840
-#define LAMBDAOFFSET 0.7*14.7
 
 void ecu_data_handler( void );
