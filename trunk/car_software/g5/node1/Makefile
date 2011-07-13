@@ -10,7 +10,7 @@ DEBUG          = dwarf-2
 CC             = avr-gcc
 ASFLAGS        = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 ALL_ASFLAGS    = -mmcu=$(MCU_TARGET) -I. -x assembler-with-cpp $(ASFLAGS)
-CFLAGS         = -g$(DEBUG) $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
+CFLAGS         = -std=c99 -g$(DEBUG) $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
 LDFLAGS        = -Wl,-Map,$(TARGET).map
 OBJ            = $(CSRC:.c=.o) $(ASRC:.S=.o)
 

@@ -51,14 +51,16 @@ valueID = list(enumerate ([
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1
-
+j = 0
 while 1:
     tmp = ord(ser.read(1))
     #tmp = test[i]
     i += 1
 
     if (package_start == True):
-        print "Package start", tmp
+	j += 1
+	print j
+        print "Package start"
         if (tmp < 0 or tmp >=38):
             nextID = -1
         else:
@@ -76,7 +78,7 @@ while 1:
 
     package_start = False
 
-    print "Data: ", tmp
+#    print "Data: ", tmp
     if (package_start_counter == 0 and tmp == 255):
         print "Start 0"
         package_start_counter = 1

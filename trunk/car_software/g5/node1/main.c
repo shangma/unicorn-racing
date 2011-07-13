@@ -163,7 +163,7 @@ int main (void)
 	while(1) {
 		ecu_data_handler();
 		
-		_delay_ms(500);
+		_delay_ms(100);
 	}
 
 /*	while(1) {*/
@@ -180,44 +180,4 @@ int main (void)
 /*/*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
 /*/*		_delay_ms(3000);*/
 /*	}*/
-}
-
-
-/* eksempel kode til at vise hvordan end besked modtaget fra can skrives til sdcard */
-void can(FIL *file)
-{
-    U8 i,j;
-    int *e;
-
-    for (j=0; j<num_of_response_mobs; j++){
-        if (can_get_status(&response_msg[j]) == CAN_STATUS_COMPLETED){
-            if (bufferindex >= data_buffer_num){
-                xprintf(PSTR("Buffer full error\n"));
-            } else {
-                for (i=0; i<9; i++) {
-                        databuffer[bufferindex][i] = response_buffer[j][i];
-                        response_buffer[j][i] = 0;
-                }
-                bufferindex++;
-            }
-            can_data_mob_setup(i);
-        }
-    }
-
-    for (i=0; i<bufferindex; i++) {         
-        xprintf(PSTR("B %d"), i); 
-        /*xprintf(PSTR(", Data1: %03d"), databuffer[i][0]);
-	    xprintf(PSTR(", Data2: %03d"), databuffer[i][1]);
-        xprintf(PSTR(", Data3: %03d"), databuffer[i][2]);
-    	xprintf(PSTR(", Data4: %03d"), databuffer[i][3]);
-        xprintf(PSTR(", Data5: %03d"), databuffer[i][4]);
-        xprintf(PSTR(", Data6: %03d"), databuffer[i][5]);
-	    xprintf(PSTR(", Data7: %03d"), databuffer[i][6]);                
-    	xprintf(PSTR(", Data8: %03d"), databuffer[i][7]);
-	    xprintf(PSTR("\r\n"));*/
-    }
-    if (f_write(file, databuffer, 9*bufferindex, e) != 0)
-            xprintf(PSTR("Write error\r\n"));
-    _delay_us(1700);
-    bufferindex = 0;
 }

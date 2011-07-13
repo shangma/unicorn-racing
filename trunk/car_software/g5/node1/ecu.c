@@ -1,5 +1,6 @@
 #include "config.h"
 #include <util/delay.h>
+#include <util/atomic.h>
 #include "uart.h"
 #include "xitoa.h"
 #include "ecu.h"
@@ -17,13 +18,15 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	uint8_t k=0;
 //	xprintf(PSTR("i%d,j%d \n"), i, j);
 	/* Add value to xbee buffer */
-    	cli();					/* !!! BYT UD MED util/atomic.h */
-	QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
-    	sei();
+    	ATOMIC_BLOCK(ATOMIC_FORCEON)
+    	{
+		QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
+	}
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
-		cli();
-		QUEUE_PUT(my_q, EcuData[i+k]);
-	    	sei();
+    		ATOMIC_BLOCK(ATOMIC_FORCEON)
+    		{
+			QUEUE_PUT(my_q, EcuData[i+k]);
+		}
 	}
 	/* Check if more than 20 elements in xbee buffer */
 	if (QUEUE_GET_NUM_ELE(my_q) >= 20) {

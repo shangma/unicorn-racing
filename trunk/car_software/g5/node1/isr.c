@@ -51,14 +51,7 @@ ISR(USART0_RX_vect)
 ISR(USART1_UDRE_vect)
 {
 	uint8_t tmp;
-	/* TODO
-	 * -Check if sending package start or package data and if more data 
-	 * is to be send
-	 * -Send the right data based on some buffer index
-	 * -Clear sending bit when done with all data
-	 */
-//	UCSR1A |= (1<<UDRE1);
-	if (xbee_sending){
+
 	/* if xbee_seq_index is less than 3 send package start sequence */
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
@@ -75,6 +68,5 @@ ISR(USART1_UDRE_vect)
 				Usart1_tx_ei_dis();
 			}
 		}
-	}
 	}
 }
