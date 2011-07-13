@@ -4,7 +4,7 @@
 #define TO_SD	2
 #define TO_XBEE 4
 
-#define MY_Q_SIZE 60
+#define MY_Q_SIZE 120
 
 struct {
 	queue_hdr_t	hdr;                             // must be named "hdr"
