@@ -20,16 +20,16 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	/* Add value to xbee buffer */
     	ATOMIC_BLOCK(ATOMIC_FORCEON)
     	{
-		QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
+		QUEUE_PUT(xbee_q, ECUObjects[j].id);	/* Add id */
 	}
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
     		ATOMIC_BLOCK(ATOMIC_FORCEON)
     		{
-			QUEUE_PUT(my_q, EcuData[i+k]);
+			QUEUE_PUT(xbee_q, EcuData[i+k]);
 		}
 	}
 	/* Check if more than 20 elements in xbee buffer */
-	if (QUEUE_GET_NUM_ELE(my_q) >= 20) {
+	if (QUEUE_GET_NUM_ELE(xbee_q) >= 20) {
 		//xprintf(PSTR("More than 20 elements\n"));
 		xbee_send_trigger();
 	}
