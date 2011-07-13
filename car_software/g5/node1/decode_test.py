@@ -51,6 +51,7 @@ valueID = list(enumerate ([
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1
+IDErrors = 0
 j = 0
 while 1:
     tmp = ord(ser.read(1))
@@ -59,9 +60,9 @@ while 1:
 
     if (package_start == True):
 	j += 1
-	print j
-        print "Package start"
+        print "Package", j, ": IDErrors", IDErrors
         if (tmp < 0 or tmp >=38):
+	    IDErrors += 1
             nextID = -1
         else:
             print "ID:", "(", tmp,",",valueID[tmp][0],",",valueID[tmp][1][0],")"

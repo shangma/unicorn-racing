@@ -19,7 +19,7 @@ void xbee_send_trigger( void )
 	if (xbee_sending) return;
 
 	/* If number of bytes in send buffer is greater than X send data */
-	if (QUEUE_GET_NUM_ELE(xbee_q)>=20){
+	if (QUEUE_GET_NUM_ELE(xbee_q)>=10){
 		xbee_sending = 1;
 		xbee_seq_index = 0;
 	    	Usart1_tx_ei_en();	/* Remove when done testing */
