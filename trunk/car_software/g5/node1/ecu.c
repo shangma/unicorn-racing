@@ -17,9 +17,13 @@ void val_to_xbee(uint8_t i, uint8_t j)
 	uint8_t k=0;
 //	xprintf(PSTR("i%d,j%d \n"), i, j);
 	/* Add value to xbee buffer */
+    	cli();
 	QUEUE_PUT(my_q, ECUObjects[j].id);	/* Add id */
+    	sei();
 	for (k=0;k<ECUObjects[j].length;k++) {	/* Add value */
+		cli();
 		QUEUE_PUT(my_q, EcuData[i+k]);
+	    	sei();
 	}
 	/* Check if more than 20 elements in xbee buffer */
 	if (QUEUE_GET_NUM_ELE(my_q) >= 20) {
@@ -39,7 +43,7 @@ void ecu_data_handler( void )
 		if (valueObjects[ECUObjects[j].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
 			/* Value to xbee? */
 			if (valueObjects[ECUObjects[j].id].action & TO_XBEE) {
-			    	_delay_ms(1);
+			    	//_delay_us(10);
 				val_to_xbee(i,j);
 			}
 	
