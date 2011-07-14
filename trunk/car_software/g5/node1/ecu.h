@@ -147,12 +147,12 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// injectorTime
 						16, 0,	// ignitionTime
 						16, 0,	// dwellTime
-						16, 0,	// gX
-						16, 0,	// gY
-						16, 0,	// gZ
-						8, 7,	// motorFlags
-						8, 7,	// outBits
-						8, 7};	// time
+						16, 7,	// gX
+						16, 7,	// gY
+						16, 7,	// gZ
+						8, 0,	// motorFlags
+						8, 0,	// outBits
+						8, 0};	// time
 
 
 /* Indeholder data fra ECU'en */
