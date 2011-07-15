@@ -13,7 +13,7 @@ void init(void);
 
 int main (void)
 {	
-	int tmp;
+	int tmp,i;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 
 //  Init CAN, UART, I/O
@@ -36,14 +36,34 @@ int main (void)
 
 	_delay_ms(2000);
 
+	i = 1;
 	while (1) {
-	tmp = test_display();
+	SEG_0(LED_ON);
+	_delay_ms(500);
+	SEG_1(LED_ON);
+	_delay_ms(500);
+	SEG_2(LED_ON);
+	_delay_ms(500);
+	SEG_3(LED_ON);
+	_delay_ms(500);
+	SEG_4(LED_ON);
+	_delay_ms(500);
+	SEG_5(LED_ON);
+	_delay_ms(500);
+	SEG_6(LED_ON);
+	_delay_ms(500);
+	SEG_7(LED_ON);
+	_delay_ms(500);
+	SEG_8(LED_ON);
+	_delay_ms(500);
+	SEG_9(LED_ON);
 
-	if (tmp == 1) PORTB |= (1<<PB6 | 1<< PB5);
-	if (tmp == -1) PORTB |= (0<<PB6 | 1<< PB5);
-	if (tmp == -2) PORTB |= (1<<PB6 | 0<< PB5);
-	_delay_ms(2000);
-	PORTB &= ~(1<<PB6 | 1<<PB5);
+
+/*	if (tmp == 1) PORTB |= (1<<PB6 | 1<< PB5);*/
+/*	if (tmp == -1) PORTB |= (0<<PB6 | 1<< PB5);*/
+/*	if (tmp == -2) PORTB |= (1<<PB6 | 0<< PB5);*/
+/*	_delay_ms(2000);*/
+/*	PORTB &= ~(1<<PB6 | 1<<PB5);*/
 	_delay_ms(500);
 	}
 	return 0;
