@@ -30,6 +30,7 @@ unsigned int pwmOut = DUTYMAX;
 unsigned short int gearBut = 0;
 unsigned short int gearRetning = 0;
 unsigned short int gearActive = 0;
+unsigned short int released = 1;
 unsigned short int maxTilNeutral = 0; 
 unsigned short int minTilNeutral = 0;
 unsigned int gearPosTargetMax = GEARPOSMAX;
@@ -59,6 +60,7 @@ ISR(ADC_vect,ISR_NOBLOCK)
 	// Channel 0 = Current sense	
 	if(channel == 0)
 	{
+		// Current lavpass filter
 		current = (int)((double)FILTERKONSTANTCURRENT*ADCconv+(double)(1-FILTERKONSTANTCURRENT)*currentOld);
 		currentOld = current;
 	}
@@ -66,10 +68,10 @@ ISR(ADC_vect,ISR_NOBLOCK)
 	// Channel 1 = Pos ADC convert
 	if(channel == 1)
 	{
-		// Giver 0 helt inde og 1024 helt ude
+		// Giver 0 helt inde og 1024 helt ude (vendes med polaritet på gear pot)
 		ADCconv = (ADCconv-1023)*-1;
 
-		// Pos lav pass filter (for at undga at stoj oedelaegger skiftet)
+		// Pos lavpass filter (for at undga at stoj oedelaegger skiftet)
 		pos = (int)((double)FILTERKONSTANTPOS*ADCconv+(double)(1-FILTERKONSTANTPOS)*posOld);
 		posOld = pos;
 	}
@@ -95,7 +97,7 @@ ISR(USART1_RX_vect)
 // Timer0 (8-bit) overflow interrupt (168 Hz)
 ISR(TIMER0_OVF_vect)
 {	
-	// ADC
+	// ADC start new reading
 	// Change ADC channel
 	ADMUX &= 0xf8;
 	ADMUX |= setChannel++;
@@ -112,7 +114,11 @@ ISR(TIMER0_OVF_vect)
 	// Knapper
 	gearBut = getBut();
 
-	if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0))
+	// Gear knapperne skal slippes før der kan skiftes gear igen
+	if((gearBut == 0) || (gearBut == GEARNEUBUT))
+		released = 1;
+
+	if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0) && (released == 1))
 	{
 
 	_delay_ms(50); // Software prell
@@ -121,6 +127,8 @@ ISR(TIMER0_OVF_vect)
 
 		if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0))
 		{
+			released = 0;			
+
 			// Gear op
 			if((gearBut==GEARUPBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
 			{
@@ -130,6 +138,7 @@ ISR(TIMER0_OVF_vect)
 				gearPosTargetMax = GEARPOSMAX;
 				gearPosTargetMin = GEARPOSMIN;
 		
+				// Kort skift til neutral ?
 				if(!((PINE&0b00100000)==0b00100000))
 				{
 					gearPosTargetMax = GEARPOSNEUTRALMAX;
@@ -187,18 +196,23 @@ ISR(TIMER0_OVF_vect)
 		sendtekst("\n\r SimiCurrent ! \n\r");
 		minTilNeutral = 0;
 		maxTilNeutral = 1;
+		
 	}
 	if((overCurrentCounter>GEARFORCEMAXTIMEOUT1) && (pos<(GEARPOSMID-GearMiddleDeadZone)))
 	{		
 		sendtekst("\n\r SimiCurrent ! \n\r");
 		minTilNeutral = 1;
 		maxTilNeutral = 0;
+
 	}
 
 	if(overCurrentCounter>GEARFORCEMAXTIMEOUT2)
 	{
-		pwmOut = 0;
+		sendtekst("\n\r Gear Stock ! \n\r");
 		hbroEnable(0);
+		_delay_ms(3000);
+		overCurrentCounter = 0;
+		hbroEnable(1);
 	}
 
 	// Til Neutral fra max

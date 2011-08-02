@@ -60,7 +60,7 @@ void uartinit(void)
 	UBRR1H = (BAUD_PRESCALE >> 8);
 	
 	// Rx Uart interrupt (Receive Complete Interrupt)
-	UCSR1B|=(1<<RXCIE1);
+	//UCSR1B|=(1<<RXCIE1);
 
 	// Tx Uart interrupt (Transmit Complete Interrupt)
 	//UCSR0B|=(1<<TXCIE0);
@@ -72,7 +72,7 @@ void pwm16Init(void)
 	// (OC1A) Output
     DDRB|= (1<<PB5);  
      
-	// Opsætning af compare match.
+	// Compare match.
 	TCCR1A |=(1<<COM1A1);
 	TCCR1A &=~(1<<COM1A0);
 

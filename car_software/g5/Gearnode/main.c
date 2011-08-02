@@ -18,19 +18,16 @@ int main(void)
 	_delay_ms(1000);
 	ioinit();
 	uartinit();
-	//pwm8Init();
 	pwm16Init();
 	adcInit(1);
 	counter0Init();
-	//pcintInit();
 	hbroEnable(1);
 	sei();
 	
-	sendtekst("Start...\n\r");
+	sendtekst("\n\rUnicorn Gearnode v1.0 \n\r");
 
 	while (1)
 	{
-
 	}
     return 0;
 }
