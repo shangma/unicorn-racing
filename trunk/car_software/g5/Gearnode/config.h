@@ -25,18 +25,18 @@
 #define GEARNEUBUT 3
 
 // Gear ADC pos, Min/Max
-#define GEARPOSMID 512
+#define GEARPOSMID 560
 #define GEARPOSMAX GEARPOSMID+100
 #define GEARPOSMIN GEARPOSMID-100
 #define GEARPOSNEUTRALMAX GEARPOSMID+50
 #define GEARPOSNEUTRALMIN GEARPOSMID-50
-#define GearMiddleDeadZone 0
+#define GearMiddleDeadZone 5
 #define IGNCUT 50 // Middle + Deadzone + IGNCUT = Ignition cut off
 
 // Force (over current) protection
-#define GEARFORCECRITICALMAX 50		// MAX current
-#define GEARFORCEMAXTIMEOUT1 15		// Timeout 1, go back (168 = ~ 1 sec)
-#define GEARFORCEMAXTIMEOUT2 50		// Timeout 2, turn off (168 = ~ 1 sec)
+#define GEARFORCECRITICALMAX 60			// MAX current
+#define GEARFORCEMAXTIMEOUT1 30			// Timeout 1, go back (168 = ~ 1 sec)
+#define GEARFORCEMAXTIMEOUT2 168		// Timeout 2, turn off (168 = ~ 1 sec)
 
 // CPU clock
 #define F_CPU 11059200
