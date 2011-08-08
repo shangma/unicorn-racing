@@ -23,6 +23,7 @@
 #include "../config.h"
 #include "can_lib.h"
 #include "can_drv.h"
+#include "../test_vars.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 
@@ -79,6 +80,7 @@ U8 can_cmd(st_cmd_t* cmd)
 {
   U8 mob_handle, cpt;
   U32 u32_temp;
+  U16 tmp;
   
   if (cmd->cmd == CMD_ABORT)
   {
@@ -122,6 +124,10 @@ U8 can_cmd(st_cmd_t* cmd)
           cmd->ctrl.rtr=0; Can_clear_rtr();
           Can_set_dlc(cmd->dlc);
           Can_config_tx();
+	  if(!cmd->blocking){	/* Enable interrupt */
+        Can_set_mob_int(mob_handle) /* Ser ud til at virke */
+		tIntReg = (CANIE1<<8) + CANIE2; /* test var */
+	  }
           break;
         //------------      
         case CMD_TX_REMOTE:       
