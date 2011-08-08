@@ -151,12 +151,14 @@ int main (void)
 	/*
 	 *	Kode til hurtig test af can 
 	 */
-	rpm_msg.pt_data = rpm_response_buffer;
-	rpm_msg.status = 0;
+/*	rpm_msg.pt_data = rpm_response_buffer;*/
+/*	rpm_msg.status = 0;*/
 
-	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+/*	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);*/
 
 	sei();				/* Enable interrupt */
+	Can_sei();		/* Enable general can interrupt */
+	Can_set_tx_int();	/* Enable can tx interrupt */
 
 
 	QUEUE_INIT(xbee_q);
