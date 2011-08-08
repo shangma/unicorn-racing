@@ -6,6 +6,8 @@
 #include "ecu.h"
 #include "queue.h"
 #include "comm.h"
+#include "can_new.h"
+#include "../lib/can_defs.h"
 
 uint8_t EcuData[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,
     23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -64,6 +66,7 @@ void ecu_data_handler( void )
 				 * Insert call to val_to_CAN() when the function is
 				 * made
 				 */
+				can_send_non_blocking(rpm_msgid, &EcuData[i], ECUObjects[j].length);
 			}
 		}
 		

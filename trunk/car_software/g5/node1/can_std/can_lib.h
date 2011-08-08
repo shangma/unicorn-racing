@@ -101,6 +101,7 @@ typedef  struct{
   U8*        pt_data; 
   U8         status; 
   can_ctrl_t ctrl;   
+  U8	     blocking;
 } st_cmd_t;
 
 
