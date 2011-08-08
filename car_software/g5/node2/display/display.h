@@ -1,3 +1,4 @@
+/* LED modes */
 #define LED_OFF		0
 #define LED_ON		1
 #define LED_BLINK1 	2

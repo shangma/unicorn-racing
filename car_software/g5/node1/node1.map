@@ -186,7 +186,7 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x5e8a
+.text           0x00000000     0x5eb8
  *(.vectors)
  .vectors       0x00000000       0x94 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/crtcan128.o
                 0x00000000                __vectors
@@ -280,162 +280,162 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
                 0x000001c6                __vector_14
                 0x000001c6                __vector_10
                 0x000001c6                __vector_20
- .text          0x000001ca      0x442 main.o
+ .text          0x000001ca      0x440 main.o
                 0x000001ca                get_fattime
                 0x00000286                main
-                0x000005aa                __vector_9
- .text          0x0000060c      0x1c0 uart.o
-                0x0000060c                USART0_Transmit
-                0x0000061c                USART1_Transmit
-                0x0000062c                USART_set_baud_rate
-                0x0000071a                uart_init
-                0x00000746                uart_get
-                0x00000754                uart_put_test
-                0x00000778                uart_put
-                0x00000788                uart_puts
-                0x000007a2                uart1_put
-                0x000007b2                uart1_puts
- .text          0x000007cc     0x25d2 sdcard_fs_driver/ff.o
-                0x000007cc                clust2sect
-                0x00000842                f_mount
-                0x00000872                f_chdrive
-                0x00000990                put_fat
-                0x00000b24                get_fat
-                0x00001014                f_lseek
-                0x000016b0                f_readdir
-                0x00001b42                f_write
-                0x00001f94                f_read
-                0x00002366                f_sync
-                0x000024dc                f_close
-                0x000024f8                chk_mounted
-                0x0000286c                f_opendir
-                0x00002920                f_chdir
-                0x000029cc                f_open
- .text          0x00002d9e      0x8ca sdcard_fs_driver/mmc.o
-                0x00002fd4                disk_initialize
-                0x0000315a                disk_status
-                0x00003168                disk_read
-                0x00003224                disk_write
-                0x00003312                disk_ioctl
-                0x0000364a                disk_timerproc
- .text          0x00003668      0x366 sdcard_fs_driver/rtc.o
-                0x00003668                RTC_read
-                0x0000371e                rtc_gettime
-                0x0000381e                RTC_write
-                0x00003896                rtc_settime
-                0x0000399c                rtc_clearHaltBit
-                0x000039c4                rtc_init
- .text          0x000039ce      0x39a can_std/can_drv.o
-                0x000039ce                can_clear_all_mob
-                0x000039ee                can_get_mob_free
-                0x00003a1c                can_get_mob_status
-                0x00003a42                can_get_data
-                0x00003a6a                can_auto_baudrate
-                0x00003d4e                can_fixed_baudrate
- .text          0x00003d68      0xbb4 can_std/can_lib.o
-                0x00003d68                can_get_status
-                0x00003e8e                can_cmd
-                0x00004902                can_init
- .text          0x0000491c      0x170 can_func.o
-                0x0000491c                init_can_data_mobs
-                0x00004960                can_update_rx_msg
-                0x00004988                can_data_mob_setup
-                0x00004a4c                can_send
- .text          0x00004a8c      0x206 isr.o
-                0x00004a8c                __vector_21
-                0x00004ae2                __vector_33
-                0x00004bc0                __vector_16
- .text          0x00004c92        0x0 error.o
- .text          0x00004c92       0x3e comm.o
-                0x00004c92                xbee_send_trigger
- .text          0x00004cd0       0x82 twi/twi.o
-                0x00004cd0                TWI_init
-                0x00004ce2                TWI_start
-                0x00004d1a                TWI_send
-                0x00004d2e                TWI_rcvr
-                0x00004d4a                TWI_stop
- .text          0x00004d52       0x50 log.o
-                0x00004d52                get_free_log_number
- .text          0x00004da2      0x164 ecu.o
-                0x00004da2                ecu_val_to_xbee
-                0x00004e72                ecu_data_handler
- .text          0x00004f06      0x17a can_new.o
-                0x00004f06                __vector_18
-                0x0000503e                can_send_non_blocking
- .text          0x00005080        0x0 test_vars.o
- .text          0x00005080      0x214 xitoa.o
-                0x00005080                xputc
-                0x0000509e                xputs
-                0x000050ac                xitoa
-                0x00005122                xprintf
-                0x000051de                xatoi
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mulsi3.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodqi4.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodhi4.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_divmodhi4.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodsi4.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_prologue.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_epilogue.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_tablejump.o)
- .text          0x00005294        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_clear_bss.o)
- .text          0x00005294      0x354 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_addsub_sf.o)
-                0x0000552c                __subsf3
-                0x0000558e                __addsf3
- .text          0x000055e8      0x1f4 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mul_sf.o)
-                0x000055e8                __mulsf3
- .text          0x000057dc      0x158 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_div_sf.o)
-                0x000057dc                __divsf3
- .text          0x00005934       0xa8 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_sf_to_si.o)
-                0x00005934                __fixsfsi
- .text          0x000059dc        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_thenan_sf.o)
- .text          0x000059dc      0x1aa /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_pack_sf.o)
-                0x000059dc                __pack_f
- .text          0x00005b86       0xf0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_unpack_sf.o)
-                0x00005b86                __unpack_f
- .text          0x00005c76        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(atoi.o)
- .text          0x00005c76        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(itoa.o)
- .text          0x00005c76        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(mul10.o)
- .text          0x00005c76        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(strrev.o)
-                0x00005c76                . = ALIGN (0x2)
+                0x000005a8                __vector_9
+ .text          0x0000060a      0x1c0 uart.o
+                0x0000060a                USART0_Transmit
+                0x0000061a                USART1_Transmit
+                0x0000062a                USART_set_baud_rate
+                0x00000718                uart_init
+                0x00000744                uart_get
+                0x00000752                uart_put_test
+                0x00000776                uart_put
+                0x00000786                uart_puts
+                0x000007a0                uart1_put
+                0x000007b0                uart1_puts
+ .text          0x000007ca     0x25d2 sdcard_fs_driver/ff.o
+                0x000007ca                clust2sect
+                0x00000840                f_mount
+                0x00000870                f_chdrive
+                0x0000098e                put_fat
+                0x00000b22                get_fat
+                0x00001012                f_lseek
+                0x000016ae                f_readdir
+                0x00001b40                f_write
+                0x00001f92                f_read
+                0x00002364                f_sync
+                0x000024da                f_close
+                0x000024f6                chk_mounted
+                0x0000286a                f_opendir
+                0x0000291e                f_chdir
+                0x000029ca                f_open
+ .text          0x00002d9c      0x8ca sdcard_fs_driver/mmc.o
+                0x00002fd2                disk_initialize
+                0x00003158                disk_status
+                0x00003166                disk_read
+                0x00003222                disk_write
+                0x00003310                disk_ioctl
+                0x00003648                disk_timerproc
+ .text          0x00003666      0x366 sdcard_fs_driver/rtc.o
+                0x00003666                RTC_read
+                0x0000371c                rtc_gettime
+                0x0000381c                RTC_write
+                0x00003894                rtc_settime
+                0x0000399a                rtc_clearHaltBit
+                0x000039c2                rtc_init
+ .text          0x000039cc      0x39a can_std/can_drv.o
+                0x000039cc                can_clear_all_mob
+                0x000039ec                can_get_mob_free
+                0x00003a1a                can_get_mob_status
+                0x00003a40                can_get_data
+                0x00003a68                can_auto_baudrate
+                0x00003d4c                can_fixed_baudrate
+ .text          0x00003d66      0xbb4 can_std/can_lib.o
+                0x00003d66                can_get_status
+                0x00003e8c                can_cmd
+                0x00004900                can_init
+ .text          0x0000491a      0x170 can_func.o
+                0x0000491a                init_can_data_mobs
+                0x0000495e                can_update_rx_msg
+                0x00004986                can_data_mob_setup
+                0x00004a4a                can_send
+ .text          0x00004a8a      0x206 isr.o
+                0x00004a8a                __vector_21
+                0x00004ae0                __vector_33
+                0x00004bbe                __vector_16
+ .text          0x00004c90        0x0 error.o
+ .text          0x00004c90       0x3e comm.o
+                0x00004c90                xbee_send_trigger
+ .text          0x00004cce       0x82 twi/twi.o
+                0x00004cce                TWI_init
+                0x00004ce0                TWI_start
+                0x00004d18                TWI_send
+                0x00004d2c                TWI_rcvr
+                0x00004d48                TWI_stop
+ .text          0x00004d50       0x50 log.o
+                0x00004d50                get_free_log_number
+ .text          0x00004da0      0x194 ecu.o
+                0x00004da0                ecu_val_to_xbee
+                0x00004e70                ecu_data_handler
+ .text          0x00004f34      0x17a can_new.o
+                0x00004f34                __vector_18
+                0x0000506c                can_send_non_blocking
+ .text          0x000050ae        0x0 test_vars.o
+ .text          0x000050ae      0x214 xitoa.o
+                0x000050ae                xputc
+                0x000050cc                xputs
+                0x000050da                xitoa
+                0x00005150                xprintf
+                0x0000520c                xatoi
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mulsi3.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodqi4.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodhi4.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_divmodhi4.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodsi4.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_prologue.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_epilogue.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_tablejump.o)
+ .text          0x000052c2        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_clear_bss.o)
+ .text          0x000052c2      0x354 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_addsub_sf.o)
+                0x0000555a                __subsf3
+                0x000055bc                __addsf3
+ .text          0x00005616      0x1f4 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mul_sf.o)
+                0x00005616                __mulsf3
+ .text          0x0000580a      0x158 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_div_sf.o)
+                0x0000580a                __divsf3
+ .text          0x00005962       0xa8 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_sf_to_si.o)
+                0x00005962                __fixsfsi
+ .text          0x00005a0a        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_thenan_sf.o)
+ .text          0x00005a0a      0x1aa /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_pack_sf.o)
+                0x00005a0a                __pack_f
+ .text          0x00005bb4       0xf0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_unpack_sf.o)
+                0x00005bb4                __unpack_f
+ .text          0x00005ca4        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(atoi.o)
+ .text          0x00005ca4        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(itoa.o)
+ .text          0x00005ca4        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(mul10.o)
+ .text          0x00005ca4        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(strrev.o)
+                0x00005ca4                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00005c76       0x3e /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mulsi3.o)
-                0x00005c76                __mulsi3
- .text.libgcc   0x00005cb4       0x18 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodqi4.o)
-                0x00005cb4                __udivmodqi4
- .text.libgcc   0x00005ccc       0x28 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodhi4.o)
-                0x00005ccc                __udivmodhi4
- .text.libgcc   0x00005cf4       0x26 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_divmodhi4.o)
-                0x00005cf4                __divmodhi4
-                0x00005cf4                _div
- .text.libgcc   0x00005d1a       0x44 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodsi4.o)
-                0x00005d1a                __udivmodsi4
- .text.libgcc   0x00005d5e       0x38 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_prologue.o)
-                0x00005d5e                __prologue_saves__
- .text.libgcc   0x00005d96       0x36 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_epilogue.o)
-                0x00005d96                __epilogue_restores__
- .text.libgcc   0x00005dcc        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
- .text.libgcc   0x00005dcc        0xc /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_tablejump.o)
-                0x00005dcc                __tablejump2__
-                0x00005dd0                __tablejump__
- .text.libgcc   0x00005dd8        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00005ca4       0x3e /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_mulsi3.o)
+                0x00005ca4                __mulsi3
+ .text.libgcc   0x00005ce2       0x18 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodqi4.o)
+                0x00005ce2                __udivmodqi4
+ .text.libgcc   0x00005cfa       0x28 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodhi4.o)
+                0x00005cfa                __udivmodhi4
+ .text.libgcc   0x00005d22       0x26 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_divmodhi4.o)
+                0x00005d22                __divmodhi4
+                0x00005d22                _div
+ .text.libgcc   0x00005d48       0x44 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_udivmodsi4.o)
+                0x00005d48                __udivmodsi4
+ .text.libgcc   0x00005d8c       0x38 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_prologue.o)
+                0x00005d8c                __prologue_saves__
+ .text.libgcc   0x00005dc4       0x36 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_epilogue.o)
+                0x00005dc4                __epilogue_restores__
+ .text.libgcc   0x00005dfa        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
+ .text.libgcc   0x00005dfa        0xc /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_tablejump.o)
+                0x00005dfa                __tablejump2__
+                0x00005dfe                __tablejump__
+ .text.libgcc   0x00005e06        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x00005dd8       0x3c /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(atoi.o)
-                0x00005dd8                atoi
+                0x00005e06       0x3c /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(atoi.o)
+                0x00005e06                atoi
  .text.avr-libc
-                0x00005e14       0x42 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(itoa.o)
-                0x00005e14                itoa
+                0x00005e42       0x42 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(itoa.o)
+                0x00005e42                itoa
  .text.avr-libc
-                0x00005e56       0x10 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(mul10.o)
-                0x00005e56                __mulhi_const_10
+                0x00005e84       0x10 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(mul10.o)
+                0x00005e84                __mulhi_const_10
  .text.avr-libc
-                0x00005e66       0x20 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(strrev.o)
-                0x00005e66                strrev
-                0x00005e86                . = ALIGN (0x2)
+                0x00005e94       0x20 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/libc.a(strrev.o)
+                0x00005e94                strrev
+                0x00005eb4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00005e86        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
-                0x00005e86                exit
-                0x00005e86                _exit
+ .fini9         0x00005eb4        0x0 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
+                0x00005eb4                exit
+                0x00005eb4                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -454,11 +454,11 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00005e86        0x4 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
+ .fini0         0x00005eb4        0x4 /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a(_exit.o)
  *(.fini0)
-                0x00005e8a                _etext = .
+                0x00005eb8                _etext = .
 
-.data           0x00800100      0x1ba load address 0x00005e8a
+.data           0x00800100      0x1ba load address 0x00005eb8
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 /usr/lib/gcc/avr/4.3.5/../../../avr/lib/avr51/crtcan128.o
@@ -581,8 +581,8 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
                 0x008009c8                databuffer
                 0x008009d8                response_msg
                 0x008009f4                PROVIDE (__bss_end, .)
-                0x00005e8a                __data_load_start = LOADADDR (.data)
-                0x00006044                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00005eb8                __data_load_start = LOADADDR (.data)
+                0x00006072                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x008009f4        0x0
                 0x008009f4                PROVIDE (__noinit_start, .)
@@ -719,24 +719,24 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
  .debug_pubnames
                 0x000006c0       0x1e test_vars.o
 
-.debug_info     0x00000000     0x4ef7
+.debug_info     0x00000000     0x4f27
  *(.debug_info)
- .debug_info    0x00000000      0xced main.o
- .debug_info    0x00000ced      0x2dd uart.o
- .debug_info    0x00000fca     0x174a sdcard_fs_driver/ff.o
- .debug_info    0x00002714      0x715 sdcard_fs_driver/mmc.o
- .debug_info    0x00002e29      0x30e sdcard_fs_driver/rtc.o
- .debug_info    0x00003137      0x325 can_std/can_drv.o
- .debug_info    0x0000345c      0x30b can_std/can_lib.o
- .debug_info    0x00003767      0x392 can_func.o
- .debug_info    0x00003af9      0x3f2 isr.o
- .debug_info    0x00003eeb       0x9d error.o
- .debug_info    0x00003f88      0x325 comm.o
- .debug_info    0x000042ad      0x12e twi/twi.o
- .debug_info    0x000043db      0x3dc log.o
- .debug_info    0x000047b7      0x439 ecu.o
- .debug_info    0x00004bf0      0x2c8 can_new.o
- .debug_info    0x00004eb8       0x3f test_vars.o
+ .debug_info    0x00000000      0xce7 main.o
+ .debug_info    0x00000ce7      0x2dd uart.o
+ .debug_info    0x00000fc4     0x174a sdcard_fs_driver/ff.o
+ .debug_info    0x0000270e      0x715 sdcard_fs_driver/mmc.o
+ .debug_info    0x00002e23      0x30e sdcard_fs_driver/rtc.o
+ .debug_info    0x00003131      0x325 can_std/can_drv.o
+ .debug_info    0x00003456      0x30b can_std/can_lib.o
+ .debug_info    0x00003761      0x392 can_func.o
+ .debug_info    0x00003af3      0x3f2 isr.o
+ .debug_info    0x00003ee5       0x9d error.o
+ .debug_info    0x00003f82      0x325 comm.o
+ .debug_info    0x000042a7      0x12e twi/twi.o
+ .debug_info    0x000043d5      0x3dc log.o
+ .debug_info    0x000047b1      0x46f ecu.o
+ .debug_info    0x00004c20      0x2c8 can_new.o
+ .debug_info    0x00004ee8       0x3f test_vars.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev   0x00000000     0x154f
@@ -758,24 +758,24 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
  .debug_abbrev  0x000013cb      0x154 can_new.o
  .debug_abbrev  0x0000151f       0x30 test_vars.o
 
-.debug_line     0x00000000     0x3650
+.debug_line     0x00000000     0x367a
  *(.debug_line)
- .debug_line    0x00000000      0x32c main.o
- .debug_line    0x0000032c      0x23b uart.o
- .debug_line    0x00000567     0x14cf sdcard_fs_driver/ff.o
- .debug_line    0x00001a36      0x834 sdcard_fs_driver/mmc.o
- .debug_line    0x0000226a      0x2ab sdcard_fs_driver/rtc.o
- .debug_line    0x00002515      0x325 can_std/can_drv.o
- .debug_line    0x0000283a      0x402 can_std/can_lib.o
- .debug_line    0x00002c3c      0x181 can_func.o
- .debug_line    0x00002dbd      0x1c0 isr.o
- .debug_line    0x00002f7d       0x57 error.o
- .debug_line    0x00002fd4       0xd6 comm.o
- .debug_line    0x000030aa      0x162 twi/twi.o
- .debug_line    0x0000320c       0xbc log.o
- .debug_line    0x000032c8      0x1c1 ecu.o
- .debug_line    0x00003489      0x17a can_new.o
- .debug_line    0x00003603       0x4d test_vars.o
+ .debug_line    0x00000000      0x324 main.o
+ .debug_line    0x00000324      0x23b uart.o
+ .debug_line    0x0000055f     0x14cf sdcard_fs_driver/ff.o
+ .debug_line    0x00001a2e      0x834 sdcard_fs_driver/mmc.o
+ .debug_line    0x00002262      0x2ab sdcard_fs_driver/rtc.o
+ .debug_line    0x0000250d      0x325 can_std/can_drv.o
+ .debug_line    0x00002832      0x402 can_std/can_lib.o
+ .debug_line    0x00002c34      0x181 can_func.o
+ .debug_line    0x00002db5      0x1c0 isr.o
+ .debug_line    0x00002f75       0x57 error.o
+ .debug_line    0x00002fcc       0xd6 comm.o
+ .debug_line    0x000030a2      0x162 twi/twi.o
+ .debug_line    0x00003204       0xbc log.o
+ .debug_line    0x000032c0      0x1f3 ecu.o
+ .debug_line    0x000034b3      0x17a can_new.o
+ .debug_line    0x0000362d       0x4d test_vars.o
 
 .debug_frame    0x00000000      0x5d0
  *(.debug_frame)
@@ -823,13 +823,13 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
  .debug_str     0x00000dfa       0x22 log.o
                                 0x2aa (size before relaxing)
  .debug_str     0x00000e1c       0x51 ecu.o
-                                0x359 (size before relaxing)
+                                0x35e (size before relaxing)
  .debug_str     0x00000e6d       0x40 can_new.o
                                 0x228 (size before relaxing)
  .debug_str     0x00000ead        0xc test_vars.o
                                  0x5c (size before relaxing)
 
-.debug_loc      0x00000000     0x3bd4
+.debug_loc      0x00000000     0x3c0d
  *(.debug_loc)
  .debug_loc     0x00000000       0xc8 main.o
  .debug_loc     0x000000c8      0x16c uart.o
@@ -842,8 +842,8 @@ LOAD /usr/lib/gcc/avr/4.3.5/avr51/libgcc.a
  .debug_loc     0x00003a00       0x3e isr.o
  .debug_loc     0x00003a3e       0x3b twi/twi.o
  .debug_loc     0x00003a79       0x40 log.o
- .debug_loc     0x00003ab9       0x8f ecu.o
- .debug_loc     0x00003b48       0x8c can_new.o
+ .debug_loc     0x00003ab9       0xc8 ecu.o
+ .debug_loc     0x00003b81       0x8c can_new.o
 
 .debug_macinfo
  *(.debug_macinfo)

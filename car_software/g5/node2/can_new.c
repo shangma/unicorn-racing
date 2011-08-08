@@ -2,6 +2,7 @@
 #include "can_std/can_lib.h"
 #include "can_new.h"
 #include "test_vars.h"
+#include "display/display.h"
 
 st_cmd_t tx_remote_msg;
 
@@ -29,10 +30,23 @@ ISR(CANIT_vect)
 		if(tmp & mask){	/* True if mob have pending interrupt */
 			Can_set_mob(i); /* Switch to mob */
 			interrupt = (CANSTMOB & INT_MOB_MSK);
-
 			switch (interrupt){
 				case MOB_RX_COMPLETED:
 					/* TODO */
+					PORTB ^= (1<<PB5);
+					can_get_data(canDataTest);
+					Can_mob_abort();        // Freed the MOB
+					Can_clear_status_mob(); // and reset MOb status	 8);
+					Can_config_rx();
+					Can_set_mob_int(i);
+					//if (canDataTest[0] >= 20) {
+						if (canDataTest[1] == 3) {  
+							SEG_7(LED_BLINK1);
+						} else {
+							SEG_5(LED_BLINK1);
+						}
+					//}
+					break;
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	

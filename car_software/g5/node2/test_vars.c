@@ -3,3 +3,5 @@
 int tIntReg = 0;
 int tIntHjul5 = 0;
 int tIntHjul6 = 0;
+
+volatile unsigned int canDataTest[8];

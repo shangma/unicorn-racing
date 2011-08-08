@@ -41,6 +41,9 @@ void ecu_data_handler( void )
 {
 	uint8_t i=0;
 	uint8_t	j=0;
+	uint8_t k;
+	int hej = 40;
+	uint8_t data[8];
 
 	/* Loop over all values in EcuData */
 	while(i<=114) {
@@ -66,7 +69,13 @@ void ecu_data_handler( void )
 				 * Insert call to val_to_CAN() when the function is
 				 * made
 				 */
-				can_send_non_blocking(rpm_msgid, &EcuData[i], ECUObjects[j].length);
+				data[0] = ECUObjects[j].id;
+				for (k=1;k<=ECUObjects[j].length;k++){
+					data[k]= EcuData[i+k-1];
+				}
+				if (ECUObjects[j].id == 20) {
+					can_send_non_blocking(rpm_msgid, &data[0], ECUObjects[j].length+1);
+				}
 			}
 		}
 		
