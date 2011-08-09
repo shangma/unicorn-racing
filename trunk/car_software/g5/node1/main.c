@@ -164,7 +164,6 @@ int main (void)
 	QUEUE_INIT(xbee_q);
 	while(1) {
 		ecu_data_handler();
-		
 		_delay_ms(100);
 	}
 

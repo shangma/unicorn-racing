@@ -1,5 +1,8 @@
 #include "queue.h"
 
+#ifndef _COMM_H_
+#define _COMM_H_
+
 #define TO_CAN	1
 #define TO_SD	2
 #define TO_XBEE 4
@@ -24,3 +27,5 @@ void xbee_send_trigger( void );
 void send_status( void );
 
 //FF 7B 0A
+
+#endif //_COMM_H_
