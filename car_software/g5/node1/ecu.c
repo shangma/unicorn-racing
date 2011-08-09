@@ -43,7 +43,7 @@ void ecu_data_handler( void )
 	uint8_t	j=0;
 	uint8_t k;
 	int hej = 40;
-	uint8_t data[8];
+	int data[8];
 
 	/* Loop over all values in EcuData */
 	while(i<=114) {
@@ -73,9 +73,7 @@ void ecu_data_handler( void )
 				for (k=1;k<=ECUObjects[j].length;k++){
 					data[k]= EcuData[i+k-1];
 				}
-				if (ECUObjects[j].id == 20) {
-					can_send_non_blocking(rpm_msgid, &data[0], ECUObjects[j].length+1);
-				}
+				can_send_non_blocking(rpm_msgid, &data[0], ECUObjects[j].length+1);
 			}
 		}
 		

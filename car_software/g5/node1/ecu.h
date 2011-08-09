@@ -1,3 +1,5 @@
+#include "comm.h"
+
 /*****************************************************************************************
 *									ECU svar								   		     *
 * For at få en streng med data fra ecu'en skal der sendes strengen ecu_data. 			 *
@@ -132,24 +134,24 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// statusCamTrigP2
 						16, 0,	// statusChokerAdd
 						16, 0,	// statusLambdaPWM
-						16, 6,	// waterTemp
-						16, 6,	// airTemp
-						16, 6,	// potmeter
-						16, 7,	// rpm
+						16, TO_CAN | TO_XBEE,	// waterTemp
+						16, TO_XBEE,	// airTemp
+						16, TO_XBEE,	// potmeter
+						16, TO_CAN | TO_XBEE,	// rpm
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
-						16, 7,	// roadSpeed
-						16, 7,	// mapSensor
-						16, 7,	// batteryV
+						16, TO_CAN | TO_XBEE,	// roadSpeed
+						16, TO_XBEE,	// mapSensor
+						16, TO_XBEE,	// batteryV
 						16, 0,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime
 						16, 0,	// ignitionTime
 						16, 0,	// dwellTime
-						16, 7,	// gX
-						16, 7,	// gY
-						16, 7,	// gZ
+						16, 0,	// gX
+						16, 0,	// gY
+						16, 0,	// gZ
 						8, 0,	// motorFlags
 						8, 0,	// outBits
 						8, 0};	// time
