@@ -32,20 +32,38 @@ ISR(CANIT_vect)
 			interrupt = (CANSTMOB & INT_MOB_MSK);
 			switch (interrupt){
 				case MOB_RX_COMPLETED:
-					/* TODO */
-					PORTB ^= (1<<PB5);
-					can_get_data(canDataTest);
+					/* Can specific code */
+					can_get_data(&canDataTest[0]);	// Copy data to canDataTest
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	 8);
-					Can_config_rx();
-					Can_set_mob_int(i);
-					//if (canDataTest[0] >= 20) {
-						if (canDataTest[1] == 3) {  
-							SEG_7(LED_BLINK1);
-						} else {
+					Can_config_rx();	// Config mob for rx again
+					Can_set_mob_int(i);	// Enable interrupt
+ 
+					/* Take care of the data code */
+					if (canDataTest[0] == 20) {
+						PORTB ^= (1<<PB5);
+						if (canDataTest[1] == 20) {  
+							SEG_0(LED_BLINK1);
+						} else if (canDataTest[1] == 21) {
+							SEG_1(LED_BLINK1);
+						} else if (canDataTest[1] == 22) {
+							SEG_2(LED_BLINK1);
+						} else if (canDataTest[1] == 23) {
+							SEG_3(LED_BLINK1);
+						} else if (canDataTest[1] == 24) {
+							SEG_4(LED_BLINK1);
+						} else if (canDataTest[1] == 25) {
 							SEG_5(LED_BLINK1);
+						} else if (canDataTest[1] == 26) {
+							SEG_6(LED_BLINK1);
+						} else if (canDataTest[1] == 27) {
+							SEG_7(LED_BLINK1);
+						} else if (canDataTest[1] == 28) {
+							SEG_8(LED_BLINK1);
+						} else if (canDataTest[1] == 29) {
+							SEG_8(LED_BLINK1);
 						}
-					//}
+					}
 					break;
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
