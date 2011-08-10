@@ -3,6 +3,7 @@
 #include "can_new.h"
 #include "test_vars.h"
 #include "display/display.h"
+#include "../lib/can_defs.h"
 
 st_cmd_t tx_remote_msg;
 
@@ -11,6 +12,12 @@ ISR(CANIT_vect)
 {
 	uint8_t i,interrupt;
 	uint16_t tmp,tmp2,mask=1;
+
+	U8 rpm_response_buffer[8];
+	st_cmd_t rpm_msg;
+
+	rpm_msg.pt_data = rpm_response_buffer;
+	rpm_msg.status = 0;
 	/*
 	 * Function to clear only the mob that generated the interrupt 
 	 * ------------- Code flow --------------------
@@ -35,13 +42,14 @@ ISR(CANIT_vect)
 					/* Can specific code */
 					can_get_data(&canDataTest[0]);	// Copy data to canDataTest
 					Can_mob_abort();        // Freed the MOB
-					Can_clear_status_mob(); // and reset MOb status	 8);
-					Can_config_rx();	// Config mob for rx again
-					Can_set_mob_int(i);	// Enable interrupt
- 
+					Can_clear_status_mob(); // and reset MOb status
+					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+//					Can_config_rx();	// Config mob for rx again
+//					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */
+					PORTB ^= (1<<PB5);
 					if (canDataTest[0] == 20) {
-						PORTB ^= (1<<PB5);
+						
 						if (canDataTest[1] == 20) {  
 							SEG_0(LED_BLINK1);
 						} else if (canDataTest[1] == 21) {
@@ -69,7 +77,7 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
 					/* Disable interrupt */
-					Can_unset_mob_int(i);
+//					Can_unset_mob_int(i);
 					break;				
 				case MOB_ACK_ERROR:
 					/* TODO */

@@ -1,7 +1,3 @@
-/*----------------------------------------------------------------------*/
-/* FAT file system sample project for FatFs            (C)ChaN, 2009    */
-/*----------------------------------------------------------------------*/
-
 #include "config.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -27,8 +23,10 @@
 #define NB_TARGET 1
 #define ID_TAG_BASE 128
 
-void can(FIL *file_to_log);
 
+/*-----------------------------------------------------------*/
+/* Vars for file FatFS					     */
+/*-----------------------------------------------------------*/
 DWORD acc_size;				/* Work register for fs command */
 WORD acc_files, acc_dirs;
 FILINFO Finfo;
@@ -63,6 +61,7 @@ ISR(TIMER2_COMP_vect)
 /* FatFs module. Any valid time must be returned even if   */
 /* the system does not support a real time clock.          */
 /* This is not required in read-only configuration.        */
+/*---------------------------------------------------------*/
 
 DWORD get_fattime ()
 {
@@ -129,6 +128,7 @@ int main (void)
 	_delay_ms(500);
 	xprintf(PSTR("System startet\n"));
 
+	/* SD-card */
 	res = rtc_gettime(&rtc);
 	xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);
 
@@ -146,20 +146,21 @@ int main (void)
 	xprintf(PSTR("Opening file %s\n"), filename);
 	xprintf(PSTR("rc=%d\n"), (WORD)f_open(&file1, filename, FA_CREATE_NEW | FA_WRITE));	/* Create new logfile for writing */
 	f_sync(&file1);			/* Sync filesystem to write changes to disk */
+
 	_delay_ms(1000);
 
 	/*
 	 *	Kode til hurtig test af can 
 	 */
-/*	rpm_msg.pt_data = rpm_response_buffer;*/
-/*	rpm_msg.status = 0;*/
+	rpm_msg.pt_data = rpm_response_buffer;
+	rpm_msg.status = 0;
 
-/*	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);*/
+	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
-	sei();				/* Enable interrupt */
+	sei();			/* Enable interrupt */
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
-
+	Can_set_rx_int();	/* Enable can rx interrupt */
 
 	QUEUE_INIT(xbee_q);
 	while(1) {
@@ -168,15 +169,6 @@ int main (void)
 	}
 
 /*	while(1) {*/
-/*		// check for rpm_msg*/
-/*		if (can_get_status(&rpm_msg) == CAN_STATUS_COMPLETED) {*/
-/*			xprintf(PSTR("i: %d, Hjul5: %d Hjul6: %d\n"), rpm_response_buffer[0], rpm_response_buffer[1], rpm_response_buffer[2]);*/
-/*			can_update_rx_msg(&rpm_msg, rpm_msgid, 8);      // update rpm_msg to accept a new msg*/
-/*			for (i=0;i<8;i++) {*/
-/*				rpm_response_buffer[i] = 0;*/
-/*			}		*/
-/*		}*/
-/*//		_delay_ms(5);*/
 /*/*		res = rtc_gettime(&rtc);*/
 /*/*		xprintf(PSTR("%d-%d-%dT%d:%d:%d\n"), rtc.year, rtc.month, rtc.mday, rtc.hour, rtc.min, rtc.sec);*/
 /*/*		_delay_ms(3000);*/
