@@ -120,7 +120,7 @@ typedef struct {
 static const valueObject valueObjects[] =	{0, 0,	// empty 
 						16, 0,	// fuelPressure
 						16, 0,	// statusLapCount
-						16, 7,	// statusInjSum
+						16, 0,	// statusInjSum
 						16, 0,	// lastGearShift
 						16, 0,	// motorOilTemp
 						16, 0,	// oilPressure
@@ -141,9 +141,9 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
-						16, TO_CAN | TO_XBEE,	// roadSpeed
-						16, TO_XBEE,	// mapSensor
-						16, TO_XBEE,	// batteryV
+						16, TO_CAN,	// roadSpeed
+						16, 0,	// mapSensor
+						16, 0,	// batteryV
 						16, 0,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime

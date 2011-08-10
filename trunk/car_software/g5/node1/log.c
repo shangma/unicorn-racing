@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "sdcard_fs_driver/ff.h"
 
 FILINFO Finfo;

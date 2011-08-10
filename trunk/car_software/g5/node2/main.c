@@ -17,6 +17,8 @@ int main (void)
 	int tmp,i;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 
+	uint8_t test_rx[8];
+
 //  Init CAN, UART, I/O
 	init();
 	TWI_init();
@@ -37,8 +39,8 @@ int main (void)
 	rpm_msg.status = 0;
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-	rpm_msg.status = 0;
-	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+//	rpm_msg.status = 0;
+//	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
     	// --- Init variables
 
@@ -48,8 +50,13 @@ int main (void)
 
 	i = 1;
 
+	test_rx[0] = 26;
+	test_rx[1] = 40;
+	test_rx[2] = 124;
+
 	while (1) {
-		_delay_ms(1000);
+		_delay_ms(5000);
+		can_send_non_blocking(gear_msgid, &test_rx[0], 8);
 		PORTB ^= (1<<PB6);
 	}
 	return 0;

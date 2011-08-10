@@ -1,6 +1,9 @@
 #define Usart1_tx_ei_en()	( UCSR1B |= (1<<UDRIE1) ) 
 #define Usart1_tx_ei_dis()	( UCSR1B &= ~(1<<UDRIE1) ) 
 
+void USART0_Transmit( unsigned char txData );
+void USART1_Transmit( unsigned char txData );
+
 void uart_init(void);         /* Initialize UART */
 uint8_t uart_get (void);      /* Get a byte from UART Rx */
 uint8_t uart_test(void);      /* Check number of data in UART Rx FIFO */
