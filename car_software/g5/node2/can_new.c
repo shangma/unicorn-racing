@@ -2,8 +2,10 @@
 #include "can_std/can_lib.h"
 #include "can_new.h"
 #include "test_vars.h"
+#include <util/delay.h>
 #include "display/display.h"
 #include "../lib/can_defs.h"
+#include <stdlib.h>
 
 st_cmd_t tx_remote_msg;
 
@@ -12,6 +14,7 @@ ISR(CANIT_vect)
 {
 	uint8_t i,interrupt;
 	uint16_t tmp,tmp2,mask=1;
+	char streng[10];
 
 	U8 rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
@@ -44,39 +47,47 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
 					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+					sendtekst("Rx mob:");
+					itoa(i,streng,2);
+					sendtekst(streng);
+					sendtekst("\n");
 //					Can_config_rx();	// Config mob for rx again
 //					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */
 					PORTB ^= (1<<PB5);
-					if (canDataTest[0] == 20) {
-						
-						if (canDataTest[1] == 20) {  
-							SEG_0(LED_BLINK1);
-						} else if (canDataTest[1] == 21) {
-							SEG_1(LED_BLINK1);
-						} else if (canDataTest[1] == 22) {
-							SEG_2(LED_BLINK1);
-						} else if (canDataTest[1] == 23) {
-							SEG_3(LED_BLINK1);
-						} else if (canDataTest[1] == 24) {
-							SEG_4(LED_BLINK1);
-						} else if (canDataTest[1] == 25) {
-							SEG_5(LED_BLINK1);
-						} else if (canDataTest[1] == 26) {
-							SEG_6(LED_BLINK1);
-						} else if (canDataTest[1] == 27) {
-							SEG_7(LED_BLINK1);
-						} else if (canDataTest[1] == 28) {
-							SEG_8(LED_BLINK1);
-						} else if (canDataTest[1] == 29) {
-							SEG_8(LED_BLINK1);
-						}
-					}
+/*					if (canDataTest[0] == 20) {*/
+/*						*/
+/*						if (canDataTest[1] == 20) {  */
+/*							SEG_0(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 21) {*/
+/*							SEG_1(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 22) {*/
+/*							SEG_2(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 23) {*/
+/*							SEG_3(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 24) {*/
+/*							SEG_4(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 25) {*/
+/*							SEG_5(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 26) {*/
+/*							SEG_6(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 27) {*/
+/*							SEG_7(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 28) {*/
+/*							SEG_8(LED_BLINK1);*/
+/*						} else if (canDataTest[1] == 29) {*/
+/*							SEG_8(LED_BLINK1);*/
+/*						}*/
+/*					}*/
 					break;
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
 					/* Disable interrupt */
+					sendtekst("Tx mob:");
+					itoa(i,streng,2);
+					sendtekst(streng);
+					sendtekst("\n");
 //					Can_unset_mob_int(i);
 					break;				
 				case MOB_ACK_ERROR:

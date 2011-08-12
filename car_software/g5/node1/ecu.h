@@ -134,14 +134,14 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// statusCamTrigP2
 						16, 0,	// statusChokerAdd
 						16, 0,	// statusLambdaPWM
-						16, TO_CAN | TO_XBEE,	// waterTemp
+						16, TO_XBEE,	// waterTemp
 						16, TO_XBEE,	// airTemp
 						16, TO_XBEE,	// potmeter
 						16, TO_CAN | TO_XBEE,	// rpm
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
-						16, TO_CAN,	// roadSpeed
+						16, 0,	// roadSpeed
 						16, 0,	// mapSensor
 						16, 0,	// batteryV
 						16, 0,	// lambdaV

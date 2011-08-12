@@ -44,6 +44,10 @@
 #define node3 0x82
 #define node4 0x83
 
+// UART
+#define USART_BAUDRATE 115200
+#define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
+
 /* --------------- TWI --------------- */
 #define TWI_CLOCK 100000UL      /* 100 kHz */
 
