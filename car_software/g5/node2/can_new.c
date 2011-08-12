@@ -47,10 +47,10 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
 					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-					sendtekst("Rx mob:");
-					itoa(i,streng,2);
-					sendtekst(streng);
-					sendtekst("\n");
+/*					sendtekst("Rx mob:");*/
+/*					itoa(i,streng,2);*/
+/*					sendtekst(streng);*/
+/*					sendtekst("\n");*/
 //					Can_config_rx();	// Config mob for rx again
 //					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */

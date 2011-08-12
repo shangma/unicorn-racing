@@ -33,6 +33,7 @@ ISR(CANIT_vect)
 
 	rpm_msg.pt_data = rpm_response_buffer;
 	rpm_msg.status = 0;
+	char tempchar[10];
 	/*
 	 * Function to clear only the mob that generated the interrupt 
 	 * ------------- Code flow --------------------
@@ -62,6 +63,7 @@ ISR(CANIT_vect)
 //					Can_config_rx();	// Config mob for rx again
 //					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */
+					sendtekst("Rxmob\n");
 					if (canDataTest[0] == 39) {
 						if (canDataTest[1] == GEARUPBUT) {  
 							sendtekst("Gear up\n\r");
@@ -77,9 +79,6 @@ ISR(CANIT_vect)
 						}
 						else
 							sendtekst("go");
-					}
-					if (canDataTest[0] == 20) {
-						sendtekst("cantest\n\r");
 					}
 					break;
 				case MOB_TX_COMPLETED:
