@@ -56,7 +56,8 @@ enum valueID {
 	motorFlags,		// 35
 	outBits,		// 36
 	time,			// 37
-	ValueIdLength		// 38
+	gear,			// 38
+	ValueIdLength		// 39
 };
 
 typedef struct {
@@ -154,7 +155,8 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// gZ
 						8, 0,	// motorFlags
 						8, 0,	// outBits
-						8, 0};	// time
+						8, 0,	// time
+						8, TO_CAN};	// gear
 
 
 /* Indeholder data fra ECU'en */
