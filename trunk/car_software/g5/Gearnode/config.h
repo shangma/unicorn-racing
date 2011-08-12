@@ -2,6 +2,17 @@
  * Config header
  *********************************************/
 
+// CPU clock
+#define FOSC           110592        // 11,0592 MHz External cristal
+#define F_CPU          (FOSC*100) // Need for AVR GCC
+
+// CAN
+#include "compiler.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "can_std/at90can_drv.h"
+#define CAN_BAUDRATE   250        // in kBit
+
 // UART
 #define USART_BAUDRATE 115200
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
@@ -37,9 +48,6 @@
 #define GEARFORCECRITICALMAX 60			// MAX current
 #define GEARFORCEMAXTIMEOUT1 30			// Timeout 1, go back (168 = ~ 1 sec)
 #define GEARFORCEMAXTIMEOUT2 168		// Timeout 2, turn off (168 = ~ 1 sec)
-
-// CPU clock
-#define F_CPU 11059200
 
 #define ADCtotnum 2
 

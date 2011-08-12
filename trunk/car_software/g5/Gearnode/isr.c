@@ -112,22 +112,22 @@ ISR(TIMER0_OVF_vect)
 	PWM_duty_cycle_A16_set(pwmOut);
 
 	// Knapper
-	gearBut = getBut();
+	//gearBut = getBut();
 
 	// Gear knapperne skal slippes før der kan skiftes gear igen
-	if((gearBut == 0) || (gearBut == GEARNEUBUT))
-		released = 1;
+	//if((gearBut == 0) || (gearBut == GEARNEUBUT))
+	//	released = 1;
 
-	if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0) && (released == 1))
-	{
+	//if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0) && (released == 1))
+	//{
 
-	_delay_ms(50); // Software prell
+	//_delay_ms(50); // Software prell
 
-		gearBut = getBut();
+		//gearBut = getBut();
 
 		if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0))
 		{
-			released = 0;			
+			//released = 0;			
 
 			// Gear op
 			if((gearBut==GEARUPBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
@@ -162,7 +162,7 @@ ISR(TIMER0_OVF_vect)
 				}
 			}
 		}
-	}
+	//}
 
 	// Ign_Cut
 	if((pos>(GEARPOSMID+GearMiddleDeadZone+IGNCUT)) || (pos<(GEARPOSMID-GearMiddleDeadZone-IGNCUT)))

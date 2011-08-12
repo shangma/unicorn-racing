@@ -65,7 +65,7 @@
 # Name of target controller 
 # (e.g. 'at90s8515', see the available avr-gcc mmcu 
 # options for possible values)
-MCU=atmega644p
+MCU=at90can128
 
 # id to use with programmer
 # default: PROGRAMMER_MCU=$(MCU)
@@ -73,7 +73,7 @@ MCU=atmega644p
 # accept the same MCU name as avr-gcc (for example
 # for ATmega8s, avr-gcc expects 'atmega8' and 
 # avrdude requires 'm8')
-PROGRAMMER_MCU=m644p	
+PROGRAMMER_MCU=c128
 
 # Name of our project
 # (use a single word, e.g. 'myproject')
@@ -84,7 +84,7 @@ PROJECTNAME=hydrtest
 # (list all files to compile, e.g. 'a.c b.cpp as.S'):
 # Use .cc, .cpp or .C suffix for C++ files, use .S 
 # (NOT .s !!!) for assembly source code files.
-PRJSRC=main.c isr.c functions.c init.c gearMotorForceController.c
+PRJSRC=main.c isr.c functions.c init.c gearMotorForceController.c can_std/can_drv.c can_std/can_lib.c can_new.c test_vars.c
 
 # additional includes (e.g. -I/path/to/mydir)
 #INC=-I/path/to/include
@@ -111,7 +111,7 @@ OPTLEVEL=3
 # one of the valid "-c PROGRAMMER-ID" values 
 # described in the avrdude info page.
 # 
-AVRDUDE_PROGRAMMERID=avrispmkii
+AVRDUDE_PROGRAMMERID=usbtiny#avrispmkii
 
 # port--serial or parallel port to which your 
 # hardware programmer is attached
