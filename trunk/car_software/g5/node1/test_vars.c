@@ -2,4 +2,4 @@
 
 int tIntReg = 0;
 
-volatile unsigned short int canDataTest[8];
+volatile char canDataTest[8];

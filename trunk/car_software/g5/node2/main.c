@@ -57,7 +57,7 @@ int main (void)
 //	test_rx[2] = 124;
 	sendtekst("Beep\n");
 	while (1) {
-		_delay_ms(4000);
+//		_delay_ms(4000);
 		can_send_non_blocking(rpm_msgid, test_rx, 8);
 
 		for (i=0;i<=6;i+=2){

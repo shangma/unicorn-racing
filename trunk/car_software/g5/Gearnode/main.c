@@ -19,19 +19,18 @@ int main(void)
 	ioinit();
 	uartinit();
 	can_init(0);
-	Can_sei();
-	Can_set_tx_int();
-	Can_set_rx_int();
 	pwm16Init();
 	adcInit(1);
+	U8 rpm_response_buffer[8];
+	st_cmd_t rpm_msg;
+
 	//counter0Init();
 	//hbroEnable(1);
 	sei();
 	
 	sendtekst("\n\rUnicorn Gearnode v1.0 \n\r");
 
-	U8 rpm_response_buffer[8];
-	st_cmd_t rpm_msg;
+
 	/*
 	 *	Kode til hurtig test af can 
 	 */
@@ -39,6 +38,10 @@ int main(void)
 	rpm_msg.status = 0;
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+
+	Can_sei();
+	Can_set_tx_int();
+	Can_set_rx_int();
 
 	while (1)
 	{
