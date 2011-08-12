@@ -6,6 +6,7 @@
 #include "../lib/can_defs.h"
 #include "display/display.h"
 #include "test_vars.h"
+#include "prototyper.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -22,6 +23,7 @@ int main (void)
 //  Init CAN, UART, I/O
 	init();
 	TWI_init();
+	uartinit();
 
 	sei();		/* Interrupt enable */
 
@@ -50,13 +52,33 @@ int main (void)
 
 	i = 1;
 
-	test_rx[0] = 26;
-	test_rx[1] = 40;
-	test_rx[2] = 124;
-
+	test_rx[0] = 39;
+	test_rx[1] = 1;
+//	test_rx[2] = 124;
+	sendtekst("Beep\n");
 	while (1) {
-		_delay_ms(5000);
-		can_send_non_blocking(gear_msgid, &test_rx[0], 8);
+		_delay_ms(4000);
+		can_send_non_blocking(rpm_msgid, test_rx, 8);
+
+		for (i=0;i<=6;i+=2){
+			test_display(LED0_7_ADDR, LED_ON<<i,0);
+			_delay_ms(100);
+		}
+		for (i=0;i<=6;i+=2){
+			test_display(LED0_7_ADDR, 0,LED_ON<<i);
+			_delay_ms(100);
+		}
+		test_display(LED0_7_ADDR, 0,0);
+		for (i=0;i<=6;i+=2){
+			test_display(LED8_15_ADDR, LED_ON<<i,0);
+			_delay_ms(100);
+		}
+		for (i=0;i<=6;i+=2){
+			test_display(LED8_15_ADDR, 0,LED_ON<<i);
+			_delay_ms(100);
+		}
+		test_display(LED8_15_ADDR, 0,0);
+
 		PORTB ^= (1<<PB6);
 	}
 	return 0;
