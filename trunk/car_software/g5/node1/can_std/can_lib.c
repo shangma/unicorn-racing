@@ -170,7 +170,7 @@ U8 can_cmd(st_cmd_t* cmd)
           Can_set_dlc(cmd->dlc);
           Can_clear_rtrmsk();
           Can_set_idemsk();
-          Can_config_rx();       
+          Can_config_rx();  
           break;
         //------------      
         case CMD_RX_DATA_MASKED:
@@ -180,7 +180,8 @@ U8 can_cmd(st_cmd_t* cmd)
           Can_set_dlc(cmd->dlc);
           cmd->ctrl.rtr=0; Can_set_rtrmsk(); Can_clear_rtr();
           Can_set_idemsk();
-          Can_config_rx();       
+          Can_config_rx();  
+	Can_set_mob_int(mob_handle) /* Ser ud til at virke */          
           break;
         //------------      
         case CMD_RX_REMOTE_MASKED:

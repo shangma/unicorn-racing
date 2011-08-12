@@ -52,7 +52,7 @@ int main (void)
 
 	i = 1;
 
-	test_rx[0] = 39;
+	test_rx[0] = 38;
 	test_rx[1] = 1;
 //	test_rx[2] = 124;
 	sendtekst("Beep\n");

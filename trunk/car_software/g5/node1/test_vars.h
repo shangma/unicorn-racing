@@ -1,3 +1,3 @@
 extern int tIntReg;
 
-extern char canDataTest[8];
+extern volatile char canDataTest[8];

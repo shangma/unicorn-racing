@@ -64,7 +64,7 @@ ISR(CANIT_vect)
 //					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */
 					sendtekst("Rxmob\n");
-					if (canDataTest[0] == 39) {
+					if (canDataTest[0] == 38) {
 						if (canDataTest[1] == GEARUPBUT) {  
 							sendtekst("Gear up\n\r");
 							gearBut = GEARUPBUT;

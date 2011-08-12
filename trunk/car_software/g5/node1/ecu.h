@@ -57,7 +57,11 @@ enum valueID {
 	outBits,		// 36
 	time,			// 37
 	gear,			// 38
-	ValueIdLength		// 39
+	FWheelL,		// 39
+	FWheelR,		// 40
+	BWheelL,		// 41
+	BWheelR,		// 42
+	ValueIdLength		// 43
 };
 
 typedef struct {
@@ -138,7 +142,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, TO_XBEE,	// waterTemp
 						16, TO_XBEE,	// airTemp
 						16, TO_XBEE,	// potmeter
-						16, TO_CAN | TO_XBEE,	// rpm
+						16, 0,	// rpm
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
@@ -155,8 +159,12 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// gZ
 						8, 0,	// motorFlags
 						8, 0,	// outBits
-						8, 0,	// time
-						8, TO_CAN};	// gear
+						8, TO_XBEE,	// time
+						8, TO_XBEE,	// gear
+						16, TO_XBEE, // FWheelL
+						16, 0, // FWheelR
+						16, 0, // BWheelL
+						16, 0}; // BWheelR
 
 
 /* Indeholder data fra ECU'en */

@@ -48,6 +48,7 @@ valueID = list(enumerate ([
 	('motorFlags', 8, 0),
 	('outBits', 8, 0),
 	('time', 8, 0),
+	('GearUp', 8, 0),
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1
@@ -61,7 +62,7 @@ while 1:
     if (package_start == True):
 	j += 1
         print "Package", j, ": IDErrors", IDErrors
-        if (tmp < 0 or tmp >=38):
+        if (tmp < 0 or tmp >=valueID[-1][0]):
 	    IDErrors += 1
             nextID = -1
         else:
@@ -71,7 +72,7 @@ while 1:
         print "Value:", tmp
         nextID -= 1
     elif nextID == 0:
-        if (tmp < 0 or tmp >=38):
+        if (tmp < 0 or tmp >=valueID[-1][0]):
             nextID = -1
         else:
             print "ID:", "(", tmp,",",valueID[tmp][0],",",valueID[tmp][1][0],")"
