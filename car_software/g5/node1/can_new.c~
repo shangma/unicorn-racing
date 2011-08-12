@@ -1,9 +1,10 @@
 #include "config.h"
 #include "can_std/can_lib.h"
 #include "can_new.h"
+#include "../lib/can_defs.h"
 #include "test_vars.h"
 #include "ecu.h"
-#include "queue.h"
+#include "comm.h"
 
 st_cmd_t tx_remote_msg;
 
@@ -12,6 +13,12 @@ ISR(CANIT_vect)
 {
 	uint8_t i,interrupt,j;
 	uint16_t tmp,tmp2,mask=1;
+
+	U8 rpm_response_buffer[8];
+	st_cmd_t rpm_msg;
+
+	rpm_msg.pt_data = rpm_response_buffer;
+	rpm_msg.status = 0;
 	/*
 	 * Function to clear only the mob that generated the interrupt 
 	 * ------------- Code flow --------------------
@@ -38,10 +45,8 @@ ISR(CANIT_vect)
 					can_get_data(&canDataTest[0]); // Copy data to canDataTest
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	 8);
-					Can_config_rx();	// Config mob for rx again
-					Can_set_mob_int(i);	// Enable interrupt
- 
-					 Take care of the data code 
+					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+					/* Take care of the data code */
 					if (valueObjects[canDataTest[0]].action & TO_XBEE) {
 						QUEUE_PUT(xbee_q, canDataTest[0]);	/* Add id */
 						for (j=1;j<=valueObjects[canDataTest[0]].length/8;j++) {
@@ -54,7 +59,7 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
 					/* Disable interrupt */
-					Can_unset_mob_int(i);
+//					Can_unset_mob_int(i);
 					break;				
 				case MOB_ACK_ERROR:
 					/* TODO */

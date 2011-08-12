@@ -14,6 +14,7 @@
 #include "twi/twi.h"
 #include "can_std/can_lib.h"
 #include "can_func.h"
+#include "can_new.h"
 #include "../lib/can_defs.h"
 #include "ecu.h"
 #include "comm.h"
@@ -157,15 +158,17 @@ int main (void)
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
+	QUEUE_INIT(xbee_q);
+
 	sei();			/* Enable interrupt */
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
 	Can_set_rx_int();	/* Enable can rx interrupt */
 
-	QUEUE_INIT(xbee_q);
+
 	while(1) {
 		ecu_data_handler();
-		_delay_ms(100);
+		_delay_ms(1000);
 	}
 
 /*	while(1) {*/
