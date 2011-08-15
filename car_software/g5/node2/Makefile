@@ -1,9 +1,9 @@
 TARGET         = node2
-CSRC           = main.c can_std/can_drv.c can_std/can_lib.c twi/twi.c display/display.c can_new.c test_vars.c can_func.c functions.c
+CSRC           = main.c twi/twi.c display/display.c functions.c can.c can_std/can_drv.c can_std/can_lib.c
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
 DEFS           =
-LIBS           =
+LIBS           = #../lib/can_new.o ../lib/can_std/can_drv.o ../lib/can_std/can_lib.o
 DEBUG          = dwarf-2
 
 CC             = avr-gcc

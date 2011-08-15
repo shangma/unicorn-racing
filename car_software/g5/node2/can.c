@@ -1,11 +1,7 @@
-#include "config.h"
-#include "can_std/can_lib.h"
-#include "can_new.h"
-#include "test_vars.h"
-#include <util/delay.h>
-#include "display/display.h"
-#include "../lib/can_defs.h"
 #include <stdlib.h>
+#include <avr/io.h>
+#include "can.h"
+#include "../lib/can_defs.h"
 
 st_cmd_t tx_remote_msg;
 
@@ -14,9 +10,9 @@ ISR(CANIT_vect)
 {
 	uint8_t i,interrupt;
 	uint16_t tmp,tmp2,mask=1;
-	char streng[10];
+	uint8_t DataBuf[8];
 
-	U8 rpm_response_buffer[8];
+	uint8_t rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
 
 	rpm_msg.pt_data = rpm_response_buffer;
@@ -43,16 +39,10 @@ ISR(CANIT_vect)
 			switch (interrupt){
 				case MOB_RX_COMPLETED:
 					/* Can specific code */
-					can_get_data(&canDataTest[0]);	// Copy data to canDataTest
+					can_get_data(&DataBuf[0]);	// Copy data to canDataTest
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
-					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-/*					sendtekst("Rx mob:");*/
-/*					itoa(i,streng,2);*/
-/*					sendtekst(streng);*/
-/*					sendtekst("\n");*/
-//					Can_config_rx();	// Config mob for rx again
-//					Can_set_mob_int(i);	// Enable interrupt
+					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);	/* TODO Lav det her på en anden måde */
 					/* Take care of the data code */
 					PORTB ^= (1<<PB5);
 /*					if (canDataTest[0] == 20) {*/
@@ -83,12 +73,7 @@ ISR(CANIT_vect)
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
-					/* Disable interrupt */
-					sendtekst("Tx mob:");
-					itoa(i,streng,2);
-					sendtekst(streng);
-					sendtekst("\n");
-//					Can_unset_mob_int(i);
+//					Can_unset_mob_int(i);		/* TODO Måske virker funktionen ikke */
 					break;				
 				case MOB_ACK_ERROR:
 					/* TODO */
@@ -124,7 +109,7 @@ ISR(CANIT_vect)
  * 0 = Besked ikke kommet i udbakke
  * 1 = Besked kommet i udbakke
 */
-U8 can_send_non_blocking(U8 msg_id, void* buf, U8 dlc)
+uint8_t can_send_non_blocking(uint8_t msg_id, void* buf, uint8_t dlc)
 {
 	tx_remote_msg.pt_data = buf; 
 	tx_remote_msg.id.std = msg_id;
@@ -144,3 +129,15 @@ U8 can_send_non_blocking(U8 msg_id, void* buf, U8 dlc)
 	}
 }
 
+uint8_t can_update_rx_msg(st_cmd_t* msg, uint8_t msg_id, uint8_t dlc)
+{
+        uint8_t i;
+        
+        msg->id.std = msg_id;
+        msg->ctrl.ide = 0;
+        msg->ctrl.rtr = 0;
+        msg->dlc = dlc;
+        msg->cmd = CMD_RX_DATA_MASKED;
+
+        while(can_cmd(msg) != CAN_CMD_ACCEPTED);
+}

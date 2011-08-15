@@ -24,6 +24,7 @@
 #define _CAN_DRV_H_
 
 //_____ I N C L U D E S ________________________________________________________
+#include <stdint.h>
 
 //_____ D E F I N I T I O N S __________________________________________________
 
@@ -354,7 +355,7 @@ extern  void can_clear_all_mob(void);
 //!          - MOb[0] upto MOb[LAST_MOB_NB]
 //!          - 0xFF if no MOb
 //!
-extern  U8 can_get_mob_free(void);
+extern  uint8_t can_get_mob_free(void);
 
 //------------------------------------------------------------------------------
 //  @fn can_get_mob_status
@@ -382,7 +383,7 @@ extern  U8 can_get_mob_free(void);
 //!          -  MOB_STUFF_ERROR
 //!          -  MOB_BIT_ERROR
 //!
-extern  U8 can_get_mob_status(void);
+extern  uint8_t can_get_mob_status(void);
 
 //------------------------------------------------------------------------------
 //  @fn can_get_data
@@ -396,7 +397,7 @@ extern  U8 can_get_mob_status(void);
 //!
 //! @return none.
 //!
-extern  void can_get_data(U8* p_can_message_data);
+extern  void can_get_data(uint8_t* p_can_message_data);
 
 //------------------------------------------------------------------------------
 //  @fn can_auto_baudrate
@@ -414,7 +415,7 @@ extern  void can_get_data(U8* p_can_message_data);
 //!         ==0: research of bit timing configuration failed
 //!         ==1: baudrate performed
 //!
-extern  U8 can_auto_baudrate(U8 eval);
+extern  uint8_t can_auto_baudrate(uint8_t eval);
 
 
 //------------------------------------------------------------------------------
@@ -430,7 +431,7 @@ extern  U8 can_auto_baudrate(U8 eval);
 //! @return Baudrate Status
 //!         fixed = 1: baudrate performed
 //!
-extern U8 can_fixed_baudrate(U8 eval);
+extern uint8_t can_fixed_baudrate(uint8_t eval);
 
 //______________________________________________________________________________
 
