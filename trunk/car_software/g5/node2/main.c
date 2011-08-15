@@ -1,11 +1,11 @@
 //_____ I N C L U D E S ________________________________________________________
 #include "config.h"
 #include "can_std/can_lib.h"
+#include "can_std/can_drv.h"
 #include <util/delay.h>
-#include "can_new.h"
+#include "can.h"
 #include "../lib/can_defs.h"
 #include "display/display.h"
-#include "test_vars.h"
 #include "prototyper.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
@@ -55,7 +55,7 @@ int main (void)
 	test_rx[0] = 38;
 	test_rx[1] = 1;
 //	test_rx[2] = 124;
-	sendtekst("Beep\n");
+//	sendtekst("Beep\n");
 	while (1) {
 //		_delay_ms(4000);
 		can_send_non_blocking(rpm_msgid, test_rx, 8);
