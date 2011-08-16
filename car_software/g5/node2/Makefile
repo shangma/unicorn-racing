@@ -3,7 +3,7 @@ CSRC           = main.c twi/twi.c display/display.c functions.c can.c can_std/ca
 MCU_TARGET     = at90can128
 OPTIMIZE       = -Os -mcall-prologues
 DEFS           =
-LIBS           = #../lib/can_new.o ../lib/can_std/can_drv.o ../lib/can_std/can_lib.o
+LIBS           =
 DEBUG          = dwarf-2
 
 CC             = avr-gcc
