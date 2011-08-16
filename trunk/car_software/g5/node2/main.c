@@ -27,6 +27,11 @@ int main (void)
 
 	sei();		/* Interrupt enable */
 
+	set_blink_rate(LED8_15_ADDR, LED_BLINK1, 20, 100);
+	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, 200);
+	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, 70);
+	set_blink_rate(LED0_7_ADDR, LED_BLINK1, 20, 100);
+
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
 	Can_set_rx_int();	/* Enable can rx interrupt */
@@ -55,29 +60,32 @@ int main (void)
 	test_rx[0] = 38;
 	test_rx[1] = 1;
 //	test_rx[2] = 124;
-//	sendtekst("Beep\n");
+	sendtekst("Beep\n");
 	while (1) {
-//		_delay_ms(4000);
+		_delay_ms(1000);
 		can_send_non_blocking(rpm_msgid, test_rx, 8);
-
-		for (i=0;i<=6;i+=2){
-			test_display(LED0_7_ADDR, LED_ON<<i,0);
-			_delay_ms(100);
-		}
-		for (i=0;i<=6;i+=2){
-			test_display(LED0_7_ADDR, 0,LED_ON<<i);
-			_delay_ms(100);
-		}
-		test_display(LED0_7_ADDR, 0,0);
-		for (i=0;i<=6;i+=2){
-			test_display(LED8_15_ADDR, LED_ON<<i,0);
-			_delay_ms(100);
-		}
-		for (i=0;i<=6;i+=2){
-			test_display(LED8_15_ADDR, 0,LED_ON<<i);
-			_delay_ms(100);
-		}
-		test_display(LED8_15_ADDR, 0,0);
+//		set_blink_rate(LED0_7_ADDR, LED_BLINK1, 100, 15);
+//		set_leds(LED0_7_ADDR, LED_BLINK1<<2);
+//		set_leds(LED8_15_ADDR, LED_BLINK1<<2);
+/*		for (i=0;i<=14;i+=2){*/
+/*			set_leds(LED0_7_ADDR, LED_ON<<i);*/
+/*			_delay_ms(100);*/
+/*		}*/
+/*		test_display(LED0_7_ADDR, 0,0);*/
+/*		for (i=0;i<=14;i+=2){*/
+/*			set_leds(LED8_15_ADDR, LED_ON<<i);*/
+/*			_delay_ms(100);*/
+/*		}*/
+/*		set_leds(LED0_7_ADDR, 0);*/
+/*		set_leds(LED0_7_ADDR, 0b1000000000000000);*/
+/*		set_leds(LED8_15_ADDR, 0);*/
+/*		set_leds(LED8_15_ADDR, 0b1010101000000000);*/
+/*		_delay_ms(1000);*/
+/*		set_leds(LED8_15_ADDR, 0b1010101010101010);*/
+/*		set_leds(LED0_7_ADDR, 0b1010101010101010);*/
+/*		_delay_ms(3000);*/
+/*		set_leds(LED8_15_ADDR, 0);*/
+/*		set_leds(LED0_7_ADDR, 0);*/
 
 		PORTB ^= (1<<PB6);
 	}

@@ -2,6 +2,10 @@
 #include <avr/io.h>
 #include "can.h"
 #include "../lib/can_defs.h"
+#include "display/display.h"
+
+//#define DEBUGRX
+#define DEBUGTX
 
 st_cmd_t tx_remote_msg;
 
@@ -11,6 +15,8 @@ ISR(CANIT_vect)
 	uint8_t i,interrupt;
 	uint16_t tmp,tmp2,mask=1;
 	uint8_t DataBuf[8];
+
+	char textBuf[10];
 
 	uint8_t rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
@@ -43,8 +49,25 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
 					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);	/* TODO Lav det her på en anden måde */
-					/* Take care of the data code */
+					#ifdef DEBUGRX
+						itoa(DataBuf[0], textBuf, 10);
+						sendtekst("Rx ");
+						sendtekst(textBuf);
+
+						sendtekst(" ");
+						itoa(DataBuf[1], textBuf, 10);
+						sendtekst(textBuf);
+
+						sendtekst(" ");
+						itoa(DataBuf[2], textBuf, 10);
+						sendtekst(textBuf);
+						sendtekst("\n");
+					#endif
+					/* Take care of the data */
 					PORTB ^= (1<<PB5);
+					if (DataBuf[0] == 20) {
+						set_rpm(DataBuf[1], DataBuf[2], LED_BLINK2);
+					}
 /*					if (canDataTest[0] == 20) {*/
 /*						*/
 /*						if (canDataTest[1] == 20) {  */
@@ -73,6 +96,9 @@ ISR(CANIT_vect)
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
+					#ifdef DEBUGTX
+						sendtekst("Tx\n");
+					#endif
 //					Can_unset_mob_int(i);		/* TODO Måske virker funktionen ikke */
 					break;				
 				case MOB_ACK_ERROR:

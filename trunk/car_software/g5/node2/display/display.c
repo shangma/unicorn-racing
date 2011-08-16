@@ -1,12 +1,156 @@
+#include <stdint.h>
 #include <util/twi.h>
 #include "display.h"
 #include "../twi/twi.h"
+
+set_rpm(uint8_t rpm_low, uint8_t rpm_high, uint8_t mode)
+{
+	uint16_t rpm;
+	/* Convert rpm */
+	rpm = (rpm_low<<8) + rpm_high*0.9408;
+	
+	/* Set leds based on rpm value */
+	if (rpm<RPM0 ) {
+		set_leds(LED0_7_ADDR, 0);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM0 && rpm < RPM1 ){
+		set_leds(LED0_7_ADDR, mode<<0);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM1 && rpm < RPM2 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM2 && rpm < RPM3 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM3 && rpm < RPM4 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM4 && rpm < RPM5 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM5 && rpm < RPM6 ){
+		set_leds(LED0_7_ADDR,  mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM6 && rpm < RPM7 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12);
+		set_leds(LED8_15_ADDR, 0);
+	
+	} else if( rpm > RPM7 && rpm < RPM8 ){
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+		set_leds(LED8_15_ADDR, 0);
+
+	} else if( rpm > RPM8 && rpm < RPM9 ){
+		set_leds(LED8_15_ADDR, mode<<0);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM9 && rpm < RPM10 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM10 && rpm < RPM11 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM11 && rpm < RPM12 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM12 && rpm < RPM13 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM13 && rpm < RPM14 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM14 && rpm < RPM15 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM15 && rpm < RPM16 ){
+		set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+		set_leds(LED0_7_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+
+	} else if( rpm > RPM16 ){
+		set_leds(LED8_15_ADDR, LED_BLINK1<<8 | LED_BLINK1<<10 | LED_BLINK1<<12 | LED_BLINK1<<14);
+		set_leds(LED0_7_ADDR, 0); 
+	}
+}
+
+uint8_t set_leds(int addr, uint16_t leds)
+{
+	if (!(TWI_start())) return -1;
+	
+	TWI_send(addr);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+	TWI_send(AI|LS0);					/* Auto-increment and start from first led reg */
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */
+
+	TWI_send(leds & 0xff);
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
+
+	TWI_send( (leds>>8) & 0xff);
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
+
+	/* send stop */
+	TWI_stop();
+	return 1;
+}
+
+
+uint8_t set_blink_rate(int addr, uint8_t blink_nr, uint8_t blink_rate, uint8_t blink_duty_cycle)
+{
+	if (!(TWI_start())) return -1;
+	
+	TWI_send(addr);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+/*	switch (blink_nr){*/
+/*		case LED_BLINK1:*/
+/*			TWI_send(AI|PSC0);					/* Auto-increment and start from PSC0 */
+/*			if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */
+/*			break;*/
+/*		case LED_BLINK2:*/
+/*			TWI_send(AI|PSC1);					/* Auto-increment and start from PSC1 */
+/*			if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */		
+/*			break;*/
+/*		default:*/
+/*			return -3;*/
+/*			break;*/
+/*	}*/
+	if (blink_nr == LED_BLINK1) {
+		TWI_send(AI|PSC0);					/* Auto-increment and start from PSC0 */
+		if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;
+	} else if (blink_nr == LED_BLINK2) {
+		TWI_send(AI|PSC1);					/* Auto-increment and start from PSC0 */
+		if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;
+	}
+		
+
+	TWI_send(blink_rate);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+	TWI_send(blink_duty_cycle);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+	/* send stop */
+	TWI_stop();
+	return 1;
+}
 
 int test_display(int addr, int i, int j )
 {
 	if (!(TWI_start())) return -1;
 	
-	TWI_send(addr);
+	TWI_send(0xc0);
 	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
 
 	TWI_send(0x12);
@@ -15,13 +159,13 @@ int test_display(int addr, int i, int j )
         TWI_send(0x00);
         if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
 
-        TWI_send(0x20);
+        TWI_send(0x10);
         if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
 
-        TWI_send(0x20);
+        TWI_send(0x00);
         if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
 
-        TWI_send(0x80);
+        TWI_send(0x10);
         if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
 
         TWI_send(i);
