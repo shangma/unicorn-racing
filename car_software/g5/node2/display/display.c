@@ -3,12 +3,8 @@
 #include "display.h"
 #include "../twi/twi.h"
 
-set_rpm(uint8_t rpm_low, uint8_t rpm_high, uint8_t mode)
-{
-	uint16_t rpm;
-	/* Convert rpm */
-	rpm = (rpm_low<<8) + rpm_high*0.9408;
-	
+set_rpm(uint16_t rpm, uint8_t mode)
+{	
 	/* Set leds based on rpm value */
 	if (rpm<RPM0 ) {
 		set_leds(LED0_7_ADDR, 0);
@@ -112,20 +108,6 @@ uint8_t set_blink_rate(int addr, uint8_t blink_nr, uint8_t blink_rate, uint8_t b
 	
 	TWI_send(addr);
 	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
-
-/*	switch (blink_nr){*/
-/*		case LED_BLINK1:*/
-/*			TWI_send(AI|PSC0);					/* Auto-increment and start from PSC0 */
-/*			if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */
-/*			break;*/
-/*		case LED_BLINK2:*/
-/*			TWI_send(AI|PSC1);					/* Auto-increment and start from PSC1 */
-/*			if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */		
-/*			break;*/
-/*		default:*/
-/*			return -3;*/
-/*			break;*/
-/*	}*/
 	if (blink_nr == LED_BLINK1) {
 		TWI_send(AI|PSC0);					/* Auto-increment and start from PSC0 */
 		if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;
@@ -140,6 +122,53 @@ uint8_t set_blink_rate(int addr, uint8_t blink_nr, uint8_t blink_rate, uint8_t b
 
 	TWI_send(blink_duty_cycle);
 	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+	/* send stop */
+	TWI_stop();
+	return 1;
+}
+
+uint8_t get_buttons(int addr)
+{
+	uint8_t data;
+
+	if (!(TWI_start())) return 8;
+
+	TWI_send(addr);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return 9;		/* No ACK from device return */
+
+	TWI_send(AI | LS0);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return 10;		/* No ACK from device return */
+
+	if (!(TWI_start())) return 11;
+
+	TWI_send(addr | 1);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return 12;		/* No ACK from device return */
+
+	data = 0;
+	data = TWI_rcvr(0);
+
+	/* send stop */
+	TWI_stop();
+	return data;
+}
+
+uint8_t set_seg(int addr, uint8_t i, uint8_t j)
+{
+	if (!(TWI_start())) return -1;
+
+	TWI_send(addr);
+	if (!(TW_STATUS == TW_MT_SLA_ACK)) return -2;		/* No ACK from device return */
+
+	TWI_send(AI|LS0);					/* Auto-increment and start from first led reg */
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;		/* No ACK from device return */
+
+        TWI_send(i);
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
+
+        TWI_send(j);
+        if (!(TW_STATUS == TW_MT_DATA_ACK)) return -2;          /* No ACK from device return */
+
 
 	/* send stop */
 	TWI_stop();

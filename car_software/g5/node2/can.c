@@ -3,6 +3,9 @@
 #include "can.h"
 #include "../lib/can_defs.h"
 #include "display/display.h"
+#include "prototyper.h"
+#include "../lib/data_def.h"
+#include "data.h"
 
 //#define DEBUGRX
 #define DEBUGTX
@@ -65,33 +68,15 @@ ISR(CANIT_vect)
 					#endif
 					/* Take care of the data */
 					PORTB ^= (1<<PB5);
-					if (DataBuf[0] == 20) {
-						set_rpm(DataBuf[1], DataBuf[2], LED_BLINK2);
+					if (DataBuf[0] == rpm) {
+						params.rpm = (DataBuf[1]<<8) + DataBuf[2]*0.9408;
+					} else if (DataBuf[0] == roadSpeed) {
+						params.roadSpeed = ((DataBuf[1]<<8) + DataBuf[2])*0.01;
+					} else if (DataBuf[0] == batteryV) {
+						params.batteryV = ((DataBuf[1]<<8) + DataBuf[2])*(1.0/210.0);
+					} else if (DataBuf[0] == waterTemp) {
+						params.waterTemp = ((DataBuf[1]<<8) + DataBuf[2])*(-150.0/3840.0)+120;
 					}
-/*					if (canDataTest[0] == 20) {*/
-/*						*/
-/*						if (canDataTest[1] == 20) {  */
-/*							SEG_0(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 21) {*/
-/*							SEG_1(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 22) {*/
-/*							SEG_2(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 23) {*/
-/*							SEG_3(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 24) {*/
-/*							SEG_4(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 25) {*/
-/*							SEG_5(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 26) {*/
-/*							SEG_6(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 27) {*/
-/*							SEG_7(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 28) {*/
-/*							SEG_8(LED_BLINK1);*/
-/*						} else if (canDataTest[1] == 29) {*/
-/*							SEG_8(LED_BLINK1);*/
-/*						}*/
-/*					}*/
 					break;
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
