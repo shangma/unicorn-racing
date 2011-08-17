@@ -1,10 +1,31 @@
 #include <stdint.h>
+#include "../config.h"
 #include <util/twi.h>
 #include <util/delay.h>
 #include "display.h"
 #include "../twi/twi.h"
 
-uint8_t buttons_state = N_BUTTON1 | N_BUTTON2;
+uint8_t buttons_state = BUTTON1 | BUTTON2;
+
+display_test(void)
+{
+	uint8_t mode;
+
+	mode = LED_ON;
+
+	
+	set_leds(LED0_7_ADDR, mode<<LED_RPM0 | mode<<LED_RPM1 | mode<<LED_RPM2 | mode<<LED_RPM3 | mode<<LED_RPM4 | mode<<LED_RPM5 | mode<<LED_RPM6 | mode<<LED_RPM7);
+	set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+	set_leds(SEG_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
+	set_leds(LED_BUTTONS_ADDR, mode<<LED_INDI1 | mode<<LED_INDI2 | mode<<LED_INDI3 | mode<<LED_INDI4 | mode<<LED_INDI5 | mode<<LED_INDI6 | mode<<LED_BUTTON_1 | mode<<LED_BUTTON_2);
+
+	_delay_ms(3000);
+
+	set_leds(LED0_7_ADDR, 0);
+	set_leds(LED8_15_ADDR, 0);
+	set_leds(SEG_ADDR, 0);
+	set_leds(LED_BUTTONS_ADDR, 0);
+}
 
 set_rpm(uint16_t rpm, uint8_t mode)
 {	

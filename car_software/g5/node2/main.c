@@ -38,10 +38,14 @@ int main (void)
  *-----------------------------------------------------------------*/
 
 	/* Set blink rates */
-	set_blink_rate(LED8_15_ADDR, LED_BLINK1, (1.0/RPM16_RATE)*252, RPM16_DUTYCYCLE*2.56);
-	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, RPM_LED_DUTYCYCLE*2.56);
 	set_blink_rate(LED0_7_ADDR, LED_BLINK1, 20, 100);
 	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, RPM_LED_DUTYCYCLE*2.56);
+
+	set_blink_rate(LED8_15_ADDR, LED_BLINK1, (1.0/RPM16_RATE)*252, RPM16_DUTYCYCLE*2.56);
+	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, RPM_LED_DUTYCYCLE*2.56);
+
+	set_blink_rate(SEG_ADDR, LED_BLINK1, 20, 100);
+	set_blink_rate(SEG_ADDR, LED_BLINK2, 0, SEG_DUTYCYCLE*2.56);
 
 
 /*-----------------------------------------------------------------*
@@ -71,11 +75,20 @@ int main (void)
 	PORTB |= (1<<PB6 | 1<<PB5);
 
 	sendtekst("Beep\n");
+	display_test();
 	while (1) {
 		_delay_ms(20);
-//		set_rpm(9001, LED_BLINK2);
 		set_rpm(params.rpm, LED_BLINK2);
 		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
+		if (buttons_state == 2) {
+			set_leds(LED_BUTTONS_ADDR, LED_ON<<BUTTON_LED_1);
+		} else if (buttons_state == 1) {
+			set_leds(LED_BUTTONS_ADDR, LED_ON<<BUTTON_LED_2);
+		} else if (buttons_state == 0) {
+			set_leds(LED_BUTTONS_ADDR, LED_ON<<BUTTON_LED_1 | LED_ON<<BUTTON_LED_2);
+		} else {
+			set_leds(LED_BUTTONS_ADDR, 0);
+		}
 //		itoa(data, streng, 10);
 //		sendtekst(streng);
 //		sendtekst("\n");		
