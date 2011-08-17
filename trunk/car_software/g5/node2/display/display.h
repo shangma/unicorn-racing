@@ -38,49 +38,51 @@
 #define SEG_UPPER_RIGHT	4
 #define SEG_TOP 	6
 
-#define SEG_0(mode)	( test_display(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
+#define SEG_OFF()	(set_seg(SEG_ADDR, 0, 0))
+
+#define SEG_0(mode)	( set_seg(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
 	mode<<SEG_LOWER_LEFT,\
 	mode<<SEG_BOTTOM |\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_UPPER_RIGHT |\
 	mode<<SEG_TOP) )
-#define SEG_1(mode)	( test_display(SEG_ADDR, 0, mode<<SEG_LOWER_RIGHT |\
+#define SEG_1(mode)	( set_seg(SEG_ADDR, 0, mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_UPPER_RIGHT) )
-#define SEG_2(mode)	( test_display(SEG_ADDR, mode<<SEG_MIDDLE |\
+#define SEG_2(mode)	( set_seg(SEG_ADDR, mode<<SEG_MIDDLE |\
 	mode<<SEG_LOWER_LEFT,\
 	mode<<SEG_TOP |\
 	mode<<SEG_UPPER_RIGHT |\
 	mode<<SEG_BOTTOM) )
-#define SEG_3(mode)	( test_display(SEG_ADDR, mode<<SEG_MIDDLE, mode<<SEG_TOP |\
+#define SEG_3(mode)	( set_seg(SEG_ADDR, mode<<SEG_MIDDLE, mode<<SEG_TOP |\
 	mode<<SEG_UPPER_RIGHT |\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_BOTTOM) )
-#define SEG_4(mode)	( test_display(SEG_ADDR, mode<<SEG_MIDDLE |\
+#define SEG_4(mode)	( set_seg(SEG_ADDR, mode<<SEG_MIDDLE |\
 	mode<<SEG_UPPER_LEFT,\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_UPPER_RIGHT) )
-#define SEG_5(mode)	( test_display(SEG_ADDR, mode<<SEG_MIDDLE |\
+#define SEG_5(mode)	( set_seg(SEG_ADDR, mode<<SEG_MIDDLE |\
 	mode<<SEG_UPPER_LEFT,\
 	mode<<SEG_TOP |\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_BOTTOM) )
-#define SEG_6(mode)	( test_display(SEG_ADDR, mode<<SEG_MIDDLE |\
+#define SEG_6(mode)	( set_seg(SEG_ADDR, mode<<SEG_MIDDLE |\
 	mode<<SEG_UPPER_LEFT |\
 	mode<<SEG_LOWER_LEFT,\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_TOP |\
 	mode<<SEG_BOTTOM) )
-#define SEG_7(mode)	( test_display(SEG_ADDR, 0, mode<<SEG_LOWER_RIGHT |\
+#define SEG_7(mode)	( set_seg(SEG_ADDR, 0, mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_TOP |\
 	mode<<SEG_UPPER_RIGHT) )
-#define SEG_8(mode)	( test_display(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
+#define SEG_8(mode)	( set_seg(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
 	mode<<SEG_MIDDLE |\
 	mode<<SEG_LOWER_LEFT,\
 	mode<<SEG_BOTTOM |\
 	mode<<SEG_LOWER_RIGHT |\
 	mode<<SEG_UPPER_RIGHT |\
 	mode<<SEG_TOP) )
-#define SEG_9(mode)	( test_display(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
+#define SEG_9(mode)	( set_seg(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
 	mode<<SEG_MIDDLE,\
 	mode<<SEG_BOTTOM |\
 	mode<<SEG_LOWER_RIGHT |\
@@ -106,7 +108,8 @@
 #define RPM16	10000
 
 int test_display(int addr, int i, int j);
-
-set_rpm(uint8_t rpm_low, uint8_t rpm_high, uint8_t mode);
+uint8_t get_buttons(int addr);
+uint8_t set_seg(int addr, uint8_t i, uint8_t j);
+set_rpm(uint16_t rpm, uint8_t mode);
 uint8_t set_leds(int addr, uint16_t leds);
 uint8_t set_blink_rate(int addr, uint8_t blink_nr, uint8_t blink_rate, uint8_t blink_duty_cycle);

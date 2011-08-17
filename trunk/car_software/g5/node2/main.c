@@ -3,10 +3,13 @@
 #include "can_std/can_lib.h"
 #include "can_std/can_drv.h"
 #include <util/delay.h>
+#include <util/atomic.h>
+#include "twi/twi.h"
 #include "can.h"
 #include "../../lib/can_defs.h"
 #include "display/display.h"
 #include "prototyper.h"
+#include "data.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 #define ID_BASE 0x80
@@ -20,6 +23,9 @@ int main (void)
 
 	uint8_t test_rx[8];
 
+	uint8_t data;
+	char streng[10];
+
 //  Init CAN, UART, I/O
 	init();
 	TWI_init();
@@ -28,8 +34,8 @@ int main (void)
 	sei();		/* Interrupt enable */
 
 	set_blink_rate(LED8_15_ADDR, LED_BLINK1, 20, 100);
-	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, 200);
-	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, 70);
+	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, 5);
+	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, 5);
 	set_blink_rate(LED0_7_ADDR, LED_BLINK1, 20, 100);
 
 	Can_sei();		/* Enable general can interrupt */
@@ -62,30 +68,60 @@ int main (void)
 //	test_rx[2] = 124;
 	sendtekst("Beep\n");
 	while (1) {
-		_delay_ms(1000);
-		can_send_non_blocking(rpm_msgid, test_rx, 8);
-//		set_blink_rate(LED0_7_ADDR, LED_BLINK1, 100, 15);
-//		set_leds(LED0_7_ADDR, LED_BLINK1<<2);
-//		set_leds(LED8_15_ADDR, LED_BLINK1<<2);
-/*		for (i=0;i<=14;i+=2){*/
-/*			set_leds(LED0_7_ADDR, LED_ON<<i);*/
-/*			_delay_ms(100);*/
+//		_delay_ms(1000);
+//		can_send_non_blocking(rpm_msgid, test_rx, 8);
+		_delay_ms(20);
+		set_rpm(params.rpm, LED_ON);
+
+//		itoa(data, streng, 10);
+//		sendtekst(streng);
+//		sendtekst("\n");		
+
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_1(LED_ON);*/
 /*		}*/
-/*		test_display(LED0_7_ADDR, 0,0);*/
-/*		for (i=0;i<=14;i+=2){*/
-/*			set_leds(LED8_15_ADDR, LED_ON<<i);*/
-/*			_delay_ms(100);*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_2(LED_ON);*/
 /*		}*/
-/*		set_leds(LED0_7_ADDR, 0);*/
-/*		set_leds(LED0_7_ADDR, 0b1000000000000000);*/
-/*		set_leds(LED8_15_ADDR, 0);*/
-/*		set_leds(LED8_15_ADDR, 0b1010101000000000);*/
-/*		_delay_ms(1000);*/
-/*		set_leds(LED8_15_ADDR, 0b1010101010101010);*/
-/*		set_leds(LED0_7_ADDR, 0b1010101010101010);*/
-/*		_delay_ms(3000);*/
-/*		set_leds(LED8_15_ADDR, 0);*/
-/*		set_leds(LED0_7_ADDR, 0);*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_3(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_4(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_5(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_6(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_7(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_8(LED_ON);*/
+/*		}*/
+/*		_delay_ms(100);*/
+/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
+/*		{*/
+/*			SEG_9(LED_ON);*/
+/*		}*/
 
 		PORTB ^= (1<<PB6);
 	}
