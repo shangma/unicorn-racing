@@ -12,7 +12,6 @@ display_test(void)
 	uint8_t mode;
 
 	mode = LED_ON;
-
 	
 	set_leds(LED0_7_ADDR, mode<<LED_RPM0 | mode<<LED_RPM1 | mode<<LED_RPM2 | mode<<LED_RPM3 | mode<<LED_RPM4 | mode<<LED_RPM5 | mode<<LED_RPM6 | mode<<LED_RPM7);
 	set_leds(LED8_15_ADDR, mode<<0 | mode<<2 | mode<<4 | mode<<6 | mode<<8 | mode<<10 | mode<<12 | mode<<14);
