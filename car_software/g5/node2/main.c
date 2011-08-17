@@ -4,7 +4,7 @@
 #include "can_std/can_drv.h"
 #include <util/delay.h>
 #include "can.h"
-#include "../lib/can_defs.h"
+#include "../../lib/can_defs.h"
 #include "display/display.h"
 #include "prototyper.h"
 

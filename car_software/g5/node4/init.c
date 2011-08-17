@@ -92,3 +92,24 @@ void counter0Init(void)
 	TCCR0A |= counter0prescale1024;
 	TIMSK0 |=(1<<TOIE0);
 }
+
+void adcInit(unsigned int channel)
+{
+	// ADC channel
+	ADMUX=(channel & 0x0f);
+
+	// Vref config
+	ADMUX |=(1<<REFS0); 
+	ADMUX &=~(1<<REFS1);
+
+	// ADC ENABLE
+	ADCSRA |=(1<<ADEN); 
+
+	// ADC frequency prescaler
+	ADCSRA |=(1<<ADPS0);
+	ADCSRA |=(1<<ADPS1);
+	ADCSRA |=(1<<ADPS2);
+
+	// ADC interrupt enable
+	ADCSRA |=(1<<ADIE);
+}

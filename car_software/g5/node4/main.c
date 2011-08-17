@@ -21,6 +21,7 @@ int main(void)
 	counter1Init();
 	counter3Init();
 	extIntInit();
+	adcInit(0);
 	sei();
 
 	while (1)

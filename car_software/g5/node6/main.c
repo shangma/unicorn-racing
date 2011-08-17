@@ -6,7 +6,6 @@
 #include "../lib/can_defs.h"
 #include "test_vars.h"
 
-
 // GPS TIME
 int the_time_h = 0;
 int the_time_m = 0;
