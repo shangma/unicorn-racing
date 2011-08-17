@@ -108,7 +108,7 @@ ISR(USART1_RX_vect)
 		speed_char[char_counter-45] = data;
 
 	if((GPRMC_flag == 1) && (char_counter==48))
-		speed = (int)(atof(speed_char)*1.852); // Knots til km/h
+	speed = (int)(atof(speed_char)*1.852); // Knots til km/h
 
 	// Latitude dd, index 18 til 19
 	if((GPGGA_flag == 1) && ((char_counter>=18) && (char_counter<=19)))	
@@ -155,7 +155,4 @@ void uartinit1(void)
 	
 	// Rx Uart interrupt (Receive Complete Interrupt)
 	UCSR1B|=(1<<RXCIE1);
-
-	// Tx Uart interrupt (Transmit Complete Interrupt)
-	//UCSR0B|=(1<<TXCIE0);
 }

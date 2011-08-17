@@ -13,6 +13,9 @@
 //#include "can_std/at90can_drv.h"
 //#define CAN_BAUDRATE   250        // in kBit
 
+// ADC
+#define ADCtotnum 3
+
 // UART
 #define USART_BAUDRATE 115200
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
