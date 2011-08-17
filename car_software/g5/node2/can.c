@@ -8,7 +8,7 @@
 #include "data.h"
 
 //#define DEBUGRX
-#define DEBUGTX
+//#define DEBUGTX
 
 st_cmd_t tx_remote_msg;
 
@@ -53,16 +53,8 @@ ISR(CANIT_vect)
 					Can_clear_status_mob(); // and reset MOb status
 					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);	/* TODO Lav det her på en anden måde */
 					#ifdef DEBUGRX
-						itoa(DataBuf[0], textBuf, 10);
+						itoa(i, textBuf, 10);
 						sendtekst("Rx ");
-						sendtekst(textBuf);
-
-						sendtekst(" ");
-						itoa(DataBuf[1], textBuf, 10);
-						sendtekst(textBuf);
-
-						sendtekst(" ");
-						itoa(DataBuf[2], textBuf, 10);
 						sendtekst(textBuf);
 						sendtekst("\n");
 					#endif
@@ -82,7 +74,10 @@ ISR(CANIT_vect)
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
 					#ifdef DEBUGTX
-						sendtekst("Tx\n");
+						itoa(i, textBuf, 10);
+						sendtekst("Tx ");
+						sendtekst(textBuf);
+						sendtekst("\n");
 					#endif
 //					Can_unset_mob_int(i);		/* TODO Måske virker funktionen ikke */
 					break;				

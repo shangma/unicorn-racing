@@ -6,7 +6,7 @@
 #include <util/atomic.h>
 #include "twi/twi.h"
 #include "can.h"
-#include "../../lib/can_defs.h"
+#include "../lib/can_defs.h"
 #include "display/display.h"
 #include "prototyper.h"
 #include "data.h"
@@ -23,7 +23,7 @@ int main (void)
 
 	uint8_t test_rx[8];
 
-	uint8_t data;
+	int8_t data;
 	char streng[10];
 
 //  Init CAN, UART, I/O
@@ -33,11 +33,20 @@ int main (void)
 
 	sei();		/* Interrupt enable */
 
-	set_blink_rate(LED8_15_ADDR, LED_BLINK1, 20, 100);
-	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, 5);
-	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, 5);
-	set_blink_rate(LED0_7_ADDR, LED_BLINK1, 20, 100);
+/*-----------------------------------------------------------------*
+ *----------------------------Display setup -----------------------*
+ *-----------------------------------------------------------------*/
 
+	/* Set blink rates */
+	set_blink_rate(LED8_15_ADDR, LED_BLINK1, (1.0/RPM16_RATE)*252, RPM16_DUTYCYCLE*2.56);
+	set_blink_rate(LED8_15_ADDR, LED_BLINK2, 0, RPM_LED_DUTYCYCLE*2.56);
+	set_blink_rate(LED0_7_ADDR, LED_BLINK1, 20, 100);
+	set_blink_rate(LED0_7_ADDR, LED_BLINK2, 0, RPM_LED_DUTYCYCLE*2.56);
+
+
+/*-----------------------------------------------------------------*
+ *----------------------------CAN interrupt setup -----------------*
+ *-----------------------------------------------------------------*/
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
 	Can_set_rx_int();	/* Enable can rx interrupt */
@@ -61,68 +70,15 @@ int main (void)
 	DDRB |= (1<<PB6 | 1<<PB5);
 	PORTB |= (1<<PB6 | 1<<PB5);
 
-	i = 1;
-
-	test_rx[0] = 38;
-	test_rx[1] = 1;
-//	test_rx[2] = 124;
 	sendtekst("Beep\n");
 	while (1) {
-//		_delay_ms(1000);
-//		can_send_non_blocking(rpm_msgid, test_rx, 8);
 		_delay_ms(20);
-		set_rpm(params.rpm, LED_ON);
-
+//		set_rpm(9001, LED_BLINK2);
+		set_rpm(params.rpm, LED_BLINK2);
+		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
 //		itoa(data, streng, 10);
 //		sendtekst(streng);
 //		sendtekst("\n");		
-
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_1(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_2(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_3(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_4(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_5(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_6(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_7(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_8(LED_ON);*/
-/*		}*/
-/*		_delay_ms(100);*/
-/*		ATOMIC_BLOCK(ATOMIC_FORCEON)*/
-/*		{*/
-/*			SEG_9(LED_ON);*/
-/*		}*/
-
 		PORTB ^= (1<<PB6);
 	}
 	return 0;
