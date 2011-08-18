@@ -78,7 +78,7 @@ int main (void)
 	display_test();
 	while (1) {
 		_delay_ms(20);
-		set_rpm(params.rpm, LED_ON);
+		set_rpm(params.rpm, LED_BLINK2);
 		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
 		if (buttons_state == 2) {
 			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_BUTTON_1);
