@@ -28,6 +28,7 @@ unsigned int pwmOut = DUTYMAX;
 
 // Gear
 unsigned short int gearBut = 0;
+unsigned short int gearButCAN = 0;
 unsigned short int gearRetning = 0;
 unsigned short int gearActive = 0;
 unsigned short int released = 1;
@@ -111,58 +112,47 @@ ISR(TIMER0_OVF_vect)
 	// PWM
 	PWM_duty_cycle_A16_set(pwmOut);
 
-	// Knapper
-	//gearBut = getBut();
+	// Buttons from CAN
+	gearBut = gearButCAN;
 
 	// Gear knapperne skal slippes før der kan skiftes gear igen
-	//if((gearBut == 0) || (gearBut == GEARNEUBUT))
-	//	released = 1;
+	if((gearBut == 0) || (gearBut == GEARNEUBUT))
+		released = 1;
 
-	//if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0) && (released == 1))
-	//{
-
-	//_delay_ms(50); // Software prell
-
-		//gearBut = getBut();
-
-		if(((gearBut==GEARUPBUT) || (gearBut==GEARDOWNBUT)) && (gearActive == 0))
+	if( (((gearBut&GEARDOWNBUT)==GEARDOWNBUT) || ((gearBut&GEARUPBUT)==GEARUPBUT)) && (gearActive == 0) && (released == 1))
+	{
+		// Gear op
+		if(((gearBut&GEARUPBUT)==GEARUPBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
 		{
-			//released = 0;			
+			gearActive = 1;
+			motorControl(IND, pwmOut);
 
-			// Gear op
-			if((gearBut==GEARUPBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
+			gearPosTargetMax = GEARPOSMAX;
+			gearPosTargetMin = GEARPOSMIN;
+
+			// Kort skift til neutral
+			if((gearBut & GEARNEUBUT)==GEARNEUBUT)
 			{
-				gearActive = 1;
-				motorControl(IND, pwmOut);
-
-				gearPosTargetMax = GEARPOSMAX;
-				gearPosTargetMin = GEARPOSMIN;
-		
-				// Kort skift til neutral ?
-				if(!((PINE&0b00100000)==0b00100000))
-				{
-					gearPosTargetMax = GEARPOSNEUTRALMAX;
-					gearPosTargetMin = GEARPOSNEUTRALMIN;
-				}
-			}
-
-			// Gear ned
-			if((gearBut==GEARDOWNBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
-			{
-				gearActive = 1;
-				motorControl(UD, pwmOut);
-
-				gearPosTargetMax = GEARPOSMAX;
-				gearPosTargetMin = GEARPOSMIN;
-	
-				if(!((PINE&0b00100000)==0b00100000))
-				{
-					gearPosTargetMax = GEARPOSNEUTRALMAX;
-					gearPosTargetMin = GEARPOSNEUTRALMIN;
-				}
+				gearPosTargetMax = GEARPOSNEUTRALMAX;
+				gearPosTargetMin = GEARPOSNEUTRALMIN;
 			}
 		}
-	//}
+		// Gear ned
+		if(((gearBut&GEARDOWNBUT)==GEARDOWNBUT) && (maxTilNeutral==0) && (minTilNeutral==0))
+		{
+			gearActive = 1;
+			motorControl(UD, pwmOut);
+
+			gearPosTargetMax = GEARPOSMAX;
+			gearPosTargetMin = GEARPOSMIN;
+
+			if((gearBut & GEARNEUBUT)==GEARNEUBUT)
+			{
+				gearPosTargetMax = GEARPOSNEUTRALMAX;
+				gearPosTargetMin = GEARPOSNEUTRALMIN;
+			}
+		}
+	}
 
 	// Ign_Cut
 	if((pos>(GEARPOSMID+GearMiddleDeadZone+IGNCUT)) || (pos<(GEARPOSMID-GearMiddleDeadZone-IGNCUT)))
@@ -243,36 +233,31 @@ ISR(TIMER0_OVF_vect)
 
 	// Debugging
 	if((i%15)==0)
-	{
-		sendtekst("PINE: ");
-		itoa(((PINE&0b11100000)>>5),tempchar,2);
+	{	
+		sendtekst("GearBut: ");
+		itoa(gearBut,tempchar,2);
 		sendtekst(tempchar);
-		sendtekst("  ");
-	
-		sendtekst("PWM: ");
-		itoa(pwmOut,tempchar,10);
-		sendtekst(tempchar);
-		sendtekst("  ");
+		sendtekst("\t");
 
 		sendtekst("POS: ");
 		itoa(pos,tempchar,10);
 		sendtekst(tempchar);
-		sendtekst("  ");
+		sendtekst("\t");
 
 		sendtekst("CS: ");
 		itoa(current,tempchar,10);
 		sendtekst(tempchar);
-		sendtekst("  ");
+		sendtekst("\t");
 
 		sendtekst("OC: ");
 		itoa(overCurrentCounter,tempchar,10);
 		sendtekst(tempchar);
-		sendtekst("  ");
+		sendtekst("\t");
 
 		sendtekst("TAGMAX: ");
 		itoa(gearPosTargetMax,tempchar,10);
 		sendtekst(tempchar);
-		sendtekst("  ");
+		sendtekst("\t");
 
 		sendtekst("TAGMIN: ");
 		itoa(gearPosTargetMin,tempchar,10);
@@ -280,5 +265,6 @@ ISR(TIMER0_OVF_vect)
 		sendtekst("\n\r");
 		i = 0;
 	}
+	
 	i++;
 }

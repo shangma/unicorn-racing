@@ -3,11 +3,12 @@
 #include "can_new.h"
 #include "test_vars.h"
 #include "../lib/can_defs.h"
+#include "../lib/data_def.h"
 #include "prototyper.h"
 
 st_cmd_t tx_remote_msg;
 
-extern unsigned short int gearBut;
+extern unsigned short int gearButCAN;
 
 unsigned short int can_update_rx_msg(st_cmd_t* msg, U8 msg_id, U8 dlc)
 {
@@ -63,22 +64,9 @@ ISR(CANIT_vect)
 //					Can_config_rx();	// Config mob for rx again
 //					Can_set_mob_int(i);	// Enable interrupt
 					/* Take care of the data code */
-					sendtekst("Rxmob\n");
-					if (canDataTest[0] == 38) {
-						if (canDataTest[1] == GEARUPBUT) {  
-							sendtekst("Gear up\n\r");
-							gearBut = GEARUPBUT;
-						 }
-						else if (canDataTest[1] == GEARDOWNBUT) {  
-							sendtekst("Gear ned\n\r");
-							gearBut = GEARUPBUT;
-						}
-						else if (canDataTest[1] == GEARNEUBUT) {  
-							sendtekst("Gear neu\n\r");
-							gearBut = GEARUPBUT;
-						}
-						else
-							sendtekst("go");
+					if (canDataTest[0] == gear) 
+					{  
+						gearButCAN = canDataTest[1];
 					}
 					break;
 				case MOB_TX_COMPLETED:

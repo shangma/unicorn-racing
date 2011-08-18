@@ -77,7 +77,7 @@ PROGRAMMER_MCU=c128
 
 # Name of our project
 # (use a single word, e.g. 'myproject')
-PROJECTNAME=hydrtest
+PROJECTNAME=gearnode
 
 # Source files
 # List C/C++/Assembly source files:
@@ -111,7 +111,7 @@ OPTLEVEL=3
 # one of the valid "-c PROGRAMMER-ID" values 
 # described in the avrdude info page.
 # 
-AVRDUDE_PROGRAMMERID=usbtiny#avrispmkii
+AVRDUDE_PROGRAMMERID=avrispmkii#usbtiny#
 
 # port--serial or parallel port to which your 
 # hardware programmer is attached
@@ -229,7 +229,7 @@ hex: $(HEXTRG)
 
 writeflash: hex
 	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID)   \
-	 -p $(PROGRAMMER_MCU) -P usb -B 0.1      \
+	 -p $(PROGRAMMER_MCU) -P usb -B 0.5      \
 	 -U flash:w:$(HEXROMTRG)
 
 install: writeflash clean

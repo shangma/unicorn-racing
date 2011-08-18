@@ -31,9 +31,9 @@
 #define DUTYMAX 2047
 
 // Buttons
-#define GEARUPBUT 1
-#define GEARDOWNBUT 2 
-#define GEARNEUBUT 3
+#define GEARUPBUT 0b00000001
+#define GEARDOWNBUT 0b00000010
+#define GEARNEUBUT 0b00000100
 
 // Gear ADC pos, Min/Max
 #define GEARPOSMID 560
