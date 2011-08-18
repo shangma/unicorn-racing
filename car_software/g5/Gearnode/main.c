@@ -23,17 +23,12 @@ int main(void)
 	adcInit(1);
 	U8 rpm_response_buffer[8];
 	st_cmd_t rpm_msg;
-
-	//counter0Init();
-	//hbroEnable(1);
+	counter0Init();
+	hbroEnable(1);
 	sei();
 	
 	sendtekst("\n\rUnicorn Gearnode v1.0 \n\r");
 
-
-	/*
-	 *	Kode til hurtig test af can 
-	 */
 	rpm_msg.pt_data = rpm_response_buffer;
 	rpm_msg.status = 0;
 
