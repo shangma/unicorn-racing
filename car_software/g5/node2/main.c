@@ -16,10 +16,18 @@
 //_____ D E C L A R A T I O N S ________________________________________________
 void init(void);
 
+char gearbut = 0;
+
 int main (void)
 {	
 	int tmp,i;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
+
+	// GearKontakter
+	DDRC&=~(1<<PC7); // Neutral
+	PORTC |= (1<<PC7); // Neutral pull-up
+	DDRE&=~(1<<PE6); // Knap1 
+	DDRE&=~(1<<PE7); // Knap2
 
 	uint8_t test_rx[8];
 
@@ -76,10 +84,18 @@ int main (void)
 
 	sendtekst("Beep\n");
 	display_test();
+
+	char dataout[] = {38,0};
+
 	while (1) {
 		_delay_ms(20);
 
 		set_rpm(params.rpm, LED_BLINK2);
+
+		// Geat buttons to CAN
+		gearbut = getBut();
+		dataout[1] = gearbut;
+		can_send_non_blocking(rpm_msgid, dataout, 2);
 
 		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
 		if (buttons_state == 2) {
@@ -105,9 +121,9 @@ int main (void)
 		}
 			
 			
-		itoa(params.batteryV, streng, 10);
-		sendtekst(streng);
-		sendtekst("\n");		
+		//itoa(params.batteryV, streng, 10);
+		//sendtekst(streng);
+		//sendtekst("\n");		
 		PORTB ^= (1<<PB6);
 	}
 	return 0;

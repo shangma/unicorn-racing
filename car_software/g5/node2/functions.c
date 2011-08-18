@@ -38,3 +38,19 @@ void sendtekst(char *tekstarray)
 		UDR1 = tekstarray[i];
 	}
 }
+
+char getBut(void)
+{
+	char out = 0;
+
+	 if(((PINE&0b10000000)==0b10000000))
+	 	out |= GEARUPBUT;
+
+	 else if(((PINE&0b01000000)==0b01000000))
+	 	out |= GEARDOWNBUT;
+
+	 if(!((PINC&0b10000000)==0b10000000))
+	 	out |= GEARNEUBUT;
+	
+	return out;
+}
