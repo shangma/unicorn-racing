@@ -53,6 +53,7 @@ ISR(CANIT_vect)
 							QUEUE_PUT(xbee_q, canDataTest[j]);	
 						}
 					}
+					xbee_send_trigger();
 
 					break;
 				case MOB_TX_COMPLETED:

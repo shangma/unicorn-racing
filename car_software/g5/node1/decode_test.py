@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import serial
-ser=serial.Serial("/dev/ttyUSB0",115200)
+ser=serial.Serial("/dev/ttyUSB2",115200)
+print "USB2 open"
 
 package_start_counter = 0
 package_start = False
@@ -49,6 +50,10 @@ valueID = list(enumerate ([
 	('outBits', 8, 0),
 	('time', 8, 0),
 	('GearUp', 8, 0),
+	('FWheelL', 16, 0),
+	('FWheelR', 16, 0),
+	('BWheelL', 16, 0),
+	('BWheelR', 16, 0),
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1
