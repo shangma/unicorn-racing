@@ -21,8 +21,8 @@
 #define RPM16	10000
 
 /* Define blink behavior for rpm > RPM16 */
-#define RPM16_RATE		10.	// Hz
-#define RPM16_DUTYCYCLE 	50.	// %
+#define RPM16_RATE		100.	// Hz
+#define RPM16_DUTYCYCLE 	2.	// %
 
 /* Define rpm leds brightness */
 #define RPM_LED_DUTYCYCLE 	2.	// %

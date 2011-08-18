@@ -41,7 +41,7 @@ enum valueID {
 	motorFlags,		// 35
 	outBits,		// 36
 	time,			// 37
-	gear,			// 38
+	gear,			// 38 // GEARUPBUT 0b0001, GEARDOWNBUT 0b0010, GEARNEUBUT 0b0100
 	FWheelL,		// 39
 	FWheelR,		// 40
 	BWheelL,		// 41
