@@ -78,7 +78,9 @@ int main (void)
 	display_test();
 	while (1) {
 		_delay_ms(20);
+
 		set_rpm(params.rpm, LED_BLINK2);
+
 		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
 		if (buttons_state == 2) {
 			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_BUTTON_1);
@@ -89,9 +91,23 @@ int main (void)
 		} else {
 			set_leds(LED_BUTTONS_ADDR, 0);
 		}
-//		itoa(data, streng, 10);
-//		sendtekst(streng);
-//		sendtekst("\n");		
+
+/*		if (params.waterTemp <= 70) {*/
+/*			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI1);*/
+/*		} else if (params.waterTemp > 70) {*/
+/*			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI4);*/
+/*		}*/
+	
+		if (params.batteryV <= 135) {
+			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI2);
+		} else if (params.batteryV > 135) {
+			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI5);
+		}
+			
+			
+		itoa(params.batteryV, streng, 10);
+		sendtekst(streng);
+		sendtekst("\n");		
 		PORTB ^= (1<<PB6);
 	}
 	return 0;
