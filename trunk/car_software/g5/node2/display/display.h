@@ -20,6 +20,12 @@
 #define RPM15	9600
 #define RPM16	10000
 
+/* Define water temperature ok for driving */
+#define WATER_OK	100	// degree celcius
+
+/* Define battery voltage ok */
+#define VOLTAGE_OK	135	// (desired voltage) * 10
+
 /* Define blink behavior for rpm > RPM16 */
 #define RPM16_RATE		100.	// Hz
 #define RPM16_DUTYCYCLE 	2.	// %

@@ -9,13 +9,13 @@ Created Friday 19 August 2011
 
 === TODO ===
 
-== CAN: ==
-[ ] Make  code use all CAN mail boxes!!!
-[ ] Undersøg hvor langt et delay der er fra data modtages fra ECU til det er ude på CAN bussen!
+TODO: @CAN
+[ ] Make  code use all CAN mail boxes !!!
+[ ] Undersøg hvor langt et delay der er fra data modtages fra ECU til det er ude på CAN bussen !
 
-== Xbee: ==
-[ ] Test xbee queue!
-[ ] Clean up ecu.c/h and use [[../lib/data_defs.h!]]
+TODO: @Xbee
+[ ] Test xbee queue !
+[ ] Clean up ecu.c/h and use [[../lib/data_defs.h !]]
 
-== SD-Card: ==
-[ ] Make functions to save data on sd-card!
+TODO: @SdCard
+[ ] Make functions to save data on sd-card !
