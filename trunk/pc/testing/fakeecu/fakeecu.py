@@ -10,7 +10,17 @@ rpmScale = 0.9408   # Faktor rpm fra ecu skal ganges med for at blive rigtig
 rpmDataPos = 54     # Byte nummer i strengen hvor rmp står
 rpmDataSize = 2     # Længden af rmp i byte
 
-tty=serial.Serial("/dev/ttyUSB1",19200,timeout=1)
+battScale = 1.0/210   # Faktor rpm fra ecu skal ganges med for at blive rigtig
+battDataPos = 66     # Byte nummer i strengen hvor rmp står
+battDataSize = 2     # Længden af rmp i byte
+
+WTempScale = -150.0/3840   # Faktor rpm fra ecu skal ganges med for at blive rigtig
+WTempOffset = 120
+WTempDataPos = 46     # Byte nummer i strengen hvor rmp står
+WTempDataSize = 2     # Længden af rmp i byte
+
+
+tty=serial.Serial("/dev/ttyUSB0",19200,timeout=1)
 datalogfile=open("testdatalog.txt","r")
 
 while 1:
@@ -27,7 +37,9 @@ while 1:
 			data=strip(datalogfile.readline(),"\n\r")
 		tty.flushOutput()
 		rpm = int((int(data[rpmDataPos*rpmDataSize:rpmDataPos*2+2*rpmDataSize],16)*rpmScale ))
-		print rpm		
+		batt = float((int(data[battDataPos*battDataSize:battDataPos*2+2*battDataSize],16)*battScale ))
+		WTemp = float((int(data[WTempDataPos*WTempDataSize:WTempDataPos*2+2*WTempDataSize],16)*WTempScale )+WTempOffset)
+		print "rpm:", rpm, "batt:", batt, "WTemp:", WTemp  		
 		tty.write(unhexlify(data))
 		#print "Sent:"
 		#print data

@@ -55,6 +55,9 @@ int main (void)
 	set_blink_rate(SEG_ADDR, LED_BLINK1, 20, 100);
 	set_blink_rate(SEG_ADDR, LED_BLINK2, 0, SEG_DUTYCYCLE*2.56);
 
+	set_blink_rate(LED_BUTTONS_ADDR, LED_BLINK1, 20, 100);
+	set_blink_rate(LED_BUTTONS_ADDR, LED_BLINK2, 0, SEG_DUTYCYCLE*2.56);
+
 
 /*-----------------------------------------------------------------*
  *----------------------------CAN interrupt setup -----------------*
@@ -73,8 +76,8 @@ int main (void)
 	rpm_msg.status = 0;
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-//	rpm_msg.status = 0;
-//	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
+	rpm_msg.status = 0;
+	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
     	// --- Init variables
 
@@ -88,15 +91,22 @@ int main (void)
 	char dataout[] = {38,0};
 
 	while (1) {
+		/* TODO 
+		 * Change LED_BLINK2 to LED_ON when regulator problem is fixed 
+		 */
+
 		_delay_ms(20);
 
+		/* Display rpm */
 		set_rpm(params.rpm, LED_BLINK2);
 
 		// Geat buttons to CAN
 		gearbut = getBut();
 		dataout[1] = gearbut;
-		can_send_non_blocking(rpm_msgid, dataout, 2);
+//		can_send_non_blocking(rpm_msgid, dataout, 2);
 
+
+		/* Display bottons code */
 		buttons_state = get_buttons(LED_BUTTONS_ADDR) & (BUTTON1 | BUTTON2);
 		if (buttons_state == 2) {
 			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_BUTTON_1);
@@ -108,22 +118,30 @@ int main (void)
 			set_leds(LED_BUTTONS_ADDR, 0);
 		}
 
-/*		if (params.waterTemp <= 70) {*/
-/*			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI1);*/
-/*		} else if (params.waterTemp > 70) {*/
-/*			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI4);*/
-/*		}*/
-	
-		if (params.batteryV <= 135) {
-			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI2);
-		} else if (params.batteryV > 135) {
-			set_leds(LED_BUTTONS_ADDR, LED_ON<<LED_INDI5);
+		/* Indicator for water temp */
+		if (params.waterTemp <= 100) {
+			indi_leds_state |= (LED_BLINK2<<LED_INDI1);
+			indi_leds_state &= ~(LED_BLINK2<<LED_INDI4);
+		} else if (params.waterTemp > 100) {
+			indi_leds_state |= (LED_BLINK2<<LED_INDI4);
+			indi_leds_state &= ~(LED_BLINK2<<LED_INDI1);
 		}
+
+		/* Indicator for batt ok */
+		if (params.batteryV <= 135) {
+			indi_leds_state |= (LED_BLINK2<<LED_INDI2);
+			indi_leds_state &= ~(LED_BLINK2<<LED_INDI5);
+		} else if (params.batteryV > 135) {
+			indi_leds_state |= (LED_BLINK2<<LED_INDI5);
+			indi_leds_state &= ~(LED_BLINK2<<LED_INDI2);
+		}
+		
+		/* Set indicator leds */
+		set_leds(LED_BUTTONS_ADDR, indi_leds_state);
 			
-			
-		//itoa(params.batteryV, streng, 10);
-		//sendtekst(streng);
-		//sendtekst("\n");		
+		itoa(params.batteryV, streng, 10);
+		sendtekst(streng);
+		sendtekst("\n");		
 		PORTB ^= (1<<PB6);
 	}
 	return 0;
