@@ -1,0 +1,24 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2011-08-19T00:55:46+02:00
+
+====== node2 ======
+Created Friday 19 August 2011
+
+===== Software: =====
+
+=== TODO ===
+
+== CAN: ==
+[ ] Undersøg hvorfor CAN stopper med at virke hvis board sender CAN beskeder med can_send_non_blocking()!!!!
+
+== Display: ==
+[ ] Skriv kode til at vise hvad for et gear bilen er i!
+[ ] Tilføj olietryk til status leds, når der kommer et board som måler det!
+[*] Funktion til at update status leds
+[ ] Change LED_BLINK2 to LED_ON when [[regulator problem]] is solved
+
+===== Hardware: =====
+
+=== TODO ===
+[ ] Løs [[regulator problem]] v!!

@@ -30,6 +30,9 @@
 /* Define 7 SEG brightness */
 #define SEG_DUTYCYCLE 	2.	// %
 
+/* Define indicator leds brightness */
+#define SEG_DUTYCYCLE 	2.	// %
+
 /*-----------------------------------------------------------*
  *--------------- Defines for hardware ----------------------*
  *-----------------------------------------------------------*/
@@ -121,7 +124,11 @@
 #define SEG_UPPER_RIGHT	4
 #define SEG_TOP 	6
 
+
+/* 7-SEG display functions */
 #define SEG_OFF()	(set_seg(SEG_ADDR, 0, 0))
+
+#define SEG_OFF(mode)	(set_seg(SEG_ADDR, mode<<SEG_DOT, 0))
 
 #define SEG_0(mode)	( set_seg(SEG_ADDR, mode<<SEG_UPPER_LEFT |\
 	mode<<SEG_LOWER_LEFT,\
@@ -179,8 +186,8 @@
 #define BUTTON1		1
 #define BUTTON2		2
 
-
-extern uint8_t buttons_state;
+extern uint16_t indi_leds_state;	// Indicator leds state
+extern uint8_t buttons_state;		// Display buttons state
 
 display_test(void);
 int test_display(int addr, int i, int j);

@@ -6,6 +6,7 @@
 #include "../twi/twi.h"
 
 uint8_t buttons_state = BUTTON1 | BUTTON2;
+uint16_t indi_leds_state = 0;
 
 display_test(void)
 {

@@ -65,7 +65,7 @@ ISR(CANIT_vect)
 					} else if (DataBuf[0] == roadSpeed) {
 						params.roadSpeed = ((DataBuf[1]<<8) + DataBuf[2])*0.01;
 					} else if (DataBuf[0] == batteryV) {
-						params.batteryV = ((DataBuf[1]<<8) + DataBuf[2])*(1.0/210.0);
+						params.batteryV = ((DataBuf[1]<<8) + DataBuf[2])*(1.0/210.0)*10;
 					} else if (DataBuf[0] == waterTemp) {
 						params.waterTemp = (((DataBuf[1]<<8) + DataBuf[2])*(-150.0/3840.0)+120);
 					}
