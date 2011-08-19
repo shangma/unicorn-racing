@@ -321,8 +321,8 @@ typedef enum {
 #define Can_set_rx_int()	( CANGIE |= INT_RX )
 #define Can_set_mob_int(mob)	{ CANIE2 |= ((1<<mob) & 0xff); \
 				  CANIE1 |= (((1<<mob)>>8) & 0x7f); }
-#define Can_unset_mob_int(mob)	{ CANIE2 &= !((1<<mob) & 0xff); \
-				  CANIE1 &= !(((1<<mob)>>8) & 0x7f); }
+#define Can_unset_mob_int(mob)	{ CANIE2 &= ~((1<<mob) & 0xff); \
+				  CANIE1 &= ~(((1<<mob)>>8) & 0x7f); }
 
 //_____ D E C L A R A T I O N S ________________________________________________
 

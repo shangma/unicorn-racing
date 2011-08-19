@@ -7,15 +7,21 @@
 #include "../lib/data_def.h"
 #include "data.h"
 
-//#define DEBUGRX
-//#define DEBUGTX
+//#define DEBUG_RX
+#define DEBUG_TX
+#define DEBUG_ACK_ERROR
+#define DEBUG_BIT_ERR
+#define DEBUG_CRC_ERR
+#define DEBUG_FORM_ERR
+#define DEBUG_STUFF_ERR
+#define DEBUG_DEFAULT
 
 st_cmd_t tx_remote_msg;
 
 /* Interrupt routine to take care of can interrupts */
 ISR(CANIT_vect)
 {
-	uint8_t i,interrupt;
+	uint8_t i,interrupt, mob_back;
 	uint16_t tmp,tmp2,mask=1;
 	uint8_t DataBuf[8];
 
@@ -41,6 +47,9 @@ ISR(CANIT_vect)
 
 	/* Test mob's for pending interrupt */
 	tmp = CANSIT2+(CANSIT1<<8);
+
+
+	mob_back = CANPAGE;	// Save CANPAGE state
 	for(i=0;i<=14;i++){
 		if(tmp & mask){	/* True if mob have pending interrupt */
 			Can_set_mob(i); /* Switch to mob */
@@ -51,12 +60,13 @@ ISR(CANIT_vect)
 					can_get_data(&DataBuf[0]);	// Copy data to canDataTest
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
+					rpm_msg.status = 0;
 					can_update_rx_msg(&rpm_msg, rpm_msgid, 8);	/* TODO Lav det her på en anden måde */
-					#ifdef DEBUGRX
+					#ifdef DEBUG_RX
 						itoa(i, textBuf, 10);
 						sendtekst("Rx ");
 						sendtekst(textBuf);
-						sendtekst("\n");
+						sendtekst("\n\r");
 					#endif
 					/* Take care of the data */
 					PORTB ^= (1<<PB5);
@@ -73,30 +83,66 @@ ISR(CANIT_vect)
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status	
-					#ifdef DEBUGTX
+					#ifdef DEBUG_TX
 						itoa(i, textBuf, 10);
 						sendtekst("Tx ");
 						sendtekst(textBuf);
-						sendtekst("\n");
+						sendtekst("\n\r");
 					#endif
-//					Can_unset_mob_int(i);		/* TODO Måske virker funktionen ikke */
+					Can_unset_mob_int(i);		/* TODO Måske virker funktionen ikke */
 					break;				
 				case MOB_ACK_ERROR:
+					#ifdef DEBUG_ACK_ERROR
+						itoa(i, textBuf, 10);
+						sendtekst("ACK_ERR ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					/* TODO */
 					break;
 				case MOB_FORM_ERROR:
+					#ifdef DEBUG_FORM_ERR
+						itoa(i, textBuf, 10);
+						sendtekst("FORM_ERR ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					/* TODO */
 					break;
 				case MOB_CRC_ERROR:
+					#ifdef DEBUG_CRC_ERR
+						itoa(i, textBuf, 10);
+						sendtekst("CRC_ERR ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					/* TODO */
 					break;
 				case MOB_STUFF_ERROR:
+					#ifdef DEBUG_STUFF_ERR
+						itoa(i, textBuf, 10);
+						sendtekst("STUFF_ERR ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					/* TODO */
 					break;
 				case MOB_BIT_ERROR:
+					#ifdef DEBUG_BIT_ERR
+						itoa(i, textBuf, 10);
+						sendtekst("BIT_ERR ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					/* TODO */
 					break;
 				default:
+					#ifdef DEBUG_DEFAULT
+						itoa(i, textBuf, 10);
+						sendtekst("Default ");
+						sendtekst(textBuf);
+						sendtekst("\n\r");
+					#endif
 					Can_mob_abort();        // Freed the MOB
 					Can_clear_status_mob(); // and reset MOb status
 					break;
@@ -104,6 +150,7 @@ ISR(CANIT_vect)
 		}
 		mask = mask<<1;
 	}
+	CANPAGE |= mob_back & 0xf0;	// Restore CANPAGE state
 }
 
 /* TODO 
@@ -146,4 +193,20 @@ uint8_t can_update_rx_msg(st_cmd_t* msg, uint8_t msg_id, uint8_t dlc)
         msg->cmd = CMD_RX_DATA_MASKED;
 
         while(can_cmd(msg) != CAN_CMD_ACCEPTED);
+}
+
+uint8_t can_config_rx_mailbox(st_cmd_t* msg, uint8_t count)
+{
+	uint8_t i;
+
+	msg->ctrl.ide = 0;
+	msg->ctrl.rtr = 0;
+	msg->cmd = CMD_RX_DATA_MASKED;
+	
+	for (i=0;i<count;i++) {
+		if (can_cmd(msg) != CAN_CMD_ACCEPTED) {
+			return CAN_CMD_REFUSED;
+		}
+	}
+	return CAN_CMD_ACCEPTED;
 }

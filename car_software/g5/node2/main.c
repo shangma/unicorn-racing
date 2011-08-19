@@ -20,7 +20,7 @@ char gearbut = 0;
 
 int main (void)
 {	
-	int tmp,i;
+	int tmp,i,res;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 
 	// GearKontakter
@@ -34,13 +34,18 @@ int main (void)
 	int8_t data;
 	char streng[10];
 
+	// Recieve buffer
+	st_cmd_t msg;
+
 //  Init CAN, UART, I/O
 	init();
-	TWI_init();
 	uartinit();
+	sendtekst("UART initialized\n\r");
+	TWI_init();
+	sendtekst("TWI initialized\n\r");
 
 	sei();		/* Interrupt enable */
-
+	sendtekst("Interrupt enabled\n\r");
 /*-----------------------------------------------------------------*
  *----------------------------Display setup -----------------------*
  *-----------------------------------------------------------------*/
@@ -66,26 +71,25 @@ int main (void)
 	Can_set_tx_int();	/* Enable can tx interrupt */
 	Can_set_rx_int();	/* Enable can rx interrupt */
 
-	// Recieve buffer
-	U8 rpm_response_buffer[8];
-	st_cmd_t rpm_msg;
 	/*
 	 *	Kode til hurtig test af can 
 	 */
-	rpm_msg.pt_data = rpm_response_buffer;
-	rpm_msg.status = 0;
-
-	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-	rpm_msg.status = 0;
-	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
-
+	sendtekst("Config 3 mailboxes for rpm_msgid...\n\r");
+	msg.id.std = rpm_msgid;
+	msg.dlc = 8;
+	res = can_config_rx_mailbox(&msg, 3);
+	if (res == CAN_CMD_ACCEPTED) {
+		sendtekst("SUCCESS\n\r");
+	} else {
+		sendtekst("FAIL\n\r");
+	}	
     	// --- Init variables
 
 	/* Init user led 0 & 1 */
 	DDRB |= (1<<PB6 | 1<<PB5);
 	PORTB |= (1<<PB6 | 1<<PB5);
 
-	sendtekst("Beep\n");
+	sendtekst("Beep\n\r");
 	display_test();
 
 	char dataout[] = {38,0};
@@ -103,7 +107,7 @@ int main (void)
 		// Geat buttons to CAN
 		gearbut = getBut();
 		dataout[1] = gearbut;
-//		can_send_non_blocking(rpm_msgid, dataout, 2);
+		can_send_non_blocking(rpm_msgid, dataout, 2);
 
 
 		/* Display bottons code */
@@ -119,19 +123,19 @@ int main (void)
 		}
 
 		/* Indicator for water temp */
-		if (params.waterTemp <= 100) {
+		if (params.waterTemp <= WATER_OK) {
 			indi_leds_state |= (LED_BLINK2<<LED_INDI1);
 			indi_leds_state &= ~(LED_BLINK2<<LED_INDI4);
-		} else if (params.waterTemp > 100) {
+		} else if (params.waterTemp > WATER_OK) {
 			indi_leds_state |= (LED_BLINK2<<LED_INDI4);
 			indi_leds_state &= ~(LED_BLINK2<<LED_INDI1);
 		}
 
 		/* Indicator for batt ok */
-		if (params.batteryV <= 135) {
+		if (params.batteryV <= VOLTAGE_OK) {
 			indi_leds_state |= (LED_BLINK2<<LED_INDI2);
 			indi_leds_state &= ~(LED_BLINK2<<LED_INDI5);
-		} else if (params.batteryV > 135) {
+		} else if (params.batteryV > VOLTAGE_OK) {
 			indi_leds_state |= (LED_BLINK2<<LED_INDI5);
 			indi_leds_state &= ~(LED_BLINK2<<LED_INDI2);
 		}
@@ -139,9 +143,9 @@ int main (void)
 		/* Set indicator leds */
 		set_leds(LED_BUTTONS_ADDR, indi_leds_state);
 			
-		itoa(params.batteryV, streng, 10);
-		sendtekst(streng);
-		sendtekst("\n");		
+/*		itoa(params.batteryV, streng, 10);*/
+/*		sendtekst(streng);*/
+/*		sendtekst("\n\r");		*/
 		PORTB ^= (1<<PB6);
 	}
 	return 0;
