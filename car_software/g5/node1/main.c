@@ -108,6 +108,9 @@ int main (void)
 	int freelognumber;		/* Free log number */
 	char filename[10]; 		/* Free log number as a string */
 
+	char e;
+	char test[] = "test1234test\n";
+
 	/* vars to test rtc code */
 	uint8_t buffer[10];
 	BOOL res;
@@ -167,8 +170,15 @@ int main (void)
 
 
 	while(1) {
-		ecu_data_handler();
 		_delay_ms(100);
+		if (QUEUE_GET_NUM_ELE(xbee_q) >= 20) {
+		
+			//xprintf(PSTR("More than 20 elements\n"));
+			xbee_send_trigger();
+		}
+//		ecu_data_handler();
+/*		f_write(&file1, test, 13, e);*/
+/*		f_sync(&file1);	*/
 	}
 
 /*	while(1) {*/

@@ -8,8 +8,15 @@
 #include "error.h"
 #include "comm.h"
 #include "queue.h"
+#include <util/atomic.h>
 
 int RecIndex = 0;	// Bruges til at tælle hvor mange bytes der er modtaget fra ECU'en
+uint8_t RecCount = 1;
+uint8_t RecJ = 0;
+uint8_t RecXbeeSend = 0;
+uint8_t RecCanSend = 0;
+uint8_t CanDataIndex = 0;
+uint8_t CanSendData[8];
 int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
 
 volatile uint8_t xbee_sending = 0;
@@ -21,6 +28,10 @@ ISR(TIMER0_COMP_vect)
 	int i;
 	testvar++;
 	if (testvar == 4) {
+		RecCount = 1;
+		RecJ = 0;
+		RecXbeeSend= 0;
+		RecCanSend = 0;
 		if (RecIndex != 114 && EcuErrorTmp < 5) { // Test for fejl
 			EcuErrorTmp++;
 			if (EcuErrorTmp == 5) {
@@ -44,6 +55,54 @@ ISR(USART0_RX_vect)
 	if (RecIndex <= 114) {			// Der skal modtages 228 bytes fra ECU'en
 		EcuData[RecIndex] = UDR0;	// Gem data fra ECU
 		RecIndex++;
+
+		if (RecCount == RecIndex) {
+			RecCount += ECUObjects[RecJ].length;
+			if (RecCanSend == 1) {
+				can_send_non_blocking(rpm_msgid, &CanSendData[0], 3);
+			}
+			if (valueObjects[ECUObjects[RecJ].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
+				/* Value to xbee? */
+				RecXbeeSend = 0;
+				RecCanSend = 0;
+				if (valueObjects[ECUObjects[RecJ].id].action & TO_XBEE) {
+				    	//_delay_us(10);
+				    	ATOMIC_BLOCK(ATOMIC_FORCEON)
+				    	{
+						QUEUE_PUT(xbee_q, ECUObjects[RecJ].id);
+					}
+					RecXbeeSend = 1;
+				}
+			} else {
+				RecXbeeSend = 0;
+			}
+
+			/* Value to CAN? */
+			if (valueObjects[ECUObjects[RecJ].id].action & TO_CAN) {
+				/* TODO
+				 * Insert call to val_to_CAN() when the function is
+				 * made
+				 */
+				CanDataIndex = 0;
+				CanSendData[CanDataIndex++] = ECUObjects[RecJ].id;
+				RecCanSend = 1;
+			} else {
+				RecCanSend = 0;
+			}
+
+			RecJ++;
+		}
+
+		if (RecXbeeSend == 1) {
+		    	ATOMIC_BLOCK(ATOMIC_FORCEON)
+		    	{
+				QUEUE_PUT(xbee_q, EcuData[RecIndex-1]);
+			}
+		}
+		if (RecCanSend == 1) {
+			CanSendData[CanDataIndex++] = EcuData[RecIndex-1];
+		}
+
 	}
 }
 

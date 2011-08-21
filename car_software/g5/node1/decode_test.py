@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import serial
-ser=serial.Serial("/dev/ttyUSB2",115200)
+ser=serial.Serial("/dev/ttyUSB1",115200)
 print "USB2 open"
 
 package_start_counter = 0
