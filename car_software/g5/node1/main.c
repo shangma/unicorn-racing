@@ -13,8 +13,7 @@
 #include "sdcard_fs_driver/rtc.h"
 #include "twi/twi.h"
 #include "can_std/can_lib.h"
-#include "can_func.h"
-#include "can_new.h"
+#include "can.h"
 #include "../lib/can_defs.h"
 #include "ecu.h"
 #include "comm.h"
@@ -161,7 +160,10 @@ int main (void)
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
-	QUEUE_INIT(xbee_q);
+
+	/* Init queues */
+	QUEUE_INIT(xbee_q);	// For xbee
+	QUEUE_INIT(sd_q);	// For sd-card
 
 	sei();			/* Enable interrupt */
 	Can_sei();		/* Enable general can interrupt */

@@ -1,6 +1,6 @@
 #include "config.h"
 #include "can_std/can_lib.h"
-#include "can_func.h"
+#include "can.h"
 #include <util/delay.h>
 #include "../lib/can_defs.h"
 #include "../lib/data_def.h"
@@ -16,6 +16,7 @@ uint8_t RecCount = 1;
 uint8_t RecJ = 0;
 uint8_t RecXbeeSend = 0;
 uint8_t RecCanSend = 0;
+uint8_t RecToSd = 0;
 uint8_t CanDataIndex = 0;
 uint8_t CanSendData[8];
 int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
@@ -33,6 +34,7 @@ ISR(TIMER0_COMP_vect)
 		RecJ = 0;
 		RecXbeeSend= 0;
 		RecCanSend = 0;
+		RecToSd = 0;
 		if (RecIndex != 114 && EcuErrorTmp < 5) { // Test for fejl
 			EcuErrorTmp++;
 			if (EcuErrorTmp == 5) {
@@ -67,6 +69,7 @@ ISR(USART0_RX_vect)
 				
 				RecXbeeSend = 0;
 				RecCanSend = 0;
+				RecToSd = 0;
 
 				/* Value to xbee? */				
 				if (valueObjects[ECUObjects[RecJ].id].action & TO_XBEE) {
@@ -95,6 +98,8 @@ ISR(USART0_RX_vect)
 					 * Insert call to val_to_SD() when the function is
 					 * made
 					 */
+					
+					RecToSd = 1;
 				}
 			} else {
 				RecCanSend = 0;
