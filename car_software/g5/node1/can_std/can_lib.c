@@ -20,10 +20,10 @@
 //******************************************************************************
 
 //_____ I N C L U D E S ________________________________________________________
+#include <stdint.h>
 #include "../config.h"
 #include "can_lib.h"
 #include "can_drv.h"
-#include "../test_vars.h"
 
 //_____ D E F I N I T I O N S __________________________________________________
 
@@ -49,7 +49,7 @@
 //!         ==1: baudrate performed 
 //!
 //------------------------------------------------------------------------------
-U8 can_init(U8 mode)
+uint8_t can_init(uint8_t mode)
 {
     if ((Can_bit_timing(mode))==0) return (0);  // c.f. macro in "can_drv.h"
     can_clear_all_mob();                        // c.f. function in "can_drv.c"
@@ -76,11 +76,11 @@ U8 can_init(U8 mode)
 //!         CAN_CMD_REFUSED  - command is refused
 //!
 //------------------------------------------------------------------------------
-U8 can_cmd(st_cmd_t* cmd)
+uint8_t can_cmd(st_cmd_t* cmd)
 {
-  U8 mob_handle, cpt;
+  uint8_t mob_handle, cpt;
   U32 u32_temp;
-  U16 tmp;
+  uint16_t tmp;
   
   if (cmd->cmd == CMD_ABORT)
   {
@@ -124,9 +124,8 @@ U8 can_cmd(st_cmd_t* cmd)
           cmd->ctrl.rtr=0; Can_clear_rtr();
           Can_set_dlc(cmd->dlc);
           Can_config_tx();
-	  if(!cmd->blocking){	/* Enable interrupt */
+	  if(!cmd->blocking){	/* Enable interrupt TODO Fjern denne linje og lav det på en bedre måde */ 
         Can_set_mob_int(mob_handle) /* Ser ud til at virke */
-		tIntReg = (CANIE1<<8) + CANIE2; /* test var */
 	  }
           break;
         //------------      
@@ -181,7 +180,7 @@ U8 can_cmd(st_cmd_t* cmd)
           cmd->ctrl.rtr=0; Can_set_rtrmsk(); Can_clear_rtr();
           Can_set_idemsk();
           Can_config_rx();  
-	Can_set_mob_int(mob_handle) /* Ser ud til at virke */          
+	Can_set_mob_int(mob_handle) /* Ser ud til at virke TODO Fjern denne linje og lav det på en bedre måde */          
           break;
         //------------      
         case CMD_RX_REMOTE_MASKED:
@@ -249,7 +248,7 @@ U8 can_cmd(st_cmd_t* cmd)
 //!                                    CAN communication
 //!
 //------------------------------------------------------------------------------
-U8 can_get_status (st_cmd_t* cmd)
+uint8_t can_get_status (st_cmd_t* cmd)
 {
     U8 a_status, rtn_val;
      

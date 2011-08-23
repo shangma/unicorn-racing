@@ -63,9 +63,12 @@ ISR(USART0_RX_vect)
 				can_send_non_blocking(rpm_msgid, &CanSendData[0], 3);
 			}
 			if (valueObjects[ECUObjects[RecJ].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
-				/* Value to xbee? */
+				
+				
 				RecXbeeSend = 0;
 				RecCanSend = 0;
+
+				/* Value to xbee? */				
 				if (valueObjects[ECUObjects[RecJ].id].action & TO_XBEE) {
 				    	//_delay_us(10);
 				    	ATOMIC_BLOCK(ATOMIC_FORCEON)
@@ -74,21 +77,28 @@ ISR(USART0_RX_vect)
 					}
 					RecXbeeSend = 1;
 				}
-			} else {
-				RecXbeeSend = 0;
-			}
+				
+				/* Value to CAN? */
+				if (valueObjects[ECUObjects[RecJ].id].action & TO_CAN) {
+					/* TODO
+					 * Insert call to val_to_CAN() when the function is
+					 * made
+					 */
+					CanDataIndex = 0;
+					CanSendData[CanDataIndex++] = ECUObjects[RecJ].id;
+					RecCanSend = 1;
+				}
 
-			/* Value to CAN? */
-			if (valueObjects[ECUObjects[RecJ].id].action & TO_CAN) {
-				/* TODO
-				 * Insert call to val_to_CAN() when the function is
-				 * made
-				 */
-				CanDataIndex = 0;
-				CanSendData[CanDataIndex++] = ECUObjects[RecJ].id;
-				RecCanSend = 1;
+				/* Value to SD? */
+				if (valueObjects[ECUObjects[RecJ].id].action & TO_SD) {
+					/* TODO
+					 * Insert call to val_to_SD() when the function is
+					 * made
+					 */
+				}
 			} else {
 				RecCanSend = 0;
+				RecXbeeSend = 0;
 			}
 
 			RecJ++;
