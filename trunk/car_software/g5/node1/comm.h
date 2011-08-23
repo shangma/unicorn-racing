@@ -9,10 +9,17 @@
 
 #define XBEE_Q_SIZE 120
 
+#define SD_Q_SIZE 120
+
 struct {
 	queue_hdr_t	hdr;                             // must be named "hdr"
 	uint8_t		items[XBEE_Q_SIZE+1]; // must be named "items", 1 space wasted
 } xbee_q;
+
+struct {
+	queue_hdr_t	hdr;                             // must be named "hdr"
+	uint8_t		items[XBEE_Q_SIZE+1]; // must be named "items", 1 space wasted
+} sd_q;
 
 static uint8_t start_sequence[] = {255,123,10};
 

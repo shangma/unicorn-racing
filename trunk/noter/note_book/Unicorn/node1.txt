@@ -14,8 +14,9 @@ TODO: @CAN
 [ ] Undersøg hvor langt et delay der er fra data modtages fra ECU til det er ude på CAN bussen !
 
 TODO: @Xbee
+[ ] Make ecu isr add id and data in one move, to prevent data from other sources messing up the queue !!!
 [ ] Test xbee queue !
-[ ] Clean up ecu.c/h and use [[../lib/data_defs.h !]]
+[*] Clean up ecu.c/h and use [[../lib/data_defs.h !]]
 
 TODO: @SdCard
 [ ] Make functions to save data on sd-card !
