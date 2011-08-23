@@ -1,3 +1,8 @@
+#ifndef _DATA_DEF_
+#define _DATA_DEF_
+
+
+
 #define TO_CAN	1
 #define TO_SD	2
 #define TO_XBEE 4
@@ -73,7 +78,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// statusCamTrigP2
 						16, 0,	// statusChokerAdd
 						16, 0,	// statusLambdaPWM
-						16, 0,	// waterTemp
+						16, TO_CAN | TO_XBEE,	// waterTemp
 						16, 0,	// airTemp
 						16, 0,	// potmeter
 						16, TO_CAN | TO_XBEE,	// rpm
@@ -82,7 +87,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// camAngle2
 						16, 0,	// roadSpeed
 						16, 0,	// mapSensor
-						16, 0,	// batteryV
+						16, TO_CAN | TO_XBEE,	// batteryV
 						16, 0,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime
@@ -94,9 +99,10 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						8, 0,	// motorFlags
 						8, 0,	// outBits
 						8, 0,	// time
-						8, TO_XBEE,	// gear
-						16, TO_XBEE, // FWheelL
+						8, 0,	// gear
+						16, 0, // FWheelL
 						16, 0, // FWheelR
 						16, 0, // BWheelL
 						16, 0}; // BWheelR
 
+#endif // _DATA_DEF_

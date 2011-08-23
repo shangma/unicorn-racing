@@ -3,6 +3,7 @@
 #include "can_func.h"
 #include <util/delay.h>
 #include "../lib/can_defs.h"
+#include "../lib/data_def.h"
 #include "uart.h"
 #include "ecu.h"
 #include "error.h"

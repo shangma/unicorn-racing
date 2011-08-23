@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import serial
-ser=serial.Serial("/dev/ttyUSB1",115200)
-print "USB2 open"
+port = "/dev/ttyUSB" + sys.argv[1]
+ser=serial.Serial(port,115200)
+print "Port:", port
 
 package_start_counter = 0
 package_start = False
