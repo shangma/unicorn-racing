@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import sys
 import serial
 from string import strip
 from binascii import hexlify, unhexlify
@@ -19,8 +20,9 @@ WTempOffset = 120
 WTempDataPos = 46     # Byte nummer i strengen hvor rmp står
 WTempDataSize = 2     # Længden af rmp i byte
 
-
+port = "/dev/ttyUSB" + sys.argv[1]
 tty=serial.Serial("/dev/ttyUSB0",19200,timeout=1)
+print "Port:", port
 datalogfile=open("testdatalog.txt","r")
 
 while 1:
