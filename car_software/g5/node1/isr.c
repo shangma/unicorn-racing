@@ -127,7 +127,7 @@ ISR(USART1_UDRE_vect)
 {
 	uint8_t tmp;
 
-	/* if xbee_seq_index is less than 3 send package start sequence */
+	/* if xbee_seq_index is less than 3 - send package start sequence */
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
 	}else{

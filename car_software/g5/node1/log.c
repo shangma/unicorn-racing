@@ -1,8 +1,16 @@
 #include <stdlib.h>
 #include "sdcard_fs_driver/ff.h"
+#include "log.h"
+
+uint8_t sd_data_buf1[100];
+uint8_t sd_data_buf2[100];
+uint8_t sd_buf1_head = 0;
+uint8_t sd_buf2_head = 0;
+uint8_t sd_buf_in_use = 1;
+uint8_t sd_buf_write = 0;
 
 FILINFO Finfo;
-	
+
 #if _USE_LFN
 char Lfname[_MAX_LFN+1];
 #endif
@@ -24,4 +32,39 @@ int get_free_log_number( DIR *dir )
 			maxname = atoi(&(Finfo.fname[0]));
 	}
 	return maxname + 1;
+}
+
+uint8_t sd_log_write(void *data, uint8_t len)
+{
+	switch (sd_buf_in_use) {
+		case 1:
+			if (SD_BUF_SIZE < sd_buf1_head + len) {
+				sd_buf_in_use = 2;
+				sd_buf_write = 1;
+			}
+			break;
+		case 2:	
+			if (SD_BUF_SIZE < sd_buf2_head + len) {
+				sd_buf_in_use = 1;
+				sd_buf_write = 1;
+			}
+			break;
+		default:
+			break;
+	}
+
+	switch (sd_buf_in_use) {
+		case 1:
+			while (len--) {
+				sd_data_buf1[sd_buf1_head++] = &data++;
+			}
+			break;
+		case 2:
+			while (len--) {
+				sd_data_buf2[sd_buf2_head++] = &data++;
+			}
+			break;
+	}
+
+	return 0;
 }

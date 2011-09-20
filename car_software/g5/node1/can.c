@@ -60,7 +60,7 @@ ISR(CANIT_vect)
 							QUEUE_PUT(xbee_q, DataBuf[j]);	
 						}
 					}
-					xbee_send_trigger();
+					xbee_send_trigger();				/* TODO Der skal nok være den i main */
 					break;
 				case MOB_TX_COMPLETED:
 					Can_mob_abort();        // Freed the MOB
