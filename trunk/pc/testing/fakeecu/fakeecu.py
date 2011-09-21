@@ -21,7 +21,7 @@ WTempDataPos = 46     # Byte nummer i strengen hvor rmp står
 WTempDataSize = 2     # Længden af rmp i byte
 
 port = "/dev/ttyUSB" + sys.argv[1]
-tty=serial.Serial("/dev/ttyUSB0",19200,timeout=1)
+tty=serial.Serial(port, 19200, timeout=1)
 print "Port:", port
 datalogfile=open("testdatalog.txt","r")
 
