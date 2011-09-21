@@ -34,7 +34,7 @@ int get_free_log_number( DIR *dir )
 	return maxname + 1;
 }
 
-uint8_t sd_log_write(void *data, uint8_t len)
+uint8_t sd_log_write(uint8_t *data, uint8_t len)
 {
 	switch (sd_buf_in_use) {
 		case 1:
@@ -56,12 +56,12 @@ uint8_t sd_log_write(void *data, uint8_t len)
 	switch (sd_buf_in_use) {
 		case 1:
 			while (len--) {
-				sd_data_buf1[sd_buf1_head++] = &data++;
+				sd_data_buf1[sd_buf1_head++] = *data++;
 			}
 			break;
 		case 2:
 			while (len--) {
-				sd_data_buf2[sd_buf2_head++] = &data++;
+				sd_data_buf2[sd_buf2_head++] = *data++;
 			}
 			break;
 	}

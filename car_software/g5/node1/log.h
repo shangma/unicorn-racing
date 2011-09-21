@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 /*
  * Vars used by sd save functions
  */
@@ -15,5 +17,5 @@ int get_free_log_number( DIR *);
 /*
  * Add data to log file
  */
-uint8_t sd_log_write(void *data, uint8_t len);
+uint8_t sd_log_write(uint8_t *data, uint8_t len);
 
