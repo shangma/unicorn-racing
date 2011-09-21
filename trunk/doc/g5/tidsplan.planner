@@ -12,18 +12,18 @@
     <calendar id="1" name="Default">
       <default-week mon="1" tue="0" wed="1" thu="1" fri="1" sat="1" sun="3"/>
       <overridden-day-types>
-        <overridden-day-type id="0">
-          <interval start="1700" end="2100"/>
-        </overridden-day-type>
         <overridden-day-type id="3">
           <interval start="1200" end="1600"/>
+        </overridden-day-type>
+        <overridden-day-type id="0">
+          <interval start="1700" end="2100"/>
         </overridden-day-type>
       </overridden-day-types>
       <days/>
     </calendar>
   </calendars>
   <tasks>
-    <task id="1" name="Gem til SD" note="" work="54000" start="20110920T000000Z" end="20111002T150000Z" work-start="20110920T170000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="1" name="Gem til SD" note="" work="54000" start="20110920T000000Z" end="20111002T150000Z" work-start="20110920T170000Z" percent-complete="0" priority="3" type="normal" scheduling="fixed-work"/>
     <task id="2" name="Display" note="" work="10800" start="20111002T150000Z" end="20111004T190000Z" work-start="20111002T150000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="1" type="FS"/>
