@@ -114,7 +114,7 @@
      inkscape:cx="2363.1733"
      inkscape:cy="1227.5314"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g3810"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="723"
@@ -129,7 +129,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -142,7 +142,7 @@
        id="g3810"
        transform="translate(-8.0812204,8.0812204)">
       <image
-         xlink:href="file:///home/css/Dropbox/Dokumenter/Unicorn/Ledningsnet/IMG116.jpg"
+         xlink:href="file:///home/css/Documents/unicorn-racing/ledningsnet/billeder/IMG116.jpg"
          width="3132"
          height="1183"
          id="image2826"
