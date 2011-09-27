@@ -2,8 +2,8 @@
 #include "sdcard_fs_driver/ff.h"
 #include "log.h"
 
-uint8_t sd_data_buf1[100];
-uint8_t sd_data_buf2[100];
+uint8_t sd_data_buf1[SD_BUF_SIZE];
+uint8_t sd_data_buf2[SD_BUF_SIZE];
 uint8_t sd_buf1_head = 0;
 uint8_t sd_buf2_head = 0;
 uint8_t sd_buf_in_use = 1;
@@ -66,5 +66,30 @@ uint8_t sd_log_write(uint8_t *data, uint8_t len)
 			break;
 	}
 
+	return 0;
+}
+
+uint8_t sd_log_check(FIL *fp)
+{
+	uint8_t bw;
+	if (sd_buf_write == 1) {	/* One of the buffers is full */
+		switch (sd_buf_in_use) {
+			case 1:
+				/* Write sd_data_buf2 to sd */
+				f_write( fp, &sd_data_buf2, sd_buf2_head, &bw);
+				sd_buf2_head = 0;
+				sd_buf_write = 0;
+				return 1;
+			case 2:
+				/* Write sd_data_buf1 to sd */
+				f_write( fp, &sd_data_buf1, sd_buf1_head, &bw);
+				sd_buf1_head = 0;
+				sd_buf_write = 0;
+				return 1;
+			default:
+				break;
+		}
+	}
+	
 	return 0;
 }
