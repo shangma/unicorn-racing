@@ -160,24 +160,24 @@ int main (void)
 
 	can_update_rx_msg(&rpm_msg, rpm_msgid, 8);
 
-
 	/* Init queues */
 	QUEUE_INIT(xbee_q);	// For xbee
-	QUEUE_INIT(sd_q);	// For sd-card
 
 	sei();			/* Enable interrupt */
 	Can_sei();		/* Enable general can interrupt */
 	Can_set_tx_int();	/* Enable can tx interrupt */
 	Can_set_rx_int();	/* Enable can rx interrupt */
 
-
 	while(1) {
 		_delay_ms(100);
-		if (QUEUE_GET_NUM_ELE(xbee_q) >= 20) {
+		
+		if (QUEUE_GET_NUM_ELE(xbee_q) >= 40) {
 		
 			//xprintf(PSTR("More than 20 elements\n"));
 			xbee_send_trigger();
 		}
+		sd_log_check(&file1);
+		f_sync(&file1);
 //		ecu_data_handler();
 /*		f_write(&file1, test, 13, e);*/
 /*		f_sync(&file1);	*/

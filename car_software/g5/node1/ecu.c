@@ -7,6 +7,7 @@
 #include "queue.h"
 #include "comm.h"
 #include "can.h"
+#include "log.h"
 #include "../lib/can_defs.h"
 
 uint8_t EcuData[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,
@@ -31,7 +32,7 @@ void ecu_val_to_xbee(uint8_t i, uint8_t j)
 		}
 	}
 	/* Check if more than 20 elements in xbee buffer */
-	if (QUEUE_GET_NUM_ELE(xbee_q) >= 20) {
+	if (QUEUE_GET_NUM_ELE(xbee_q) >= 40) {
 		//xprintf(PSTR("More than 20 elements\n"));
 		xbee_send_trigger();
 	}
@@ -48,19 +49,26 @@ void ecu_data_handler( void )
 	/* Loop over all values in EcuData */
 	while(i<=114) {
 		/* Check if anything to be done for value */
+
 		if (valueObjects[ECUObjects[j].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
 			/* Value to xbee? */
 			if (valueObjects[ECUObjects[j].id].action & TO_XBEE) {
 			    	//_delay_us(10);
 				ecu_val_to_xbee(i,j);
 			}
-	
+
+
 			/* Value to SD? */
 			if (valueObjects[ECUObjects[j].id].action & TO_SD) {
 				/* TODO
 				 * Insert call to val_to_sd() when the function is
 				 * made
 				 */
+				data[0] = ECUObjects[j].id;
+				for (k=0;k<ECUObjects[j].length;k++){
+					data[k+1]= EcuData[i+k];
+				}
+				sd_log_write(&data[0], 3);
 			}
 	
 			/* Value to CAN? */

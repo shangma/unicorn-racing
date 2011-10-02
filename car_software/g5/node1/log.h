@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "sdcard_fs_driver/ff.h"
 
 #define SD_BUF_SIZE 100
 

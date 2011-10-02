@@ -33,7 +33,7 @@ valueID = list(enumerate ([
 	('waterTemp', 16, 6),
 	('airTemp', 16, 6),
 	('potmeter', 16, 6),
-	('rpm', 16, 7),
+	('rpm', 16, 0),
 	('triggerErr', 16, 0),
 	('camAngle1', 16, 0),
 	('camAngle2', 16, 0),
@@ -56,6 +56,7 @@ valueID = list(enumerate ([
 	('FWheelR', 16, 0),
 	('BWheelL', 16, 0),
 	('BWheelR', 16, 0),
+        ('debug', 16, 0),
 	('ValueIdLength', 16, 0)]))
 
 nextID = -1
