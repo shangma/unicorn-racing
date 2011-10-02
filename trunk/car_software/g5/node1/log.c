@@ -80,7 +80,7 @@ uint8_t sd_log_check(FIL *fp)
 				sd_buf2_head = 0;
 				sd_buf_write = 0;
 				return 1;
-			case 2:
+		case 2:
 				/* Write sd_data_buf1 to sd */
 				f_write( fp, &sd_data_buf1, sd_buf1_head, &bw);
 				sd_buf1_head = 0;

@@ -98,12 +98,13 @@ ISR(USART0_RX_vect)
 					 * Insert call to val_to_SD() when the function is
 					 * made
 					 */
-					
+					sd_log_write( &ECUObjects[RecJ].id, 1);
 					RecToSd = 1;
 				}
 			} else {
 				RecCanSend = 0;
 				RecXbeeSend = 0;
+				RecToSd = 0;
 			}
 
 			RecJ++;
@@ -118,6 +119,9 @@ ISR(USART0_RX_vect)
 		if (RecCanSend == 1) {
 			CanSendData[CanDataIndex++] = EcuData[RecIndex-1];
 		}
+		if (RecToSd == 1) {
+			sd_log_write(EcuData[RecIndex-1], 1);
+		}
 
 	}
 }
@@ -131,14 +135,14 @@ ISR(USART1_UDRE_vect)
 	if (xbee_seq_index<3) {
 		UDR1 = start_sequence[xbee_seq_index++];
 	}else{
-		QUEUE_GET(xbee_q, tmp);
-		if (nextId == 0) {
+		QUEUE_GET(xbee_q, tmp);		// pop value from queue
+		if (nextId == 0) {		// Check if at start of data package
 			nextId = valueObjects[tmp].length+8;
 		}
-		UDR1 = tmp;
+		UDR1 = tmp;			// Send value
 		nextId = nextId - 8;
-	    	if (nextId == 0) {
-			if (QUEUE_GET_NUM_ELE(xbee_q) <= 4) {
+	    	if (nextId == 0) {		// Data package send, check number of bytes in the queue
+			if (QUEUE_GET_NUM_ELE(xbee_q) <= 4) {	// If less than 4 bytes remain stop sending
 				xbee_sending = 0;
 				Usart1_tx_ei_dis();
 			}

@@ -16,11 +16,6 @@ struct {
 	uint8_t		items[XBEE_Q_SIZE+1]; // must be named "items", 1 space wasted
 } xbee_q;
 
-struct {
-	queue_hdr_t	hdr;                             // must be named "hdr"
-	uint8_t		items[XBEE_Q_SIZE+1]; // must be named "items", 1 space wasted
-} sd_q;
-
 static uint8_t start_sequence[] = {255,123,10};
 
 volatile extern uint8_t xbee_seq_index;
