@@ -9,6 +9,7 @@
 #include "error.h"
 #include "comm.h"
 #include "queue.h"
+#include "log.h"
 #include <util/atomic.h>
 
 int RecIndex = 0;	// Bruges til at tælle hvor mange bytes der er modtaget fra ECU'en
@@ -98,7 +99,7 @@ ISR(USART0_RX_vect)
 					 * Insert call to val_to_SD() when the function is
 					 * made
 					 */
-					sd_log_write( &ECUObjects[RecJ].id, 1);
+					sd_log_write( (uint8_t *)&ECUObjects[RecJ].id, 1);
 					RecToSd = 1;
 				}
 			} else {
@@ -120,7 +121,7 @@ ISR(USART0_RX_vect)
 			CanSendData[CanDataIndex++] = EcuData[RecIndex-1];
 		}
 		if (RecToSd == 1) {
-			sd_log_write(EcuData[RecIndex-1], 1);
+			sd_log_write(&EcuData[RecIndex-1], 1);
 		}
 
 	}
