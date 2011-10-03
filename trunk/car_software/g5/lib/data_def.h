@@ -51,7 +51,8 @@ enum valueID {
 	FWheelR,		// 40
 	BWheelL,		// 41
 	BWheelR,		// 42
-	ValueIdLength		// 43
+	debug,			// 43
+	ValueIdLength		// 44
 };
 
 typedef struct {
@@ -78,17 +79,17 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0,	// statusCamTrigP2
 						16, 0,	// statusChokerAdd
 						16, 0,	// statusLambdaPWM
-						16, TO_CAN | TO_XBEE,	// waterTemp
+						16, TO_SD | TO_CAN | TO_XBEE,	// waterTemp
 						16, 0,	// airTemp
-						16, 0,	// potmeter
-						16, TO_CAN | TO_XBEE,	// rpm
+						16, TO_SD, // potmeter
+						16, TO_SD | TO_CAN | TO_XBEE,	// rpm
 						16, 0,	// triggerErr
 						16, 0,	// camAngle1
 						16, 0,	// camAngle2
 						16, 0,	// roadSpeed
-						16, 0,	// mapSensor
-						16, TO_CAN | TO_XBEE,	// batteryV
-						16, 0,	// lambdaV
+						16, TO_SD,	// mapSensor
+						16, TO_SD | TO_CAN | TO_XBEE,	// batteryV
+						16, TO_SD,	// lambdaV
 						16, 0,	// load
 						16, 0,	// injectorTime
 						16, 0,	// ignitionTime
@@ -103,6 +104,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						16, 0, // FWheelL
 						16, 0, // FWheelR
 						16, 0, // BWheelL
-						16, 0}; // BWheelR
+						16, 0, // BWheelR
+						16, 0}; // debug
 
 #endif // _DATA_DEF_
