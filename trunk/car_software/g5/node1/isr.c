@@ -18,6 +18,7 @@ uint8_t RecJ = 0;
 uint8_t RecXbeeSend = 0;
 uint8_t RecCanSend = 0;
 uint8_t RecToSd = 0;
+uint8_t SdIdNum = 0;
 uint8_t CanDataIndex = 0;
 uint8_t CanSendData[8];
 int testvar = 0;	// Tmp var for at køre TIMER0_COMP_vect langsommere
@@ -67,7 +68,6 @@ ISR(USART0_RX_vect)
 			}
 			if (valueObjects[ECUObjects[RecJ].id].action & (TO_XBEE | TO_SD | TO_CAN) ) {
 				
-				
 				RecXbeeSend = 0;
 				RecCanSend = 0;
 				RecToSd = 0;
@@ -99,8 +99,8 @@ ISR(USART0_RX_vect)
 					 * Insert call to val_to_SD() when the function is
 					 * made
 					 */
-					sd_log_write( (uint8_t *)&ECUObjects[RecJ].id, 1);
 					RecToSd = 1;
+					SdIdNum = RecJ;
 				}
 			} else {
 				RecCanSend = 0;
@@ -121,14 +121,17 @@ ISR(USART0_RX_vect)
 			CanSendData[CanDataIndex++] = EcuData[RecIndex-1];
 		}
 		if (RecToSd == 1) {
-			sd_log_write(&EcuData[RecIndex-1], 1);
+			if ((RecCount-1) == RecIndex) {
+				sd_log_write( (uint8_t *)&ECUObjects[SdIdNum].id, 1);
+				sd_log_write(&EcuData[RecIndex-2], 2);
+			}
 		}
 
 	}
 }
 
 /* ISR to take care of xbee data sending */
-ISR(USART1_UDRE_vect)
+mISR(USART1_UDRE_vect)
 {
 	uint8_t tmp;
 
