@@ -7,6 +7,7 @@
 #include "twi/twi.h"
 #include "can.h"
 #include "../lib/can_defs.h"
+#include "../lib/data_def.h"
 #include "display/display.h"
 #include "prototyper.h"
 #include "data.h"
@@ -23,11 +24,18 @@ int main (void)
 	int tmp,i,res;
 	CLKPR = 0x80;  CLKPR = 0x00;  // Clock prescaler Reset
 
-	// GearKontakter
+/*-----------------------------------------------------------------*
+ *------------------------- Gear buttoms setup---------------------*
+ *-----------------------------------------------------------------*/
 	DDRC&=~(1<<PC7); // Neutral
 	PORTC |= (1<<PC7); // Neutral pull-up
 	DDRE&=~(1<<PE6); // Knap1 
 	DDRE&=~(1<<PE7); // Knap2
+
+	/* Buttoms interrupt */
+	EICRB |= (1<<ISC71|1<<ISC70|1<<ISC61|1<<ISC60); /* Rising edge */
+	EIMSK |= (1<<INT7 | 1<<INT6);
+
 
 	uint8_t test_rx[8];
 
@@ -92,7 +100,7 @@ int main (void)
 	sendtekst("Beep\n\r");
 	display_test();
 
-	char dataout[] = {38,0};
+	char dataout[] = {gear,0};
 
 	while (1) {
 		/* TODO 
@@ -105,9 +113,19 @@ int main (void)
 		set_rpm(params.rpm, LED_BLINK2);
 
 		// Geat buttons to CAN
-		gearbut = getBut();
-		dataout[1] = gearbut;
-		can_send_non_blocking(rpm_msgid, dataout, 2);
+		dataout[1] = 0;
+		/* Format buttom states for sending */ 
+		dataout[1] |= (params.GearButDown*GEARDOWNBUT | 
+					GEARUPBUT*params.GearButUp | 
+					params.GearButNeutral*GEARNEUBUT);
+		/* Send buttom states */
+		if(dataout[1] != 0) {
+			can_send_non_blocking(rpm_msgid, dataout, 2);
+		}
+		/* Clear buttom states */
+		params.GearButDown = 0;
+		params.GearButUp = 0;
+		params.GearButNeutral = 0;
 
 
 		/* Display bottons code */
