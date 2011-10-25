@@ -169,7 +169,7 @@ int main (void)
 	Can_set_rx_int();	/* Enable can rx interrupt */
 
 	while(1) {
-		_delay_ms(100);
+		_delay_ms(50);
 		
 		if (QUEUE_GET_NUM_ELE(xbee_q) >= 40) {
 		

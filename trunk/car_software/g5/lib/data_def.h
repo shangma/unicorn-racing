@@ -100,7 +100,7 @@ static const valueObject valueObjects[] =	{0, 0,	// empty
 						8, 0,	// motorFlags
 						8, 0,	// outBits
 						8, 0,	// time
-						8, 0,	// gear
+						8, TO_XBEE,	// gear
 						16, 0, // FWheelL
 						16, 0, // FWheelR
 						16, 0, // BWheelL
