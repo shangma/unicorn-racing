@@ -131,7 +131,7 @@ ISR(USART0_RX_vect)
 }
 
 /* ISR to take care of xbee data sending */
-mISR(USART1_UDRE_vect)
+ISR(USART1_UDRE_vect)
 {
 	uint8_t tmp;
 
