@@ -1,0 +1,2 @@
+- Man skal bruge FreeUser.key fil for at kunne ændre i ECU tabeller (filen kan vælges fra programmet)
+
